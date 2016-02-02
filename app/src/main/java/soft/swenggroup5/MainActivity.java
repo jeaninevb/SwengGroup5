@@ -17,6 +17,9 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.File;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
      * HEIGHT: The height of the generated qr code TODO include in layout to scale correctly?
      * DEFAULT_STR: Test string to show generation of qr code TODO remove
      * INTEGRATOR: Object that is used to access the integrated scanner
+     * TEST_FILE: test file to show encoding of header TODO remove
      */
     private final static int WHITE = 0xFFFFFFFF;
     private final static int BLACK = 0xFF000000;
@@ -37,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int HEIGHT = 400;
     private final static String STR = "Software Engineering Group 5 - SOFT";
     private final IntentIntegrator INTEGRATOR = new IntentIntegrator(this);
+    private final File TEST_FILE = new File("testFile.txt");
 
     /**
      * onCreate
@@ -61,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Attempt to generate the qr code and put it into the ImageView
         try {
+            ArrayList<Byte> Header = encodeHeader(TEST_FILE,1);
             Bitmap bitmap = encodeAsBitmap(STR);
             imageView.setImageBitmap(bitmap);
         } catch (WriterException e) {
@@ -126,6 +132,65 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         return bitmap;
+    }
+    /**
+     * encodeHeader
+     *
+     * Takes a file and its position and returns an ArrayList of bytes representing
+     * 1. File size
+     * 2. File Type
+     * 3. Hash value
+     * 4. Position
+     *
+     * @param file: the data to be used
+     * @param position: the positon of the QR code (only applies to files greater than 1 QR code)
+     * @return An ArrayList of buytes to be used as the QR code header
+     */
+    ArrayList encodeHeader(File file,int position) {
+        ArrayList<Byte> header = new ArrayList<Byte>();
+
+        //FILE SIZE
+        ByteBuffer buffer;
+        buffer = ByteBuffer.allocate(8);
+        buffer.putLong(file.length());
+        Log.d("file length ", String.valueOf(file.length()));
+        buffer.flip();
+        int length = buffer.remaining();
+        for(int i=0;i<length;i++)       //Passes individual bytes from byte array into the header list
+        {
+            header.add(buffer.get(i));
+        }
+        buffer.clear();
+
+        // FILE TYPE
+        // String ext = FilenameUtils.getExtension(file);
+        String filename = file.getName();
+        String ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length()); // gets the file extension
+        byte[] fileType = ext.getBytes();
+        for(int i=0;i<fileType.length;i++)       //Passes individual bytes from byte array into the header list
+            header.add(fileType[i]);
+
+        // HASH VALUE
+        int h = file.hashCode();
+        buffer = ByteBuffer.allocate(4);
+        buffer.putInt(h);
+        buffer.flip();
+        for(int i=0;i<buffer.remaining();i++)       //Passes individual bytes from byte array into the header list
+            header.add(buffer.get(i));
+        buffer.clear();
+
+        //NUMBER OF QR CODE
+        buffer = ByteBuffer.allocate(4);
+        buffer.putInt(position);
+        buffer.flip();
+        for(int i=0;i<buffer.remaining();i++)       //Passes individual bytes from byte array into the header list
+            header.add(buffer.get(i));
+        buffer.clear();
+
+        for(int i=0; i<header.size();i++)
+            Log.d("Header val "+i, String.valueOf(header.get(i)));
+
+        return header;
     }
 
     /**
