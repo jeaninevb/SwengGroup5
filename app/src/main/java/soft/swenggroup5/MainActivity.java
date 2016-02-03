@@ -50,12 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private final static int HEIGHT = 400;
     private final static String STR = "Software Engineering Group 5 - SOFT";
     private final IntentIntegrator INTEGRATOR = new IntentIntegrator(this);
-<<<<<<< HEAD
-    private final File TEST_FILE = new File("testFile.txt");
-    private final static int MAX_FILE_SIZE = 2000;
-=======
     private File TEST_FILE;
->>>>>>> origin/BackEnd
+    private final static int MAX_FILE_SIZE = 2000;
 
     /**
      * onCreate
