@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private final static String STR = "Software Engineering Group 5 - SOFT";
     private final IntentIntegrator INTEGRATOR = new IntentIntegrator(this);
     private final File TEST_FILE = new File("testFile.txt");
+    private final static int MAX_FILE_SIZE = 2000;
 
     /**
      * onCreate
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Attempt to generate the qr code and put it into the ImageView
         try {
-            ArrayList<Byte> Header = encodeHeader(TEST_FILE,1);
+            ArrayList<Byte> Header = encodeHeader(TEST_FILE);
             Bitmap bitmap = encodeAsBitmap(STR);
             imageView.setImageBitmap(bitmap);
         } catch (WriterException e) {
@@ -143,10 +144,9 @@ public class MainActivity extends AppCompatActivity {
      * 4. Position
      *
      * @param file: the data to be used
-     * @param position: the positon of the QR code (only applies to files greater than 1 QR code)
      * @return An ArrayList of buytes to be used as the QR code header
      */
-    ArrayList encodeHeader(File file,int position) {
+    ArrayList encodeHeader(File file) {
         ArrayList<Byte> header = new ArrayList<Byte>();
 
         //FILE SIZE
@@ -156,8 +156,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("file length ", String.valueOf(file.length()));
         buffer.flip();
         int length = buffer.remaining();
-        for(int i=0;i<length;i++)       //Passes individual bytes from byte array into the header list
-        {
+        for(int i=0;i<length;i++)  {         //Passes individual bytes from byte array into the header list
             header.add(buffer.get(i));
         }
         buffer.clear();
@@ -167,30 +166,52 @@ public class MainActivity extends AppCompatActivity {
         String filename = file.getName();
         String ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length()); // gets the file extension
         byte[] fileType = ext.getBytes();
-        for(int i=0;i<fileType.length;i++)       //Passes individual bytes from byte array into the header list
+        for(int i=0;i<fileType.length;i++) {     //Passes individual bytes from byte array into the header list
             header.add(fileType[i]);
+        }
 
         // HASH VALUE
         int h = file.hashCode();
         buffer = ByteBuffer.allocate(4);
         buffer.putInt(h);
         buffer.flip();
-        for(int i=0;i<buffer.remaining();i++)       //Passes individual bytes from byte array into the header list
+        for(int i=0;i<buffer.remaining();i++) {      //Passes individual bytes from byte array into the header list
             header.add(buffer.get(i));
+        }
         buffer.clear();
 
         //NUMBER OF QR CODE
+        int qrCodes = splitFileSize(file.length());
         buffer = ByteBuffer.allocate(4);
-        buffer.putInt(position);
+        buffer.putInt(qrCodes);
         buffer.flip();
-        for(int i=0;i<buffer.remaining();i++)       //Passes individual bytes from byte array into the header list
+        for(int i=0;i<buffer.remaining();i++) {     //Passes individual bytes from byte array into the header list
             header.add(buffer.get(i));
+        }
         buffer.clear();
 
-        for(int i=0; i<header.size();i++)
-            Log.d("Header val "+i, String.valueOf(header.get(i)));
+        for(int i=0; i<header.size();i++) {
+            Log.d("Header val " + i, String.valueOf(header.get(i)));
+        }
 
         return header;
+    }
+    /**
+     * splitFileSize
+     *
+     * Takes in a file size and calculates the number of QR codes needed to transfer it.
+     *
+     * @param size: the size of the file to be transferred.
+     * @return the number of QR Codes required.
+     */
+    int splitFileSize(long size) {
+        int qrCodes= 0;
+        while(size > MAX_FILE_SIZE) {
+            qrCodes++;
+            size -= MAX_FILE_SIZE;
+        }
+        return qrCodes;
+
     }
 
     /**
