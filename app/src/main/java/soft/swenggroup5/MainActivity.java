@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             s.close();
         }
         catch (Exception e) {
-            Log.d("Write to temp", e.toString());
+            Log.d("Write_to_temp", e.toString());
         }
 
         // Attempt to generate the qr code and put it into the ImageView
@@ -179,16 +179,9 @@ public class MainActivity extends AppCompatActivity {
      * @return An ArrayList of buytes to be used as the QR code header
      */
     ArrayList encodeHeader(File file) {
-
-        getMimeType(file);
-
-
         ArrayList<Byte> header = new ArrayList<Byte>();
 
         ByteBuffer b = ByteBuffer.allocate(8);
-        // file length
-        Long x = file.length();
-
 
         //FILE SIZE
         ByteBuffer buffer;
@@ -249,13 +242,13 @@ public class MainActivity extends AppCompatActivity {
      */
     public static String getMimeType(File file) {
         String filePath = file.getAbsolutePath();
-        Log.d("File path", filePath);
+        Log.d("File_path", filePath);
         String type = null;
         String extension = MimeTypeMap.getFileExtensionFromUrl(filePath);
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
-        Log.d("File MIME type", type);
+        Log.d("File_MIME_type", type);
         return type;
     }
 
@@ -293,10 +286,10 @@ public class MainActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                Log.d("Scan Button", "Cancelled scan");
+                Log.d("Scan_Button", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Log.d("Scan Button", "Scanned");
+                Log.d("Scan_Button", "Scanned");
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
