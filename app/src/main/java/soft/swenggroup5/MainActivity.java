@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -177,7 +179,16 @@ public class MainActivity extends AppCompatActivity {
      * @return An ArrayList of buytes to be used as the QR code header
      */
     ArrayList encodeHeader(File file) {
+
+        getMimeType(file);
+
+
         ArrayList<Byte> header = new ArrayList<Byte>();
+
+        ByteBuffer b = ByteBuffer.allocate(8);
+        // file length
+        Long x = file.length();
+
 
         //FILE SIZE
         ByteBuffer buffer;
@@ -226,6 +237,28 @@ public class MainActivity extends AppCompatActivity {
 
         return header;
     }
+
+    /**
+     * getMimeType
+     *
+     * Get the MIME type of a file.
+     * List of MIME types: http://www.freeformatter.com/mime-types-list.html
+     *
+     * @param file: the file to get the MIME type of
+     * @return the MIME type of the passed file or else null if not possible to get the type
+     */
+    public static String getMimeType(File file) {
+        String filePath = file.getAbsolutePath();
+        Log.d("File path", filePath);
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(filePath);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        Log.d("File MIME type", type);
+        return type;
+    }
+
     /**
      * splitFileSize
      *
