@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 INTEGRATOR.setBeepEnabled(false);
                 INTEGRATOR.setBarcodeImageEnabled(true);
                 INTEGRATOR.initiateScan();
-
             }
         });
     }
