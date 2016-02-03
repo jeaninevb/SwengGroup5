@@ -1,6 +1,7 @@
 package soft.swenggroup5;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +18,15 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
@@ -41,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int HEIGHT = 400;
     private final static String STR = "Software Engineering Group 5 - SOFT";
     private final IntentIntegrator INTEGRATOR = new IntentIntegrator(this);
-    private final File TEST_FILE = new File("testFile.txt");
+    private File TEST_FILE;
 
     /**
      * onCreate
@@ -63,6 +72,26 @@ public class MainActivity extends AppCompatActivity {
 
         // Create a space that will be used to present the demo generated qr code
         ImageView imageView = (ImageView) findViewById(R.id.qrCode);
+
+        try {
+            // cannot initialize as a constant as an error must be handled.
+            // TODO move this to unit tests
+            TEST_FILE = File.createTempFile("testing", ".txt");
+            // explicitly specify that the temp file is to be deleted on exit of the app
+            TEST_FILE.deleteOnExit();
+            // write hello to the temp file
+            FileOutputStream s = new FileOutputStream(TEST_FILE);
+            s.write('h');
+            s.write('e');
+            s.write('l');
+            s.write('l');
+            s.write('o');
+            // close  the stream
+            s.close();
+        }
+        catch (Exception e) {
+            Log.d("Write to temp", e.toString());
+        }
 
         // Attempt to generate the qr code and put it into the ImageView
         try {
@@ -133,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         return bitmap;
     }
+
     /**
      * encodeHeader
      *
@@ -143,8 +173,8 @@ public class MainActivity extends AppCompatActivity {
      * 4. Position
      *
      * @param file: the data to be used
-     * @param position: the positon of the QR code (only applies to files greater than 1 QR code)
-     * @return An ArrayList of buytes to be used as the QR code header
+     * @param position: the position of the QR code (only applies to files greater than 1 QR code)
+     * @return An ArrayList of bytes to be used as the QR code header
      */
     ArrayList encodeHeader(File file,int position) {
         ArrayList<Byte> header = new ArrayList<Byte>();
