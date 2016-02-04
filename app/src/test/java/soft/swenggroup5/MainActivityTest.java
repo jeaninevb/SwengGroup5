@@ -16,7 +16,11 @@ public class MainActivityTest {
     public void test_splitFileSize()  {
         assertEquals(0, MainActivity.splitFileSize(-1));
         assertEquals(0, MainActivity.splitFileSize(0));
-        assertEquals(0, MainActivity.splitFileSize(1));
-        assertEquals(1, MainActivity.splitFileSize(2001));
+        assertEquals(1, MainActivity.splitFileSize(1));
+        assertEquals(2, MainActivity.splitFileSize(2001));
+        assertEquals(2, MainActivity.splitFileSize(3999));
+        assertEquals(3, MainActivity.splitFileSize(4001));
+        assertEquals(3, MainActivity.splitFileSize(5000));
+        assertEquals(5, MainActivity.splitFileSize(10000));
     }
 }
