@@ -175,19 +175,20 @@ public class MainActivity extends AppCompatActivity {
         List<Byte> listOfBytes = new ArrayList<Byte>();
 
         //FILE SIZE
-        headerString.add(String.valueOf(file.length()));
+        headerString.add(String.valueOf(file.length()+"|"));
 
         // FILE TYPE
         String filename = getMimeType(file);
-        headerString.add(filename);
+        headerString.add(filename+"|");
 
         // HASH VALUE
         int h = file.hashCode();
-        headerString.add(String.valueOf(h));
+        headerString.add(String.valueOf(h)+"|");
 
         //NUMBER OF QR CODE
         int qrCodes = splitFileSize(file.length());
         headerString.add(String.valueOf(qrCodes));
+        headerString.add(String.valueOf("\0"));                 //End tag for header
 
         for(int i = 0; i < headerString.size(); i++) {
             byte[] b =  headerString.get(i).getBytes();
