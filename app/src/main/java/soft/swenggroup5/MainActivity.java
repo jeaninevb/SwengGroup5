@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
         headerString.add(String.valueOf(h)+"|");
 
         //NUMBER OF QR CODE
-        int qrCodes = splitFileSize(file.length());
+        int qrCodes = splitFileSize((int)file.length());
         headerString.add(String.valueOf(qrCodes));
         headerString.add(String.valueOf("\0"));                 //End tag for header
 
@@ -232,14 +232,18 @@ public class MainActivity extends AppCompatActivity {
      * @param size: the size of the file to be transferred.
      * @return the number of QR Codes required.
      */
-    public static int splitFileSize(long size) {
-        int qrCodes= 0;
-        while(size > MAX_FILE_SIZE) {
-            qrCodes++;
-            size -= MAX_FILE_SIZE;
+    public static int splitFileSize(int size) {
+        if(size<=0) {
+            return 0;
         }
-        return qrCodes;
-
+        else {
+            if(size%MAX_FILE_SIZE>0 || size<MAX_FILE_SIZE) {
+                return size / MAX_FILE_SIZE + 1;
+            }
+            else {
+                return size / MAX_FILE_SIZE;
+            }
+        }
     }
 
     /**
