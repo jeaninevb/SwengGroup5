@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
      * @param size: the size of the file to be transferred.
      * @return the number of QR Codes required.
      */
-    int splitFileSize(long size) {
+    public static int splitFileSize(long size) {
         int qrCodes= 0;
         while(size > MAX_FILE_SIZE) {
             qrCodes++;
