@@ -20,27 +20,57 @@ import static junit.framework.TestCase.assertEquals;
 @SmallTest
 public class EncoderUtilsTest {
 
+    // ======================================
+    // Begin Tests for getMimeType(File file)
+    // There are 3 tests
+    // ======================================
+
     /**
-     * test_getMimeType
+     * test_getMimeType_onNullInput
      *
-     * Test for getMimeType(File file).
-     * Test consists of various temp files being created and checking that getMimeType returns
-     * the expected MIME type for the created files
-     *
-     * Remember to explicitly specify that the temp file is to be deleted on exit
-     *
-     * @throws IOException: if temp file could not be created
+     * Test getMimeType with a null input
      */
     @Test
-    public void test_getMimeType() throws IOException {
+    public void test_getMimeType_onNullInput() {
+        assertEquals(EncoderUtils.getMimeType(null), null);
+    }
+
+    /**
+     * test_getMimeType_onInvalidInput
+     *
+     * Test getMimeType with an invalid file input
+     *
+     * @throws IOException: if temp file not created successfully
+     */
+    @Test
+    public void test_getMimeType_onInvalidInput() throws IOException {
+        File testInvalidFileNoType = File.createTempFile("test_null_file", null);
+        testInvalidFileNoType.deleteOnExit();
+        assertEquals(EncoderUtils.getMimeType(testInvalidFileNoType), null);
+
+        // The below throws a null pointer exception within File. This input cannot be created
+        // File testInvalidFileNoName = File.createTempFile(null, ".txt");
+    }
+
+    /**
+     * test_getMimeType_onValidInput
+     *
+     * Test getMimeType with a valid File
+     *
+     * @throws IOException: if temp file not created successfully
+     */
+    @Test
+    public void test_getMimeType_onValidInput() throws IOException {
         File testTxtFile = File.createTempFile("test_txt_file", ".txt");
         testTxtFile.deleteOnExit();
         assertEquals(EncoderUtils.getMimeType(testTxtFile), "text/plain");
 
-
         File testPngFile = File.createTempFile("testing_png_file", ".png");
         testPngFile.deleteOnExit();
         assertEquals(EncoderUtils.getMimeType(testPngFile), "image/png");
-
     }
+
+    // ======================================
+    // Ending Tests for getMimeType(File file)
+    // ======================================
 }
