@@ -1,10 +1,8 @@
 package soft.swenggroup5;
 
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -20,17 +18,10 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -98,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Attempt to generate the qr code and put it into the ImageView
         try {
-            ArrayList<Byte> Header = encodeHeader(TEST_FILE);
+            List<Byte> Header = encodeHeader(TEST_FILE);
             Bitmap bitmap = encodeAsBitmap(STR);
             imageView.setImageBitmap(bitmap);
         } catch (WriterException e) {
@@ -173,63 +164,43 @@ public class MainActivity extends AppCompatActivity {
      * 1. File size
      * 2. File Type
      * 3. Hash value
-     * 4. Position
+     * 4. Number of qr codes
      *
      * @param file: the data to be used
-     * @return An ArrayList of buytes to be used as the QR code header
+     * @return A List of bytes to be used as the QR code header
      */
-    ArrayList encodeHeader(File file) {
-        ArrayList<Byte> header = new ArrayList<Byte>();
+    List encodeHeader(File file) {
 
-        ByteBuffer b = ByteBuffer.allocate(8);
+        ArrayList<String> headerString = new ArrayList<String>();
+        List<Byte> listOfBytes = new ArrayList<Byte>();
 
         //FILE SIZE
-        ByteBuffer buffer;
-        buffer = ByteBuffer.allocate(8);
-        buffer.putLong(file.length());
-        Log.d("file length ", String.valueOf(file.length()));
-        buffer.flip();
-        int length = buffer.remaining();
-        for(int i=0;i<length;i++)  {         //Passes individual bytes from byte array into the header list
-            header.add(buffer.get(i));
-        }
-        buffer.clear();
+        headerString.add(String.valueOf(file.length()));
 
         // FILE TYPE
-        // String ext = FilenameUtils.getExtension(file);
-        String filename = file.getName();
-        String ext = filename.substring(filename.lastIndexOf(".") + 1, filename.length()); // gets the file extension
-        byte[] fileType = ext.getBytes();
-        for(int i=0;i<fileType.length;i++) {     //Passes individual bytes from byte array into the header list
-            header.add(fileType[i]);
-        }
+        String filename = getMimeType(file);
+        headerString.add(filename);
 
         // HASH VALUE
         int h = file.hashCode();
-        buffer = ByteBuffer.allocate(4);
-        buffer.putInt(h);
-        buffer.flip();
-        for(int i=0;i<buffer.remaining();i++) {      //Passes individual bytes from byte array into the header list
-            header.add(buffer.get(i));
-        }
-        buffer.clear();
+        headerString.add(String.valueOf(h));
 
         //NUMBER OF QR CODE
         int qrCodes = splitFileSize(file.length());
-        buffer = ByteBuffer.allocate(4);
-        buffer.putInt(qrCodes);
-        buffer.flip();
-        for(int i=0;i<buffer.remaining();i++) {     //Passes individual bytes from byte array into the header list
-            header.add(buffer.get(i));
-        }
-        buffer.clear();
+        headerString.add(String.valueOf(qrCodes));
 
-        for(int i=0; i<header.size();i++) {
-            Log.d("Header val " + i, String.valueOf(header.get(i)));
+        for(int i = 0; i < headerString.size(); i++) {
+            byte[] b =  headerString.get(i).getBytes();
+            for(int j=0; j < b.length;j++) {
+                listOfBytes.add(b[j]);
+            }
         }
-
-        return header;
+        for(int i =0; i<listOfBytes.size();i++) {                       // FOR DEBUGGING PURPOSES
+            Log.d("Header val "+i,String.valueOf(listOfBytes.get(i)));
+        }
+        return listOfBytes;
     }
+
 
     /**
      * getMimeType
