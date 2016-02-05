@@ -36,4 +36,15 @@ public class EncoderUtils {
         }
         return null;
     }
+
+    //test pull first
+
+    public int  bytes{
+    if{
+
+        }
+        else{
+
+        }
+    }
 }
