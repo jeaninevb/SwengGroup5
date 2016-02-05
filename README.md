@@ -1,6 +1,6 @@
 <snippet>
-  <content><![CDATA[
-# ${1:S.O.F.T - Stable Offline File Transfer}
+  <content>
+#S.O.F.T - Stable Offline File Transfer
 
 STILL IN PRODUCTION, NOT A FINISHED PRODUCT
 
@@ -59,7 +59,5 @@ Sam Green - https://github.com/greens1
 Cormac Keane - https://github.com/CrusaderCrab
 
 ## License
-TODO: Add license
-]]></content>
-  <tabTrigger>readme</tabTrigger>
+TODO: Add license</content>
 </snippet>
