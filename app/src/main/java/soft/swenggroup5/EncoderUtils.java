@@ -38,13 +38,7 @@ public class EncoderUtils {
     }
 
     //test pull first
-
-    public int  bytes{
-    if{
-
-        }
-        else{
-
-        }
-    }
+/*    private List<Bytes> getFileBytes(File file) {
+        // your code here
+    }*/
 }
