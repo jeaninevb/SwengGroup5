@@ -2,8 +2,8 @@ package soft.swenggroup5;
 
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-
 import java.io.File;
+import java.util.List;
 
 /**
  * EncoderUtils
@@ -61,7 +61,8 @@ public class EncoderUtils {
     }
 
     //test pull first
-/*    private List<Bytes> getFileBytes(File file) {
+    private List<Byte> getFileBytes(File file) {
         // your code here
-    }*/
+        return null;
+    }
 }
