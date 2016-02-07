@@ -46,7 +46,7 @@ public class EncoderUtils {
      * @param size: the size of the file to be transferred.
      * @return the number of QR Codes required.
      */
-    public static int splitFileSize(int size) {
+    public static int numberOfQRCodes(int size) {
         if(size<=0) {
             return 0;
         }

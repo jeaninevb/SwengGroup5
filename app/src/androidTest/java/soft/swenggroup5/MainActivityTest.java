@@ -22,9 +22,16 @@ import static junit.framework.TestCase.assertEquals;
 @RunWith(AndroidJUnit4.class)
 @SmallTest
 public class MainActivityTest {
+
+    // ======================================
+    // Begin Tests for encodeHeader(File file)
+    // There is 1 test (More will be added)
+    // ======================================
+
+    // TODO Test null file
     @Test
     public void test_encodeHeader()throws IOException {
-        File testTxtFile = File.createTempFile("test", ".txt");
+        File testTxtFile = File.createTempFile("test", ".txt");                  //Create a temporary test file
         testTxtFile.deleteOnExit();
         // write hello to the temp file
         FileOutputStream s = new FileOutputStream(testTxtFile);
@@ -38,26 +45,26 @@ public class MainActivityTest {
 
         s.close();
 
-        List<Byte> expected = new ArrayList<Byte>();
+        List<Byte> expected = new ArrayList<Byte>();                    //Assign expected values
         byte[] exp = {(byte) 54, (byte) 124, (byte) 116, (byte) 101, (byte) 120,
                 (byte) 116, (byte) 47, (byte) 112, (byte) 108, (byte) 97,
                 (byte) 105, (byte) 110, (byte) 124, (byte) 45, (byte) 50, (byte) 49,
                 (byte) 51, (byte) 52, (byte) 48, (byte) 51, (byte) 52, (byte) 57,
                 (byte) 49, (byte) 124, (byte) 49, (byte) 0};
         byte[] b;
-        do {
-            int x = testTxtFile.hashCode();
-            b = String.valueOf(x).getBytes();
+        do {                                                             //the method .hashCode() can return different values for the same file
+            int hashCode = testTxtFile.hashCode();                       //therefore conditions have been added to ensure it matches the one generated
+            b = String.valueOf(hashCode).getBytes();                     //by encodeHeader().
         }while(b.length!=10);
 
-        int j =0;
+        int j =0;                                                            //Replaces random bytes in array exp with the correct hash code value
         for(int i=13;j<b.length;i++) {
             exp[i]= b[j++];
         }
-        for(int i=0; i<exp.length;i++) {
+        for(int i=0; i<exp.length;i++) {                                    //Adds the array to a List used for comparison
             expected.add(exp[i]);
         }
-       assertEquals(MainActivity.encodeHeader(testTxtFile),expected);
+        assertEquals(MainActivity.encodeHeader(testTxtFile),expected);
     }
 
 }
