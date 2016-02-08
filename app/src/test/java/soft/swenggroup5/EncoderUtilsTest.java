@@ -14,13 +14,13 @@ public class EncoderUtilsTest {
      */
     @Test
     public void test_splitFileSize()  {
-        assertEquals(0, EncoderUtils.splitFileSize(-1));
-        assertEquals(0, EncoderUtils.splitFileSize(0));
-        assertEquals(1, EncoderUtils.splitFileSize(1));
-        assertEquals(2, EncoderUtils.splitFileSize(2001));
-        assertEquals(2, EncoderUtils.splitFileSize(3999));
-        assertEquals(3, EncoderUtils.splitFileSize(4001));
-        assertEquals(3, EncoderUtils.splitFileSize(5000));
-        assertEquals(5, EncoderUtils.splitFileSize(10000));
+        assertEquals(0, EncoderUtils.numberOfQRCodes(-1));
+        assertEquals(0, EncoderUtils.numberOfQRCodes(0));
+        assertEquals(1, EncoderUtils.numberOfQRCodes(1));
+        assertEquals(2, EncoderUtils.numberOfQRCodes(2001));
+        assertEquals(2, EncoderUtils.numberOfQRCodes(3999));
+        assertEquals(3, EncoderUtils.numberOfQRCodes(4001));
+        assertEquals(3, EncoderUtils.numberOfQRCodes(5000));
+        assertEquals(5, EncoderUtils.numberOfQRCodes(10000));
     }
 }
