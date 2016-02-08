@@ -39,24 +39,28 @@ TODO: Write usage instructions
 4. Push to the branch: `git push origin my-new-feature`
 5. Submit a pull request :D
 
-## Testing
-
-#JVM Unit Tests
-TODO
-
-#Instrumented Unit Tests
-TODO
+## Testing on Windows
 
 #Automated Testing
-TODO
+1. Run ```.\PowerShellRunTests.ps1```
+2. If the resulting output is as shown below you are clear to push:
+![alt tag](https://github.com/jeaninevb/SwengGroup5/blob/BackEnd/README_Images/Powershell_ClearToPush.PNG)
+
+3. If the resulting output is as shown below, your instrumented tests were not run. This likely means that you did not have a connected device or an emulator available:
+![alt tag](https://github.com/jeaninevb/SwengGroup5/blob/BackEnd/README_Images/Powershell_AndroidBuildFail.PNG)
+
+4. If the resulting output is as shown below, your tests failed and you should go back and fix whatever changes caused tests to fail before pushing:
+![alt tag](https://github.com/jeaninevb/SwengGroup5/blob/BackEnd/README_Images/Powershell_FailedTests.PNG)
+
+
 
 ## Credits
-Jeanine Burke - https://github.com/jeaninevb
-Tomas Barry - https://github.com/TomasBarry
-Sean McGroarty - https://github.com/McGizzle
-Lingfeng Yue - https://github.com/sorocky
-Sam Green - https://github.com/greens1
-Cormac Keane - https://github.com/CrusaderCrab
+Jeanine Burke - https://github.com/jeaninevb<br />
+Tomas Barry - https://github.com/TomasBarry<br />
+Sean McGroarty - https://github.com/McGizzle<br />
+Lingfeng Yue - https://github.com/sorocky<br />
+Sam Green - https://github.com/greens1<br />
+Cormac Keane - https://github.com/CrusaderCrab<br />
 
 ## License
 TODO: Add license</content>
