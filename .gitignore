@@ -7,6 +7,5 @@
 /build
 /captures
 
-BashRunTests.sh
 instrumented_test_results.txt
 jvm_test_results.txt
