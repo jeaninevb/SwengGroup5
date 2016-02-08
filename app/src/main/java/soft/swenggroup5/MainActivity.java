@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         headerString.add(String.valueOf(h) + "|");
 
         //NUMBER OF QR CODE
-        int qrCodes = EncoderUtils.splitFileSize(headerString.size() + 5);
+        int qrCodes = EncoderUtils.numberOfQRCodes(headerString.size() + 5);
         headerString.add(String.valueOf(qrCodes));
         headerString.add(String.valueOf("\0"));                 //End tag for header
 
