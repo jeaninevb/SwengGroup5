@@ -24,13 +24,26 @@ import static junit.framework.TestCase.assertEquals;
 public class MainActivityTest {
 
     // ======================================
-    // Begin Tests for encodeHeader(File file)
+    // Begin Tests for encodeHeader(java.io.File file)
     // There is 1 test (More will be added)
     // ======================================
 
-    // TODO Test null file
+    /**
+     * test_encodeHeader_null()
+     *
+     * Test encodeHeader(File file) with a null input
+     */
     @Test
-    public void test_encodeHeader()throws IOException {
+    public void test_encodeHeader_null()throws IOException {
+        assertEquals(MainActivity.encodeHeader(null),null);
+    }
+    /**
+     * test_encodeHeader_validInput()
+     *
+     * Test encodeHeader(File file) with a valid input
+     */
+    @Test
+    public void test_encodeHeader_validInput()throws IOException {
         File testTxtFile = File.createTempFile("test", ".txt");                  //Create a temporary test file
         testTxtFile.deleteOnExit();
         // write hello to the temp file
@@ -41,8 +54,6 @@ public class MainActivityTest {
         s.write('s');
         s.write('t');
         s.write('*');
-
-
         s.close();
 
         List<Byte> expected = new ArrayList<Byte>();                    //Assign expected values
@@ -69,5 +80,20 @@ public class MainActivityTest {
         }
         assertEquals(MainActivity.encodeHeader(testTxtFile),expected);
     }
+    /**
+     * test_encodeHeader_invalidInput()
+     *
+     * Test encodeHeader(File file) with an invalid input
+     */
+    @Test
+    public void test_encodeHeader_invalidInput() throws IOException {
 
+        File testInvalidFileNoType = File.createTempFile("test_null_file", null);
+        testInvalidFileNoType.deleteOnExit();
+        assertEquals(MainActivity.encodeHeader(testInvalidFileNoType), null);
+    }
+
+    // ======================================
+    // Ending Tests for encodeHeader(File file)
+    // ======================================
 }

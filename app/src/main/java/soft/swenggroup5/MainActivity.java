@@ -170,6 +170,10 @@ public class MainActivity extends AppCompatActivity {
      */
     static List encodeHeader(File file) {
 
+        if(file==null || file.length()==0) {
+            return null;
+        }
+
         ArrayList<String> headerString = new ArrayList<String>();
         List<Byte> listOfBytes = new ArrayList<Byte>();
 
