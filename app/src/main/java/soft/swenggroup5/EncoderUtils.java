@@ -20,6 +20,11 @@ public class EncoderUtils {
 
     private final static int MAX_FILE_SIZE = 2000;
     /**
+     * encodeFile
+     *
+     * Takes in the file and converts it to bytes
+     */
+    /**
      * getMimeType
      *
      * Get the MIME type of a file.

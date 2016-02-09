@@ -51,43 +51,57 @@ echo "JVM Test Results:"
 
 
 # Get the .xml files that contain the results
-chmod u+x ./app/build/test-results/debug/TEST-soft.swenggroup5.ExampleUnitTest.xml
-files=./app/build/test-results/debug/TEST-soft.swenggroup5.ExampleUnitTest.xml
+
+
+chmod u+x ./app/build/test-results/debug/TEST-soft.swenggroup5.MainActivityTest.xml
+chmod u+x ./app/build/test-results/debug/TEST-soft.swenggroup5.EncoderUtilsTest.xml
+FILES[0]=./app/build/test-results/debug/TEST-soft.swenggroup5.MainActivityTest.xml  
+FILES[1]=./app/build/test-results/debug/TEST-soft.swenggroup5.EncoderUtilsTest.xml
+
 
 #for each file
-i=0
-count=${#files}
-echo $count
-while [ $i -lt 1 ]
- do
+
 # convert the results to parseable object
-    report=load $files
 
+read_dom () {
+    local IFS=\>
+    read -d \< ENTITY CONTENT
+    local ret=$?
+    TAG_NAME=${ENTITY%% *}
+    ATTRIBUTES=${ENTITY#* }
+    return $ret
+}
+parse_dom () {
+    if [[ $TAG_NAME = "testsuite" ]] ; then
+        eval local $ATTRIBUTES
+        name1=$name
+		num_tests=$tests
+		num_skipped=$skipped
+		num_errors=$errors
+		num_failures=$failures
+		time1=$time
+    fi
+} 
+for (( c=0; c<2; c++ ))
+do
+while read_dom; do
+    parse_dom
+done < ${FILES[$c]}
 	
-
-    # get relevant information from results
-   
-    name=($report grep -oP '(?<=testsuite name>)[^<]+')	
-    num_tests=($report grep -oP '(?<=testsuite>)[^<]+')
-    num_skipped=($report grep -oP '(?<=testsuite>)[^<]+')
-    num_failures=($report grep -oP '(?<=testsuite>)[^<]+')
-    num_errors=($report grep -oP '(?<=testsuite>)[^<]+')
-    time=($report xml_grep -oP '(?<=testsuite>)[^<]+')
-
     # update totals
-    $num_skipped_total=$((num_skipped + num_skipped_total))
-    $num_failures_total=$((num_failures + num_failures_total))
-    $num_errors_total=$((num_errors + num_errors_total))
+   (( num_skipped_total += num_skipped ))
+   (( num_failures_total += num_failures ))
+   (( num_errors_total += num_errors ))
 
     # print out the results
-    echo $name 
-    echo ”Duration = $time :”
-    echo "Number of tests = $num_tests“
-    echo "Number of skipped tests = $num_skipped“
-    echo "Number of failed tests = $num_failures“
-    echo "Number of test errors = $num_errors“
- $i=$((i + 1))
-done
+    echo "			Name: $name1 "
+    echo "			Duration = $time1 :"
+    echo "						Number of tests = $num_tests"
+    echo "						Number of skipped tests = $num_skipped"
+	echo "						Number of test errors = $num_errors"
+    echo "						Number of failed tests = $num_failures "
+done   
+
 #####################################################
 #####################################################
 
