@@ -57,7 +57,10 @@ public class MainActivityTest {
             b = String.valueOf(hashCode).getBytes();                     //by encodeHeader().
         }while(b.length!=10);
 
-        int j =0;                                                            //Replaces random bytes in array exp with the correct hash code value
+        int j =0;
+        int k = 0;
+
+        int l = 123;                                                           //Replaces random bytes in array exp with the correct hash code value
         for(int i=13;j<b.length;i++) {
             exp[i]= b[j++];
         }
