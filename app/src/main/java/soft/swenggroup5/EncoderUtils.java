@@ -89,5 +89,56 @@ public class EncoderUtils {
         }
         return byteList;                //return the array list containing all bytes
     }
+    /**
+     * encodeHeader
+     *
+     * Takes a file and its position and returns an ArrayList of bytes representing
+     * 1. File size
+     * 2. File Type
+     * 3. Hash value
+     * 4. Number of qr codes
+     *
+     * @param file: the data to be used
+     * @return A List of bytes to be used as the QR code header
+     */
+    static List encodeHeader(File file) {
+
+        if(file==null || file.length()==0) {
+            return null;
+        }
+
+        ArrayList<String> headerString = new ArrayList<String>();
+        List<Byte> listOfBytes = new ArrayList<Byte>();
+
+        //FILE SIZE
+        headerString.add(String.valueOf(file.length()+"|"));
+
+        // FILE TYPE
+        String filename = EncoderUtils.getMimeType(file);
+        headerString.add(filename+"|");
+
+        // HASH VALUE
+        int h = file.hashCode();
+        headerString.add(String.valueOf(h) + "|");
+
+        //NUMBER OF QR CODE
+        int qrCodes = EncoderUtils.numberOfQRCodes(headerString.size() + 5);
+        headerString.add(String.valueOf(qrCodes));
+        headerString.add(String.valueOf("\0"));                 //End tag for header
+
+        for(int i = 0; i < headerString.size(); i++) {
+            byte[] b =  headerString.get(i).getBytes();
+            for(int j=0; j < b.length;j++) {
+                listOfBytes.add(b[j]);
+            }
+        }
+        for(int i =0; i<listOfBytes.size();i++) {                       // FOR DEBUGGING PURPOSES
+            Log.d("Header val "+i,String.valueOf(listOfBytes.get(i)));
+        }
+        return listOfBytes;
+    }
+
+
+
 
 }
