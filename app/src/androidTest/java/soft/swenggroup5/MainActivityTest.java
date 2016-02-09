@@ -24,8 +24,8 @@ import static junit.framework.TestCase.assertEquals;
 public class MainActivityTest {
 
     // ======================================
-    // // Begin Tests for encodeHeader(java.io.File file)
-    // There is 1 test (More will be added)
+    // Begin Tests for encodeHeader(java.io.File file)
+    //
     // ======================================
 
     /**
@@ -35,7 +35,7 @@ public class MainActivityTest {
       */
     @Test
     public void test_encodeHeader_null()throws IOException {
-         assertEquals(MainActivity.encodeHeader(null),null);
+         assertEquals(EncoderUtils.encodeHeader(null),null);
      }
 
      /**
@@ -81,7 +81,7 @@ public class MainActivityTest {
         for(int i=0; i<exp.length;i++) {                                    //Adds the array to a List used for comparison
             expected.add(exp[i]);
         }
-        assertEquals(MainActivity.encodeHeader(testTxtFile),expected);
+        assertEquals(EncoderUtils.encodeHeader(testTxtFile),expected);
     }
 
     /**
@@ -94,7 +94,7 @@ public class MainActivityTest {
 
          File testInvalidFileNoType = File.createTempFile("test_null_file", null);
          testInvalidFileNoType.deleteOnExit();
-         assertEquals(MainActivity.encodeHeader(testInvalidFileNoType), null);
+         assertEquals(EncoderUtils.encodeHeader(testInvalidFileNoType), null);
      }
      // ======================================
      // Ending Tests for encodeHeader(File file)
