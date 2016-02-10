@@ -140,10 +140,3 @@ else
 	echo "**************************************************************"
 	echo ""
 fi
-#Remove temporary files on exit
-#rm jvm_build
-#rm instrumented_build
-rm jvm_test_results.txt
-rm instrumented_test_results.txt
-
-
