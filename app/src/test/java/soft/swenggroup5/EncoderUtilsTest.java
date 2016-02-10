@@ -23,4 +23,6 @@ public class EncoderUtilsTest {
         assertEquals(3, EncoderUtils.numberOfQRCodes(5000));
         assertEquals(5, EncoderUtils.numberOfQRCodes(10000));
     }
+
+    // LINGFENG TODO
 }
