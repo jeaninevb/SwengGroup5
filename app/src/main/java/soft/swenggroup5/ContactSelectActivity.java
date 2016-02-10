@@ -7,6 +7,8 @@ import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import java.io.File;
+
 /**
  * Contact Select Activity:
  * In Short: Activity that allows a user to select a contact, if cancelled returns to the previous
@@ -92,7 +94,7 @@ public class ContactSelectActivity extends AppCompatActivity {
                 nameIdx = cursor.getColumnIndex(
                         ContactsContract.Contacts.DISPLAY_NAME);
                 name = cursor.getString(nameIdx); //get the string at row 0, DISPLAY_NAME column
-
+                contactData.addName(name);
                     /*
                     Now that we have the name we query the contact "database" again, filtering results
                     to only return results on the same row as our chosen contacts name
@@ -146,6 +148,12 @@ public class ContactSelectActivity extends AppCompatActivity {
                         }
 
                     } while (cursor.moveToNext());
+                    try { //try needed to catch IOExceptions from toFile()
+                        File contactFile = contactData.toFile(this);
+                        //TODO: Pass file to next Activity, the "display file" Activity
+                    }catch(Exception e) {
+                        //TODO: Handle Exception smartly
+                    }
 
                 }
             }
