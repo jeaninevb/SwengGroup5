@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 /**
  * Contact Select Activity:
@@ -66,7 +65,9 @@ public class ContactSelectActivity extends AppCompatActivity {
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == RESULT_OK) { //if a contact was chosen
+        if (resultCode == RESULT_OK) { //if Contact Intent ended with the user selecting a Contact
+
+            ContactData contactData = new ContactData(); //used to store collected Contact data
             // handle contact results
             String name;    // the chosen contacts name
             String mime;    // the id of the piece of data in the contact we are looking at
@@ -74,8 +75,7 @@ public class ContactSelectActivity extends AppCompatActivity {
             int data2Idx;   // Index of DATA2 column
             int mimeIdx;    // Index of MIMETYPE column
             int nameIdx;    // Index of DISPLAY_NAME column
-            String email;
-            String phone;
+
             Uri contactUri = data.getData(); //Get the URI that represents the chosen contact
 
                 /*
@@ -124,24 +124,27 @@ public class ContactSelectActivity extends AppCompatActivity {
                     data2Idx = cursor.getColumnIndex(
                             ContactsContract.Contacts.Data.DATA2);
 
-                    // Go through the table and store it
-                    // and save it into a TEMPORARY_contact for now
+                    // Match the data to the MIME type, store in variables
                     do {
                         mime = cursor.getString(mimeIdx);
                         if (ContactsContract.CommonDataKinds.Email
                                 .CONTENT_ITEM_TYPE.equalsIgnoreCase(mime)) {
-                            email = cursor.getString(dataIdx);
-                            int type = cursor.getInt(data2Idx);
-                            Log.v("Got an Email: ", email);
-                            //TODO: Store the data somewhere
+                            String email = cursor.getString(dataIdx);
+                            int emailType = cursor.getInt(data2Idx);
+                            contactData.addEmail(email, emailType);
                         }
                         if (ContactsContract.CommonDataKinds.Phone
                                 .CONTENT_ITEM_TYPE.equalsIgnoreCase(mime)) {
-                            phone = cursor.getString(dataIdx);
-                            int type = cursor.getInt(data2Idx);
-                            Log.v("Got a phone number", phone);
-                            //TODO: Store the data somewhere
+                            String phone = cursor.getString(dataIdx);
+                            int phoneType = cursor.getInt(data2Idx);
+                            contactData.addPhoneNumber(phone, phoneType);
                         }
+                        if(ContactsContract.CommonDataKinds.StructuredPostal.
+                                CONTENT_ITEM_TYPE.equalsIgnoreCase(mime)){
+                            String postal = cursor.getString(dataIdx);
+                            contactData.addPostalAddress(postal);
+                        }
+
                     } while (cursor.moveToNext());
 
                 }
