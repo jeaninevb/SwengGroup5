@@ -9,5 +9,9 @@
 /build
 /captures
 
+# Powershell result output
 instrumented_test_results.txt
 jvm_test_results.txt
+
+# Bash result output
+x
