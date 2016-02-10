@@ -110,7 +110,6 @@ done
 total_results=$((num_skipped_total+num_failures_total+num_errors_total))
 jvm_build=$( tail -5 $jvm_results | head -1 )
 instrumented_build=$( tail -5 $instrumented_results | head -1 )
-echo $jvm_build
 
 
 if [ $total_results != 0 ] 
@@ -135,8 +134,16 @@ then
 	echo "################################################################"     
 	echo ""
 else
-	echo "Everything was succesful! You can now push."
+	echo ""
+	echo "**************************************************************"
+	echo "			CLEAR TO PUSH								"
+	echo "**************************************************************"
+	echo ""
 fi
-
+#Remove temporary files on exit
+#rm jvm_build
+#rm instrumented_build
+rm jvm_test_results.txt
+rm instrumented_test_results.txt
 
 

@@ -41,7 +41,7 @@ TODO: Write usage instructions
 
 ## Testing on Windows
 
-#Automated Testing
+#Automated Testing for Windows
 1. Run ```.\PowerShellRunTests.ps1```
 2. If the resulting output is as shown below you are clear to push:
 ![alt tag](https://github.com/jeaninevb/SwengGroup5/blob/BackEnd/README_Images/Powershell_ClearToPush.PNG)
@@ -51,6 +51,16 @@ TODO: Write usage instructions
 
 4. If the resulting output is as shown below, your tests failed and you should go back and fix whatever changes caused tests to fail before pushing:
 ![alt tag](https://github.com/jeaninevb/SwengGroup5/blob/BackEnd/README_Images/Powershell_FailedTests.PNG)
+
+#Automated Testing for Mac
+1. Run ```./BashRunTests.sh```, make sure you either have an android device connected or the emulator running.
+
+2. If the resulting output is:”BUILD SUCCESSFUL
+Everything was succesful! You can now push.”
+Then you are clear to push.
+
+3. If the resulting output is an error message then it will explain where the testing problem is and it should be fixed before being pushed.
+
 
 
 
