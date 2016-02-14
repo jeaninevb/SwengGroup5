@@ -70,7 +70,7 @@ public class EncoderUtils {
     }
 
     //convert a file object into a list of bytes
-    private List<Byte> getFileBytes(File file) {
+    public static List<Byte> getFileBytes(File file) {
 
         byte[] array = new byte[(int) file.length()];  //create an array for bytes
         try {

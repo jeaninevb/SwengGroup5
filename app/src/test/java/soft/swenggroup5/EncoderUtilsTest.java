@@ -3,7 +3,9 @@ package soft.swenggroup5;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,25 +31,31 @@ public class EncoderUtilsTest {
         assertEquals(5, EncoderUtils.numberOfQRCodes(10000));
     }
 
+
     // LINGFENG TODO
+    @Test
+    public void test_getFileBytes_onNullInput(){
+        assertEquals(EncoderUtils.getFileBytes(null), null);
+    }
 
     @Test
-    public void testGetFileBytes()throws FileNotFoundException {
+    public void test_getFileBytes_onInvalidInput() throws IOException {
+        File testInvalidFile = File.createTempFile("test_null_file", null);
+        testInvalidFile.deleteOnExit();
+        assertEquals(EncoderUtils.getFileBytes(testInvalidFile), null);
 
-        List<String[]> expected = new ArrayList<>();
-        expected.add(new String[]{"abc", "bar"});
-        expected.add(new String[]{"bcd", "efg"});
+    }
 
-        List<String[]> actual = new ArrayList<>();
-        actual.add(new String[]{"abc", "bar"});
-        actual.add(new String[]{"bcd", "efg"});
+    @Test
+    public void test_getFileBytes_onValidInput() throws IOException {
+        File testValidTxtFile = File.createTempFile("test_txt_file", ".txt");
+        testValidTxtFile.deleteOnExit();
+        assertEquals(EncoderUtils.getFileBytes(testValidTxtFile), "text/plain");
 
-        assertEquals(expected.size(), actual.size());
-        for (int i = 0; i < expected.size(); i++) {
-            for (int j = 0; j < expected.get(i).length; j++) {
-                Assert.assertEquals(expected.get(i)[j], actual.get(i)[j]);
-            }
-        }
+        File testValidPngFile = File.createTempFile("testing_png_file", ".png");
+        testValidPngFile.deleteOnExit();
+        assertEquals(EncoderUtils.getFileBytes(testValidPngFile), "image/png");
+
     }
 
 }
