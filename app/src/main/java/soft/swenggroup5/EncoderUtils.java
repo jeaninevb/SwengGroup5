@@ -71,28 +71,32 @@ public class EncoderUtils {
 
     //convert a file object into a list of bytes
     public static List<Byte> getFileBytes(File file) {
-
-        byte[] array = new byte[(int) file.length()];  //create an array for bytes
-        try {
-            FileInputStream fileInputStream = new FileInputStream(file);  //read through the file and put into the array in Bytes
-            fileInputStream.read(array);
-            for (int i = 0; i < array.length; i++) {
-                System.out.print((char)array[i]);
+        if(file != null){
+            byte[] array = new byte[(int) file.length()];  //create an array for bytes
+            try {
+                FileInputStream fileInputStream = new FileInputStream(file);  //read through the file and put into the array in Bytes
+                fileInputStream.read(array);
+                for (int i = 0; i < array.length; i++) {
+                    System.out.print((char)array[i]);
+                }
+            } catch (FileNotFoundException e) {                 //through "File Not Found" if can't find the file
+                System.out.println("File Not Found.");
+                e.printStackTrace();
             }
-        } catch (FileNotFoundException e) {                 //through "File Not Found" if can't find the file
-            System.out.println("File Not Found.");
-            e.printStackTrace();
-        }
-        catch (IOException e1) {
-            System.out.println("Error Reading The File.");      //through "Error Reading The File" if there is an error of reading file
-            e1.printStackTrace();
+            catch (IOException e1) {
+                System.out.println("Error Reading The File.");      //through "Error Reading The File" if there is an error of reading file
+                e1.printStackTrace();
+            }
+
+            List<Byte> byteList = new ArrayList<Byte>();    // create a new array list
+            for (int index = 0; index < array.length; index++) {
+                byteList.add(array[index]);                     //put each index of array into array list
+            }
+            return byteList;                //return the array list containing all bytes
+
         }
 
-        List<Byte> byteList = new ArrayList<Byte>();    // create a new array list
-        for (int index = 0; index < array.length; index++) {
-            byteList.add(array[index]);                     //put each index of array into array list
-        }
-        return byteList;                //return the array list containing all bytes
+            return null;
     }
     /**
      * encodeHeader
