@@ -110,7 +110,7 @@ public class EncoderUtils {
      * @param file: the data to be used
      * @return A List of bytes to be used as the QR code header
      */
-    static List<Byte> encodeHeader(File file) {
+   public static List<Byte> encodeHeader(File file) {
 
         if(file==null || file.length()==0) {
             return null;

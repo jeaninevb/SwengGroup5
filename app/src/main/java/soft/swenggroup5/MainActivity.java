@@ -19,6 +19,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -119,7 +120,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    /**
+     * encodeFile
+     *
+     * Takes a file and returns a List of bytes representing the data
+     *
+     * @param file: The data to be converted to QR Code
+     * @return a List of Bytes
+     */
+    List<Byte> encodeFile(File file) {
+        if(file!=null || file.length()!=0) {
+            List<Byte> b = new ArrayList<Byte>(EncoderUtils.encodeHeader(file));
+            b.addAll(EncoderUtils.getFileBytes(file));
+            return b;
+        }
+        return null;
 
+    }
 
     /**
      * encodeAsBitmap
