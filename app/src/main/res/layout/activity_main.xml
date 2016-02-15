@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp" >
+    android:paddingLeft="1dp"
+    android:paddingRight="1dp"
+    tools:context=".MainActivity">
+
+    <ImageButton
+        android:layout_width="400dp"
+        android:layout_height="130dp"
+        android:id="@+id/imageButton"
+        android:src="@mipmap/softlogo"
+        android:adjustViewBounds="false"
+        android:layout_alignParentTop="true"
+        android:longClickable="false" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Button"
-        android:id="@+id/button"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_width="@dimen/main_screen_button_width"
+        android:layout_height="@dimen/main_screen_button_height"
+        android:text="Open Contacts"
+        android:id="@+id/openContacts"
+        android:layout_marginTop="300dp"
+        android:layout_alignLeft="@+id/receive"
+        android:layout_alignStart="@+id/receive"
+        android:onClick="contacts"
 
-    <ImageView
-        android:id="@+id/qrCode"
-        android:layout_width="500px"
-        android:layout_height="500px" />
+
+        />
+
+    <Button
+        android:layout_width="@dimen/main_screen_button_width"
+        android:layout_height="@dimen/main_screen_button_height"
+        android:text="Receive File"
+        android:id="@+id/receive"
+        android:layout_below="@+id/openContacts"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="65dp" />
 
 </RelativeLayout>

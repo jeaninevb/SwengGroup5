@@ -54,19 +54,28 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Create the scan button referencing the button in res/activity_main.xml
-        Button scanButton = (Button)findViewById(R.id.button);
+        Button scanButton = (Button)findViewById(R.id.generate);
 
-        // Create a space that will be used to present the demo generated qr code
-        ImageView imageView = (ImageView) findViewById(R.id.qrCode);
+//        // Create a space that will be used to present the demo generated qr code
+//        ImageView imageView = (ImageView) findViewById(R.id.qrCode);
+//
+//        // Attempt to generate the qr code and put it into the ImageView
+//        try {
+//            Bitmap bitmap = encodeAsBitmap(STR);
+//            imageView.setImageBitmap(bitmap);
+//        } catch (WriterException e) {
+//            e.printStackTrace();
+//        }
+//        unnecessary at the moment
 
-        // Attempt to generate the qr code and put it into the ImageView
-        try {
-            Bitmap bitmap = encodeAsBitmap(STR);
-            imageView.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
-
+//        /** Called when the user clicks the open contacts button */
+//        public void openContacts(View view) {
+//            // Do something in response to button
+//
+//                Intent intent = new Intent(this, ContactSelectActivity.class);
+//
+//        }
+//
         // Create the event listener for when scanButton is clicked
         scanButton.setOnClickListener(new View.OnClickListener() {
 
@@ -133,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * Defines what happens when a successful read of a qr code occurs. Right now (at base), when
      * a qr code is successfully scanned, the scanner is exited and the contents of the scan
-     * are breifly shown on the device screen TODO update when changes
+     * are briefly shown on the device screen TODO update when changes
      *
      * @param requestCode: TODO investigate params
      * @param resultCode: TODO investigate params
