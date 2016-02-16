@@ -1,7 +1,14 @@
 package soft.swenggroup5;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,6 +26,10 @@ import java.util.List;
 public class EncoderUtils {
 
     private final static int MAX_FILE_SIZE = 2000;
+    private final static int WHITE = 0xFFFFFFFF;
+    private final static int BLACK = 0xFF000000;
+    private final static int WIDTH = 400;
+    private final static int HEIGHT = 400;
     /**
      * encodeFile
      *
@@ -143,8 +154,59 @@ public class EncoderUtils {
         return listOfBytes;
     }
 
+    /**
+     * byteListToString
+     *
+     * Convert a List<Byte> to a String
+     *
+     * @param list: the list to convert
+     * @return a string representing the passed list
+     */
+    public static String byteListToString(List<Byte> list) {
+        if(list != null) {
+            byte[] data = new byte[list.size()];
+            int i = 0;
+            for (Byte b : list) {
+                data[i++] = b;
+            }
+            return new String(data);
+        }
+        return null;
+    }
 
+    /**
+     * encodeAsBitmap
+     *
+     * Takes a string and returns a bitmap representation of the string as a qr code
+     *
+     * @param dataBytes: bytes to generate a qr code for
+     * @return a bitmap representing the qr code generated for the passed string
+     * @throws WriterException
+     */
+    public static Bitmap generateQRCodeBitmap(List<Byte> dataBytes) throws WriterException {
+        String stringToConvert = byteListToString(dataBytes);
 
+        BitMatrix result;
+        try {
+            result = new MultiFormatWriter().encode(stringToConvert, BarcodeFormat.QR_CODE, WIDTH, HEIGHT, null);
+        } catch (IllegalArgumentException iae) {
+            // Unsupported format
+            return null;
+        }
 
+        int width = result.getWidth();
+        int height = result.getHeight();
+        int[] pixels = new int[width * height];
+        for (int y = 0; y < height; y++) {
+            int offset = y * width;
+            for (int x = 0; x < width; x++) {
+                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+            }
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
+        return bitmap;
+    }
 
 }

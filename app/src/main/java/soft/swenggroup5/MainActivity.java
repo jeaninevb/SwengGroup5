@@ -1,7 +1,6 @@
 package soft.swenggroup5;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,16 +9,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -35,10 +29,6 @@ public class MainActivity extends AppCompatActivity {
      * INTEGRATOR: Object that is used to access the integrated scanner
      * TEST_FILE: test file to show encoding of header TODO remove
      */
-    private final static int WHITE = 0xFFFFFFFF;
-    private final static int BLACK = 0xFF000000;
-    private final static int WIDTH = 400;
-    private final static int HEIGHT = 400;
     private final static String STR = "Software Engineering Group 5 - SOFT";
     private final IntentIntegrator INTEGRATOR = new IntentIntegrator(this);
     private File TEST_FILE;
@@ -85,14 +75,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Write_to_temp", e.toString());
         }
 
-        // Attempt to generate the qr code and put it into the ImageView
-        try {
-            List<Byte> Header = EncoderUtils.encodeHeader(TEST_FILE);
-            Bitmap bitmap = encodeAsBitmap(STR);
-            imageView.setImageBitmap(bitmap);
-        } catch (WriterException e) {
-            e.printStackTrace();
-        }
+        // TODO Attempt to generate the qr code and put it into the ImageView
 
         // Create the event listener for when scanButton is clicked
         scanButton.setOnClickListener(new View.OnClickListener() {
@@ -118,41 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 INTEGRATOR.initiateScan();
             }
         });
-    }
-
-
-    /**
-     * encodeAsBitmap
-     *
-     * Takes a string and returns a bitmap representation of the string as a qr code
-     *
-     * @param stringToConvert: the string to generate a qr code for
-     * @return a bitmap representing the qr code generated for the passed string
-     * @throws WriterException
-     */
-    Bitmap encodeAsBitmap(String stringToConvert) throws WriterException {
-        // TODO investigate
-        BitMatrix result;
-        try {
-            result = new MultiFormatWriter().encode(stringToConvert, BarcodeFormat.QR_CODE, WIDTH, HEIGHT, null);
-        } catch (IllegalArgumentException iae) {
-            // Unsupported format
-            return null;
-        }
-
-        int width = result.getWidth();
-        int height = result.getHeight();
-        int[] pixels = new int[width * height];
-        for (int y = 0; y < height; y++) {
-            int offset = y * width;
-            for (int x = 0; x < width; x++) {
-                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
-            }
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-        return bitmap;
     }
 
     /**
