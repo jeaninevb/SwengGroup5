@@ -3,11 +3,9 @@ package soft.swenggroup5;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import java.io.File;
 
@@ -29,17 +27,11 @@ public class ContactSelectActivity extends AppCompatActivity {
      *
      * @param savedInstanceState: unused
      */
-    protected  void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Button contactButton = (Button)findViewById(R.id.contactButton);
-        contactButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
 
-                setContentView(R.layout.activity_contact_select);
-                doLaunchContactPicker();
-         }
-        });
+    protected  void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_contact_select);
+        doLaunchContactPicker();
     }
 
     /**

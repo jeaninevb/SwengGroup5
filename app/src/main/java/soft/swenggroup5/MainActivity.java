@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int HEIGHT = 400;
     private final static String STR = "Software Engineering Group 5 - SOFT";
     private final IntentIntegrator INTEGRATOR = new IntentIntegrator(this);
+    private final ContactSelectActivity CONTACT_SCREEN = new ContactSelectActivity();
 
     /**
      * onCreate
@@ -48,12 +49,14 @@ public class MainActivity extends AppCompatActivity {
      * @param savedInstanceState: required param to instantiate the super class
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // Create the scan button referencing the button in res/activity_main.xml
         Button scanButton = (Button)findViewById(R.id.generate);
+        Button contactButton= (Button)findViewById(R.id.contactButton);
+
 
 //        // Create a space that will be used to present the demo generated qr code
 //        ImageView imageView = (ImageView) findViewById(R.id.qrCode);
@@ -97,6 +100,13 @@ public class MainActivity extends AppCompatActivity {
                 INTEGRATOR.setBeepEnabled(false);
                 INTEGRATOR.setBarcodeImageEnabled(true);
                 INTEGRATOR.initiateScan();
+            }
+        });
+        contactButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+        public void onClick(View w) {
+                Log.d("T", "TEST");
+                startActivity(new Intent(MainActivity.this, ContactSelectActivity.class));
             }
         });
     }
