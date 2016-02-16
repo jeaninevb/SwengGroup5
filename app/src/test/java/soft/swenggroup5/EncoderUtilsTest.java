@@ -31,19 +31,23 @@ public class EncoderUtilsTest {
 
 
     // LINGFENG TODO
+
+    //test null input for getFileBytes
     @Test
     public void test_getFileBytes_onNullInput(){
-//        assertEquals(EncoderUtils.getFileBytes(null), null);
+        assertEquals(null, EncoderUtils.getFileBytes(null));
     }
 
+/*    //test invalid input for getFileBytes
     @Test
     public void test_getFileBytes_onInvalidInput() throws IOException {
         File testInvalidFile = File.createTempFile("test_null_file", null);
         testInvalidFile.deleteOnExit();
 //        assertEquals(EncoderUtils.getFileBytes(testInvalidFile), null);
 
-    }
+    }*/
 
+/*
     @Test
     public void test_getFileBytes_onValidInput() throws IOException {
         File testValidTxtFile = File.createTempFile("test_txt_file", ".txt");
@@ -55,6 +59,7 @@ public class EncoderUtilsTest {
 //        assertEquals(EncoderUtils.getFileBytes(testValidPngFile), "image/png");
 
     }
+*/
 
 
 
