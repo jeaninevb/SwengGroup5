@@ -69,7 +69,14 @@ public class EncoderUtils {
         }
     }
 
-    //convert a file object into a list of bytes
+    /**
+     * make file to bytes
+     *
+     * get a file, convert it to a list of bytes
+     *
+     * @param file: the file read in
+     * @return an array of bytes
+     */
     public static List<Byte> getFileBytes(File file) {
         if(file != null){
             byte[] array = new byte[(int) file.length()];  //create an array for bytes

@@ -37,7 +37,7 @@ public class EncoderUtilsTest {
     //test null input for getFileBytes
     @Test
     public void test_getFileBytes_onNullInput(){
-        assertEquals(EncoderUtils.getFileBytes(null), null);
+        assertEquals(null, EncoderUtils.getFileBytes(null));
     }
 
 /*    //test invalid input for getFileBytes
