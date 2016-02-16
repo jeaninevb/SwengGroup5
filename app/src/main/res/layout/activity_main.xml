@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="1dp"
     android:paddingRight="1dp"
+    android:background="#040404"
     tools:context=".MainActivity">
 
     <ImageButton
@@ -17,25 +18,24 @@
         android:longClickable="false" />
 
     <Button
-        android:layout_width="@dimen/main_screen_button_width"
-        android:layout_height="@dimen/main_screen_button_height"
+        android:layout_width="300dp"
+        android:layout_height="130dp"
         android:text="Open Contacts"
-        android:id="@+id/openContacts"
-        android:layout_marginTop="300dp"
-        android:layout_alignLeft="@+id/receive"
-        android:layout_alignStart="@+id/receive"
+        android:id="@+id/contactButton"
         android:onClick="contacts"
 
-
-        />
+        android:layout_below="@+id/imageButton"
+        android:layout_alignLeft="@+id/generate"
+        android:layout_alignStart="@+id/generate"
+        android:layout_marginTop="34dp" />
 
     <Button
-        android:layout_width="@dimen/main_screen_button_width"
-        android:layout_height="@dimen/main_screen_button_height"
+        android:layout_width="300dp"
+        android:layout_height="130dp"
         android:text="Receive File"
-        android:id="@+id/receive"
-        android:layout_below="@+id/openContacts"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp" />
+        android:id="@+id/generate"
+        android:layout_marginTop="71dp"
+        android:layout_below="@+id/contactButton"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

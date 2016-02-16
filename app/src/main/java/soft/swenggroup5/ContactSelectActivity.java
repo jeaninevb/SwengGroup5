@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.File;
 
@@ -29,8 +31,15 @@ public class ContactSelectActivity extends AppCompatActivity {
      */
     protected  void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_select);
-        doLaunchContactPicker();
+        Button contactButton = (Button)findViewById(R.id.contactButton);
+        contactButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+
+                setContentView(R.layout.activity_contact_select);
+                doLaunchContactPicker();
+         }
+        });
     }
 
     /**
