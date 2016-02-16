@@ -105,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
         contactButton.setOnClickListener(new View.OnClickListener() {
             @Override
         public void onClick(View w) {
-                Log.d("T", "TEST");
                 startActivity(new Intent(MainActivity.this, ContactSelectActivity.class));
             }
         });

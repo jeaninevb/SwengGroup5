@@ -20,7 +20,7 @@
     <Button
         android:layout_width="300dp"
         android:layout_height="130dp"
-        android:text="Open Contacts"
+        android:text="Send Contact"
         android:id="@+id/contactButton"
         android:onClick="contacts"
 
