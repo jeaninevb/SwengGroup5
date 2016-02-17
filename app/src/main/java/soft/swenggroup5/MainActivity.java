@@ -77,10 +77,10 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 //
-        Button scanButton = (Button)findViewById(R.id.button);
+//        Button scanButton = (Button)findViewById(R.id.button);
 
         // Create a space that will be used to present the demo generated qr code
-        ImageView imageView = (ImageView) findViewById(R.id.qrCode);
+  //      ImageView imageView = (ImageView) findViewById(R.id.qrCode);
 
         try {
             // cannot initialize as a constant as an error must be handled.
