@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Create the scan button referencing the button in res/activity_main.xml
-<<<<<<< HEAD
         Button scanButton = (Button)findViewById(R.id.generate);
         Button contactButton= (Button)findViewById(R.id.contactButton);
 
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 //
-=======
         Button scanButton = (Button)findViewById(R.id.button);
 
         // Create a space that will be used to present the demo generated qr code
@@ -106,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
 
         // TODO Attempt to generate the qr code and put it into the ImageView
 
->>>>>>> BackEnd
         // Create the event listener for when scanButton is clicked
         scanButton.setOnClickListener(new View.OnClickListener() {
 
