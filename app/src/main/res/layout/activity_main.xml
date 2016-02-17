@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="1dp"
     android:paddingRight="1dp"
-    android:background="#040404"
+    android:background="#505050"
     tools:context=".MainActivity">
 
     <ImageButton
@@ -15,7 +15,9 @@
         android:src="@mipmap/softlogo"
         android:adjustViewBounds="false"
         android:layout_alignParentTop="true"
-        android:longClickable="false" />
+        android:longClickable="false"
+        android:background="#505050"
+        />
 
     <Button
         android:layout_width="300dp"
@@ -23,19 +25,28 @@
         android:text="Send Contact"
         android:id="@+id/contactButton"
         android:onClick="contacts"
+        android:typeface="monospace"
+        android:textSize="35sp"
+        android:textColor="@color/BLACK"
 
         android:layout_below="@+id/imageButton"
         android:layout_alignLeft="@+id/generate"
         android:layout_alignStart="@+id/generate"
-        android:layout_marginTop="34dp" />
+        android:layout_marginTop="34dp"
+        android:background="@drawable/smooth_button"/>
 
     <Button
         android:layout_width="300dp"
         android:layout_height="130dp"
         android:text="Receive File"
+        android:typeface="monospace"
+        android:textSize="35sp"
+        android:textColor="@color/BLACK"
+
         android:id="@+id/generate"
         android:layout_marginTop="71dp"
         android:layout_below="@+id/contactButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/smooth_button"/>
 
 </RelativeLayout>
