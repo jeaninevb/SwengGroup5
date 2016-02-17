@@ -18,6 +18,7 @@
         android:longClickable="false" />
 
     <Button
+<<<<<<< HEAD
         android:layout_width="300dp"
         android:layout_height="130dp"
         android:text="Send Contact"
@@ -37,5 +38,22 @@
         android:layout_marginTop="71dp"
         android:layout_below="@+id/contactButton"
         android:layout_centerHorizontal="true" />
+=======
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="79dp" />
+
+    <ImageView
+        android:id="@+id/qrCode"
+        android:layout_width="500px"
+        android:layout_height="500px"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="69dp" />
+>>>>>>> BackEnd
 
 </RelativeLayout>

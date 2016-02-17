@@ -2,7 +2,17 @@
 .gradle
 /local.properties
 /.idea/workspace.xml
+/.idea/misc.xml
+/.idea/gradle.xml
+/.idea/vcs.xml
 /.idea/libraries
 .DS_Store
 /build
 /captures
+
+# Powershell result output
+instrumented_test_results.txt
+jvm_test_results.txt
+
+# Bash result output
+x

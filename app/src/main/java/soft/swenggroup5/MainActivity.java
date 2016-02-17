@@ -1,7 +1,6 @@
 package soft.swenggroup5;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,13 +8,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.io.File;
+import java.io.FileOutputStream;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,14 +29,13 @@ public class MainActivity extends AppCompatActivity {
      * HEIGHT: The height of the generated qr code TODO include in layout to scale correctly?
      * DEFAULT_STR: Test string to show generation of qr code TODO remove
      * INTEGRATOR: Object that is used to access the integrated scanner
+     * TEST_FILE: test file to show encoding of header TODO remove
      */
-    private final static int WHITE = 0xFFFFFFFF;
-    private final static int BLACK = 0xFF000000;
-    private final static int WIDTH = 400;
-    private final static int HEIGHT = 400;
     private final static String STR = "Software Engineering Group 5 - SOFT";
     private final IntentIntegrator INTEGRATOR = new IntentIntegrator(this);
     private final ContactSelectActivity CONTACT_SCREEN = new ContactSelectActivity();
+    private File TEST_FILE;
+
 
     /**
      * onCreate
@@ -54,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Create the scan button referencing the button in res/activity_main.xml
+<<<<<<< HEAD
         Button scanButton = (Button)findViewById(R.id.generate);
         Button contactButton= (Button)findViewById(R.id.contactButton);
 
@@ -78,6 +78,35 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 //
+=======
+        Button scanButton = (Button)findViewById(R.id.button);
+
+        // Create a space that will be used to present the demo generated qr code
+        ImageView imageView = (ImageView) findViewById(R.id.qrCode);
+
+        try {
+            // cannot initialize as a constant as an error must be handled.
+            // TODO move this to unit tests
+            TEST_FILE = File.createTempFile("testing", ".txt");
+            // explicitly specify that the temp file is to be deleted on exit of the app
+            TEST_FILE.deleteOnExit();
+            // write hello to the temp file
+            FileOutputStream s = new FileOutputStream(TEST_FILE);
+            s.write('h');
+            s.write('e');
+            s.write('l');
+            s.write('l');
+            s.write('o');
+            // close  the stream
+            s.close();
+        }
+        catch (Exception e) {
+            Log.d("Write_to_temp", e.toString());
+        }
+
+        // TODO Attempt to generate the qr code and put it into the ImageView
+
+>>>>>>> BackEnd
         // Create the event listener for when scanButton is clicked
         scanButton.setOnClickListener(new View.OnClickListener() {
 
@@ -109,42 +138,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-
     /**
-     * encodeAsBitmap
+     * encodeFile
      *
-     * Takes a string and returns a bitmap representation of the string as a qr code
+     * Takes a file and returns a List of bytes representing the data
      *
-     * @param stringToConvert: the string to generate a qr code for
-     * @return a bitmap representing the qr code generated for the passed string
-     * @throws WriterException
+     * @param file: The data to be converted to QR Code
+     * @return a List of Bytes
      */
-    Bitmap encodeAsBitmap(String stringToConvert) throws WriterException {
-        // TODO investigate
-        BitMatrix result;
-        try {
-            result = new MultiFormatWriter().encode(stringToConvert, BarcodeFormat.QR_CODE, WIDTH, HEIGHT, null);
-        } catch (IllegalArgumentException iae) {
-            // Unsupported format
-            return null;
+    List<Byte> encodeFile(File file) {
+        if(file!=null || file.length()!=0) {
+            List<Byte> b = new ArrayList<Byte>(EncoderUtils.encodeHeader(file));
+            b.addAll(EncoderUtils.getFileBytes(file));
+            return b;
         }
-
-        int width = result.getWidth();
-        int height = result.getHeight();
-        int[] pixels = new int[width * height];
-        for (int y = 0; y < height; y++) {
-            int offset = y * width;
-            for (int x = 0; x < width; x++) {
-                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
-            }
-        }
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
-        return bitmap;
+        return null;
     }
-
     /**
      * onActivityResult
      *
@@ -161,10 +170,10 @@ public class MainActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                Log.d("Scan Button", "Cancelled scan");
+                Log.d("Scan_Button", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Log.d("Scan Button", "Scanned");
+                Log.d("Scan_Button", "Scanned");
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
