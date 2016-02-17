@@ -25,9 +25,9 @@
         android:text="Send Contact"
         android:id="@+id/contactButton"
         android:onClick="contacts"
-        android:typeface="monospace"
-        android:textSize="35sp"
-        android:textColor="@color/BLACK"
+
+        android:textSize="25sp"
+        android:textColor="@color/WHITE"
 
         android:layout_below="@+id/imageButton"
         android:layout_alignLeft="@+id/generate"
@@ -39,9 +39,9 @@
         android:layout_width="300dp"
         android:layout_height="130dp"
         android:text="Receive File"
-        android:typeface="monospace"
-        android:textSize="35sp"
-        android:textColor="@color/BLACK"
+
+        android:textSize="25sp"
+        android:textColor="@color/WHITE"
 
         android:id="@+id/generate"
         android:layout_marginTop="71dp"
