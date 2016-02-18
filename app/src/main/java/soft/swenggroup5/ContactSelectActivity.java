@@ -20,6 +20,7 @@ public class ContactSelectActivity extends AppCompatActivity {
     // our ID for the Intent called in doLaunchContectPicker(), unneeded for now
     private static final int CONTACT_PICKER_RESULT = 1001;
 
+
     /**
      * onCreate
      *
@@ -152,6 +153,7 @@ public class ContactSelectActivity extends AppCompatActivity {
                     try { //try needed to catch IOExceptions from toFile()
                         File contactFile = contactData.toFile(this);
                         //TODO: Pass file to next Activity, the "display file" Activity
+                      //  MainActivity.encodeFile(contactFile);
                     }catch(Exception e) {
                         //TODO: Handle Exception smartly
                     }
