@@ -6,8 +6,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.ImageView;
+
+import com.google.zxing.WriterException;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Contact Select Activity:
@@ -151,9 +156,19 @@ public class ContactSelectActivity extends AppCompatActivity {
                     } while (cursor.moveToNext());
                     try { //try needed to catch IOExceptions from toFile()
                         File contactFile = contactData.toFile(this);
-                        //TODO: Pass file to next Activity, the "display file" Activity
-                    }catch(Exception e) {
-                        //TODO: Handle Exception smartly
+                        try {
+                            ImageView contactQRCode = (ImageView) findViewById(R.id.imageView2);
+                            contactQRCode.setImageBitmap(
+                                    EncoderUtils.generateQRCodeBitmap(
+                                            EncoderUtils.getFileBytes(contactFile)
+                                    )
+                            );
+                        }
+                        catch (WriterException e) {
+                            Log.e("onActivityResult", e.toString());
+                        }
+                    }catch(IOException e) {
+                        Log.e("onActivityResult", e.toString());
                     }
 
                 }
