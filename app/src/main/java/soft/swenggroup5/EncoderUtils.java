@@ -30,11 +30,29 @@ public class EncoderUtils {
     private final static int BLACK = 0xFF000000;
     private final static int WIDTH = 400;
     private final static int HEIGHT = 400;
+
     /**
      * encodeFile
      *
-     * Takes in the file and converts it to bytes
+     * Takes a file and returns a List of bytes representing the header and contents
+     *
+     * @param file: The data to be converted to QR Code
+     * @return a List of Bytes
      */
+    public static List<Byte> encodeFile(File file) {
+        try {
+            if (file != null || file.length() != 0) {
+                List<Byte> b = new ArrayList<Byte>(EncoderUtils.encodeHeader(file));
+                b.addAll(EncoderUtils.getFileBytes(file));
+                return b;
+            }
+        }
+        catch (NullPointerException e) {
+            Log.e("encodeFile", e.toString());
+        }
+        return null;
+    }
+
     /**
      * getMimeType
      *
@@ -47,17 +65,16 @@ public class EncoderUtils {
     public static String getMimeType(File file) {
         if(file != null) {
             String filePath = file.getAbsolutePath();
-            Log.d("File_path", filePath);
             String type = null;
             String extension = MimeTypeMap.getFileExtensionFromUrl(filePath);
             if (extension != null) {
                 type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
             }
-            Log.d("File_MIME_type", "" + type);
             return type;
         }
         return null;
     }
+
     /**
      * splitFileSize
      *
@@ -67,11 +84,11 @@ public class EncoderUtils {
      * @return the number of QR Codes required.
      */
     public static int numberOfQRCodes(int size) {
-        if(size<=0) {
+        if(size <= 0) {
             return 0;
         }
         else {
-            if(size%MAX_FILE_SIZE>0 || size<MAX_FILE_SIZE) {
+            if(size % MAX_FILE_SIZE > 0 || size < MAX_FILE_SIZE) {
                 return size / MAX_FILE_SIZE + 1;
             }
             else {
@@ -81,41 +98,37 @@ public class EncoderUtils {
     }
 
     /**
-     * make file to bytes
+     * getFileBytes
      *
-     * get a file, convert it to a list of bytes
+     * get a file, convert it's contents to a list of bytes
      *
      * @param file: the file read in
      * @return an array of bytes
      */
     public static List<Byte> getFileBytes(File file) {
         if(file != null){
-            byte[] array = new byte[(int) file.length()];  //create an array for bytes
+            byte[] array = new byte[(int) file.length()];
             try {
-                FileInputStream fileInputStream = new FileInputStream(file);  //read through the file and put into the array in Bytes
+                FileInputStream fileInputStream = new FileInputStream(file);
                 fileInputStream.read(array);
                 for (int i = 0; i < array.length; i++) {
                     System.out.print((char)array[i]);
                 }
-            } catch (FileNotFoundException e) {                 //through "File Not Found" if can't find the file
-                System.out.println("File Not Found.");
-                e.printStackTrace();
+            } catch (FileNotFoundException e) {
+                Log.e("getFileBytes", e.toString());
             }
             catch (IOException e1) {
-                System.out.println("Error Reading The File.");      //through "Error Reading The File" if there is an error of reading file
-                e1.printStackTrace();
+                Log.e("getFileBytes", e1.toString());
             }
-
-            List<Byte> byteList = new ArrayList<Byte>();    // create a new array list
+            List<Byte> byteList = new ArrayList<Byte>();
             for (int index = 0; index < array.length; index++) {
-                byteList.add(array[index]);                     //put each index of array into array list
+                byteList.add(array[index]);
             }
-            return byteList;                //return the array list containing all bytes
-
+            return byteList;
         }
-
             return null;
     }
+
     /**
      * encodeHeader
      *
@@ -159,9 +172,6 @@ public class EncoderUtils {
                 listOfBytes.add(b[j]);
             }
         }
-        for(int i =0; i<listOfBytes.size();i++) {                       // FOR DEBUGGING PURPOSES
-            Log.d("Header val "+i,String.valueOf(listOfBytes.get(i)));
-        }
         return listOfBytes;
     }
 
@@ -196,12 +206,12 @@ public class EncoderUtils {
      */
     public static Bitmap generateQRCodeBitmap(List<Byte> dataBytes) throws WriterException {
         String stringToConvert = byteListToString(dataBytes);
-
         BitMatrix result;
         try {
             result = new MultiFormatWriter().encode(stringToConvert, BarcodeFormat.QR_CODE, WIDTH, HEIGHT, null);
-        } catch (IllegalArgumentException iae) {
+        } catch (IllegalArgumentException e) {
             // Unsupported format
+            Log.e("generateQRCodeBitmap", e.toString());
             return null;
         }
 
@@ -214,10 +224,8 @@ public class EncoderUtils {
                 pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
             }
         }
-
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, width, 0, 0, width, height);
         return bitmap;
     }
-
 }
