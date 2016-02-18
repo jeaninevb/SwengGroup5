@@ -14,11 +14,6 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
-/**
- * EncoderUtilsTest
- *
- * Test class for the EncoderUtils class
- */
 @RunWith(AndroidJUnit4.class)
 @SmallTest
 public class EncoderUtilsTest {
@@ -28,80 +23,43 @@ public class EncoderUtilsTest {
     // There are 3 tests
     // ======================================
 
-    /**
-     * test_getMimeType_onNullInput
-     *
-     * Test getMimeType with a null input
-     */
     @Test
     public void test_getMimeType_onNullInput() {
-        assertEquals(EncoderUtils.getMimeType(null), null);
+        assertEquals(null, EncoderUtils.getMimeType(null));
     }
 
-    /**
-     * test_getMimeType_onInvalidInput
-     *
-     * Test getMimeType with an invalid file input
-     *
-     * @throws IOException: if temp file not created successfully
-     */
     @Test
     public void test_getMimeType_onInvalidInput() throws IOException {
         File testInvalidFileNoType = File.createTempFile("test_null_file", null);
         testInvalidFileNoType.deleteOnExit();
-        assertEquals(EncoderUtils.getMimeType(testInvalidFileNoType), null);
-
-        // The below throws a null pointer exception within File. This input cannot be created
-        // File testInvalidFileNoName = File.createTempFile(null, ".txt");
+        assertEquals(null, EncoderUtils.getMimeType(testInvalidFileNoType));
     }
 
-    /**
-     * test_getMimeType_onValidInput
-     *
-     * Test getMimeType with a valid File
-     *
-     * @throws IOException: if temp file not created successfully
-     */
     @Test
     public void test_getMimeType_onValidInput() throws IOException {
         File testTxtFile = File.createTempFile("test_txt_file", ".txt");
         testTxtFile.deleteOnExit();
-        assertEquals(EncoderUtils.getMimeType(testTxtFile), "text/plain");
+        assertEquals("text/plain", EncoderUtils.getMimeType(testTxtFile));
 
         File testPngFile = File.createTempFile("testing_png_file", ".png");
         testPngFile.deleteOnExit();
-        assertEquals(EncoderUtils.getMimeType(testPngFile), "image/png");
+        assertEquals("image/png", EncoderUtils.getMimeType(testPngFile));
     }
-
-    // ======================================
-    // Ending Tests for getMimeType(File file)
-    // ======================================
 
     // ======================================
     // Begin Tests for encodeHeader(java.io.File file)
     //
     // ======================================
 
-    /**
-     * test_encodeHeader_null()
-     *
-     * Test encodeHeader(File file) with a null input
-     */
     @Test
     public void test_encodeHeader_null()throws IOException {
-        assertEquals(EncoderUtils.encodeHeader(null),null);
+        assertEquals(null, EncoderUtils.encodeHeader(null));
     }
 
-    /**
-     * test_encodeHeader_validInput()
-     *
-     * Test encodeHeader(File file) with a valid input
-     */
     @Test
     public void test_encodeHeader_validInput()throws IOException {
-        File testTxtFile = File.createTempFile("test", ".txt");                  //Create a temporary test file
+        File testTxtFile = File.createTempFile("test", ".txt");
         testTxtFile.deleteOnExit();
-        // write hello to the temp file
         FileOutputStream s = new FileOutputStream(testTxtFile);
         s.write('*');
         s.write('t');
@@ -109,8 +67,6 @@ public class EncoderUtilsTest {
         s.write('s');
         s.write('t');
         s.write('*');
-
-
         s.close();
 
         List<Byte> expected = new ArrayList<Byte>();                    //Assign expected values
@@ -135,22 +91,14 @@ public class EncoderUtilsTest {
         for(int i=0; i<exp.length;i++) {                                    //Adds the array to a List used for comparison
             expected.add(exp[i]);
         }
-        assertEquals(EncoderUtils.encodeHeader(testTxtFile),expected);
+        assertEquals(expected, EncoderUtils.encodeHeader(testTxtFile));
     }
 
-    /**
-     * test_encodeHeader_invalidInput()
-     *
-     * Test encodeHeader(File file) with an invalid input
-     */
     @Test
     public void test_encodeHeader_invalidInput() throws IOException {
 
         File testInvalidFileNoType = File.createTempFile("test_null_file", null);
         testInvalidFileNoType.deleteOnExit();
-        assertEquals(EncoderUtils.encodeHeader(testInvalidFileNoType), null);
+        assertEquals(null, EncoderUtils.encodeHeader(testInvalidFileNoType));
     }
-    // ======================================
-    // Ending Tests for encodeHeader(File file)
-    // ======================================
 }
