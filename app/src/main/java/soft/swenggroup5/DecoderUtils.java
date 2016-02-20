@@ -25,7 +25,7 @@ public class DecoderUtils {
      * @return  ReceivedData object that can be used to save the data to a Android
      *          device and view info on the file
      */
-    public ReceivedData decodeFile(String data, String fileExtension){
+    public static ReceivedData decodeFile(String data, String fileExtension){
 
         switch(fileExtension){
         case ContactData.FILE_EXTENSION:

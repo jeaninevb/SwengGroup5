@@ -35,6 +35,15 @@ public interface ReceivedData {
     public void saveData(Context context);
 
     /**
+     * TEST_saveData. For testing purposes, access to the created Intents are needed so that
+     * auto-inputs can be feed into them.
+     *
+     * @param context
+     * @return
+     */
+    public Intent TEST_saveData(Context context);
+
+    /**
      * printData
      *
      * A debug method for printing out the current state of the object.
