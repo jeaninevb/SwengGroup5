@@ -22,50 +22,72 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
+import android.util.Log;
 import android.widget.Toast;
 
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 public class DecoderUtilsTest {
 
-    private static final String PACKAGE = "com.sonyericsson.android.socialphonebook";
-    private static final int TIMEOUT = 5000;
+    //private static final String PACKAGE = "com.sonyericsson.android.socialphonebook";
+
+    //As ContactData opens the device's default Contact App to insert contacts, different
+    //+ "resource_ids" must be used to identify the "save contact button" on the opened
+    private static final String[] CONTACT_SAVE_BUTTON_ID = {
+            "com.sonyericsson.android.socialphonebook:id/save_menu_item",            //Sony Experia m2
+            "com.android.contacts:id/menu_save"                                      //Nexus 5
+    };
+
+    private static final int WAIT_TIME = 8000; //8 seconds
     private static final String STRING_TO_BE_TYPED = "UiAutomator";
     private UiDevice mDevice;
 
     @Test
-    public void test_getMimeType_onNullInput() {
-        // Initialize UiDevice instance
+    public void test_addContact_normalInput() {
+        // Initialize UiDevice instance, the object which will look at the current screen
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         // Start from the home screen
         mDevice.pressHome();
-
+        //context needed to start Activities
         Context context = InstrumentationRegistry.getContext();
+        //create a ContactData to make the Intent. This will be changed to DecoderUtil
+        //+calls once the auto-input is functioning correctly
         ContactData cd = new ContactData();
         cd.addName("bob");
+
         Intent i = cd.TEST_getInsertIntent(context);
+        //NEW_TASK flag needed to allow this Intent to act as a standalone app
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
-        //mDevice.waitForIdle(TIMEOUT * 100);
-        //mDevice.wait(Until.hasObject(By.pkg(PACKAGE).depth(0)),
-        //        TIMEOUT);
+        //Hackish method to have test wait until the Intent has fully started, hopefully this can
+        //+be changed later to wait until Intent is ready for use
         try {
-            Thread.sleep(8000);
+            Thread.sleep(WAIT_TIME);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        //UiObject to represent the "Save new Contact" button in the Contact App
+        UiObject saveButton;
+        int resourceIdIndex = 0;
+        //The save button will have a different id for every Contact App.
+        //+ keep trying ids until one works.
+        do{
+            saveButton = mDevice.findObject(new UiSelector()
+                    .resourceId(CONTACT_SAVE_BUTTON_ID[resourceIdIndex]));
+        }while(resourceIdIndex < CONTACT_SAVE_BUTTON_ID.length && !saveButton.exists());
 
-        UiObject saveButton = mDevice.findObject(new UiSelector()
-                .resourceId("com.sonyericsson.android.socialphonebook:id/save_menu_item"));
+        //Might wrap entire test in one big try-catch instead
         try {
-            saveButton.click();
+            if(saveButton.exists()) {
+                //Presses the button. Will also probably cause "back button" to be called and return
+                //+ the device to the main "Contact App" activity
+                saveButton.click();
+            }
         } catch (UiObjectNotFoundException e) {
             e.printStackTrace();
         }
 
         assertEquals(null, null); //one test needed or else will auto-fail. Just annoys me.
-        //Toast toast = Toast.makeText(context, "Test over", Toast.LENGTH_SHORT);
-        //toast.show();
     }
 
 }
