@@ -45,13 +45,12 @@ public class ContactData implements ReceivedData{
      * Creates a ContactData instance holding the data held in the given file. In the SOFT app this will
      * be used in the Receiver code once the QR codes are decoded.
      *
-     * @param file : a text file containing contact data. Must be in the format of files created by
-     *             ContactData's toFile() method
+     * @param scanner : a scanner containing contact data. Must be constructed using a file
+     *                in the format of files created by ContactData's toFile() method
      * @throws java.io.IOException :  from creating a Scanner using a File
      */
-    public ContactData(File file) throws java.io.IOException{
+    public ContactData(Scanner scanner){
         data = new ArrayList<ContactTriplet>();
-        Scanner scanner = new Scanner(file);
         scanner.useDelimiter(""+DELIMITER);
         while(scanner.hasNext()){
             String stringData = scanner.next();
@@ -79,7 +78,7 @@ public class ContactData implements ReceivedData{
     //TODO: Remove this method (must also be removed from ReceivedData)
     public void printData(){
         for(ContactTriplet ct : data){
-            Log.v("XXXXXXXXXX",ct.getData()+" "+ct.getMime()+" "+ct.getMetaData());
+            Log.v("ContactData_printData ",ct.getData()+" "+ct.getMime()+" "+ct.getMetaData());
         }
     }
 
