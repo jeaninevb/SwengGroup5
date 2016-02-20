@@ -375,4 +375,72 @@ public class ContactData implements ReceivedData{
         char getMime(){ return mime;}
         char getMetaData(){ return metaData;}
     }
+
+    /**
+     * TEST_getInsertIntent
+     *
+     * to be able to do Instrumentation test with artificial input access to the current
+     * Intent is needed. This method is the exact same as saveData(context) but it returns
+     * the created Intent rather then starting it inside the method
+     *
+     * @param context needed to interact with Android system
+     * @return intent : the created Intent that will open the default contacts app to insert
+     *                  a new contact
+     */
+    public Intent TEST_getInsertIntent(Context context){
+        //creates an Intent that will open the default Contact app to insert a new contact
+        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+        intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+
+        //now we pass default data for the new contact
+        int phoneNumberCount = 0;
+        int emailCount = 0;
+        for(ContactTriplet ct : data){
+            if(ct.getMime() == ContactTriplet.PHONE){
+                intent.putExtra(getCurrentPhoneExtraConstant(phoneNumberCount), ct.getData());
+                switch(ct.metaData){//pass what type of phone number you just added
+                    case ContactTriplet.HOME:
+                        intent.putExtra(getCurrentPhoneTypeExtraConstant(phoneNumberCount),
+                                ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
+                        break;
+                    case ContactTriplet.WORK:
+                        intent.putExtra(getCurrentPhoneTypeExtraConstant(phoneNumberCount),
+                                ContactsContract.CommonDataKinds.Phone.TYPE_WORK);
+                        break;
+                    case ContactTriplet.OTHER:
+                        intent.putExtra(getCurrentPhoneTypeExtraConstant(phoneNumberCount),
+                                ContactsContract.CommonDataKinds.Phone.TYPE_OTHER);
+                        break;
+                    default: //unknown type, will be given default unused type (usually HOME or OTHER)
+                }
+                phoneNumberCount++;
+            }else if(ct.getMime() == ContactTriplet.EMAIL){
+                intent.putExtra(getCurrentEmailExtraConstant(emailCount), ct.data);
+                switch(ct.metaData){
+                    case ContactTriplet.HOME:
+                        intent.putExtra(getCurrentEmailTypeExtraConstant(emailCount),
+                                ContactsContract.CommonDataKinds.Email.TYPE_HOME);
+                        break;
+                    case ContactTriplet.WORK:
+                        intent.putExtra(getCurrentEmailTypeExtraConstant(emailCount),
+                                ContactsContract.CommonDataKinds.Email.TYPE_WORK);
+                        break;
+                    case ContactTriplet.OTHER:
+                        intent.putExtra(getCurrentEmailTypeExtraConstant(emailCount),
+                                ContactsContract.CommonDataKinds.Email.TYPE_OTHER);
+                        break;
+                    default:
+                        break;
+                }
+                emailCount++;
+                //no meta data given for name or Address for now.
+            }else if(ct.getMime() == ContactTriplet.NAME){
+                intent.putExtra(ContactsContract.Intents.Insert.NAME, ct.data);
+            }
+            else if(ct.getMime() == ContactTriplet.POSTAL){
+                intent.putExtra(ContactsContract.Intents.Insert.POSTAL, ct.data);
+            }
+        }
+        return intent;
+    }
 }

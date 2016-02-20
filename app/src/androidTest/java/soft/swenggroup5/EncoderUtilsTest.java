@@ -80,7 +80,6 @@ public class EncoderUtilsTest {
             int hashCode = testTxtFile.hashCode();                       //therefore conditions have been added to ensure it matches the one generated
             b = String.valueOf(hashCode).getBytes();                     //by encodeHeader().
         }while(b.length!=10);
-
         int j =0;
         int k = 0;
 
