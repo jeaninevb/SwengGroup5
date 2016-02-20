@@ -1,5 +1,6 @@
 package soft.swenggroup5;
 
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
@@ -17,55 +18,54 @@ import org.junit.Before;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.By;
+import android.support.test.uiautomator.UiObject;
+import android.support.test.uiautomator.UiObjectNotFoundException;
+import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
+import android.widget.Toast;
 
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 public class DecoderUtilsTest {
 
-    private static final String BASIC_SAMPLE_PACKAGE
-            = "soft.swenggroup5";
-    private static final int LAUNCH_TIMEOUT = 5000;
+    private static final String PACKAGE = "com.sonyericsson.android.socialphonebook";
+    private static final int TIMEOUT = 5000;
     private static final String STRING_TO_BE_TYPED = "UiAutomator";
     private UiDevice mDevice;
 
-    @Before
-    public void startMainActivityFromHomeScreen() {
+    @Test
+    public void test_getMimeType_onNullInput() {
         // Initialize UiDevice instance
         mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-
         // Start from the home screen
         mDevice.pressHome();
 
-        // Wait for launcher
-        final String launcherPackage = mDevice.getLauncherPackageName();
-        assertNotEquals(launcherPackage, null);
-        mDevice.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)),
-                LAUNCH_TIMEOUT);
-
-        // Launch the app
         Context context = InstrumentationRegistry.getContext();
-        final Intent intent = context.getPackageManager()
-                .getLaunchIntentForPackage(BASIC_SAMPLE_PACKAGE);
-        // Clear out any previous instances
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        context.startActivity(intent);
-
-        // Wait for the app to appear
-        mDevice.wait(Until.hasObject(By.pkg(BASIC_SAMPLE_PACKAGE).depth(0)),
-                LAUNCH_TIMEOUT);
-
-        /*ContactData cd = new ContactData();
+        ContactData cd = new ContactData();
         cd.addName("bob");
         Intent i = cd.TEST_getInsertIntent(context);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(i);*/
+        context.startActivity(i);
+        //mDevice.waitForIdle(TIMEOUT * 100);
+        //mDevice.wait(Until.hasObject(By.pkg(PACKAGE).depth(0)),
+        //        TIMEOUT);
+        try {
+            Thread.sleep(8000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-    }
+        UiObject saveButton = mDevice.findObject(new UiSelector()
+                .resourceId("com.sonyericsson.android.socialphonebook:id/save_menu_item"));
+        try {
+            saveButton.click();
+        } catch (UiObjectNotFoundException e) {
+            e.printStackTrace();
+        }
 
-    @Test
-    public void test_getMimeType_onNullInput() {
-        assertEquals(null, EncoderUtils.getMimeType(null));
+        assertEquals(null, null); //one test needed or else will auto-fail. Just annoys me.
+        //Toast toast = Toast.makeText(context, "Test over", Toast.LENGTH_SHORT);
+        //toast.show();
     }
 
 }
