@@ -14,6 +14,8 @@ import java.util.Scanner;
 /**
  * ContactData
  *
+ * Implements ReceivedData
+ *
  * A class used to hold data on a Contact and convert it to and from a text file format. The class can
  * also produce an Intent that will insert a Contact into the Android device using the default Contacts
  * App.
@@ -22,7 +24,7 @@ import java.util.Scanner;
  * address.
  *
  */
-public class ContactData {
+public class ContactData implements ReceivedData{
 
     public static final char DELIMITER = '#'; //delimiter in the text file ContactData creates/reads
     private ArrayList<ContactTriplet> data; //holds all the data about acontact, ContactTriplet is defined below
@@ -59,8 +61,22 @@ public class ContactData {
         }
     }
 
+    /**
+     * toString (from ReceivedData)
+     *
+     * @return  a string that can be used to identify (but not uniquely) the data
+     *          contained in the called ContactData.
+     */
+    public String toString(){
+        String name = "Unknown";
+        for(ContactTriplet triplet : data)
+            if(triplet.getMime() == ContactTriplet.NAME)
+                name = triplet.getData();
+        return name + " Contact Data";
+    }
+
     //For debugging purposes
-    //TODO: Remove this method
+    //TODO: Remove this method (must also be removed from ReceivedData)
     public void printData(){
         for(ContactTriplet ct : data){
             Log.v("XXXXXXXXXX",ct.getData()+" "+ct.getMime()+" "+ct.getMetaData());
@@ -68,19 +84,18 @@ public class ContactData {
     }
 
     /**
-     * getInsertContactIntent
+     * getInsertIntent  (from ReceivedData)
      *
-     * Creates and returns an Intent that will open the default Contact App and try
+     * Creates and an Intent that will open the default Contact App and try
      * to insert a contact based on the info in the ContactData object this is called on.
+     * It then calls the created Intent
      *
      * At the moment it can only add at ost 3 of the same type of data, i.e. only 3 phone numbers,
      * only 3 email addresses ...etc
      *
      * @param context : The currently activity Activity object
-     * @return intent : An Intent that will open the default Contact App and try to insert a contact
-     *                  based on the info in the ContactData object this is called on
      */
-    public Intent getInsertContactIntent(Context context){
+    public void saveData(Context context){
         //creates an Intent that will open the default Contact app to insert a new contact
         Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
         intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
@@ -134,13 +149,13 @@ public class ContactData {
                 intent.putExtra(ContactsContract.Intents.Insert.POSTAL, ct.data);
             }
         }
-        return intent;
+        context.startActivity(intent);
     }
 
     /**
      * getCurrentPhoneExtraConstant
      *
-     * For a phone number to be passed to the "Insert Contact" Intent in the getInsertContactIntent()
+     * For a phone number to be passed to the "Insert Contact" Intent in the getInsertIntent()
      * method it must be passed with the correct String ID, and for each distinct phone number added
      * a different ID string must be used. This method returns the id strings.
      * @param phoneNumberCount :  How many phone numbers have already been added to the Intent
@@ -158,7 +173,7 @@ public class ContactData {
      *
      * Similar to getCurrentPhoneExtraConstant but this returns the string ID relating to
      * the meta-data (e.g. WORK number, HOME number) corresponding to the phone numbers passed
-     * to the "Insert Contact" Intent created by getInsertContactIntent()
+     * to the "Insert Contact" Intent created by getInsertIntent()
      *
      * @param phoneNumberCount : How many phone numbers have already been added to the Intent
      * @return : the String ID for meta-data relating to the "phoneNumberCounth" phone number
