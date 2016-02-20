@@ -26,8 +26,10 @@ import java.util.Scanner;
  */
 public class ContactData implements ReceivedData{
 
+    public static final String FILE_EXTENSION = "condata";
     public static final char DELIMITER = '#'; //delimiter in the text file ContactData creates/reads
     private ArrayList<ContactTriplet> data; //holds all the data about acontact, ContactTriplet is defined below
+
 
     /**
      * ContactData
@@ -228,7 +230,7 @@ public class ContactData implements ReceivedData{
         //create the Contact file
         File outputDir = context.getCacheDir(); // get folder path for this app
         //createTempFile makes a file with a random filename, but we must still delete the file later ourselves
-        File outputFile = File.createTempFile("ContactData", ".txt", outputDir);
+        File outputFile = File.createTempFile("ContactData", "."+FILE_EXTENSION, outputDir);
         outputFile.deleteOnExit();
         BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
         //write the content of Contact to the file

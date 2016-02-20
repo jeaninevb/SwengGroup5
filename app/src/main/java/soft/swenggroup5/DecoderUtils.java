@@ -1,7 +1,5 @@
 package soft.swenggroup5;
 
-import java.io.ByteArrayInputStream;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -22,21 +20,19 @@ public class DecoderUtils {
      *
      * @param data  a string (that should contain the data gotten from decoded QR codes
      *              without the encoding Header)
+     * @param fileExtension the file extension saved in the MIME section of the
+     *                      encoded header
      * @return  ReceivedData object that can be used to save the data to a Android
      *          device and view info on the file
      */
-    //There will need to be some extra data passed to identify what type of data is in
-    //+data. This data will needed to be probably added during Encoding.
-    public ReceivedData decodeFile(String data/*, dataType*/){
+    public ReceivedData decodeFile(String data, String fileExtension){
 
-        /*switch(dataType){
-        case CONTACT_DATA:
+        switch(fileExtension){
+        case ContactData.FILE_EXTENSION:
             return new ContactData( new Scanner(data) );
-        default:
+        default://will return generic "FileData" object in later versions.
             return null;
         }
-        */
-        return new ContactData( new Scanner(data) );
     }
 
 }
