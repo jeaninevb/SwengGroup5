@@ -2,6 +2,8 @@ package soft.swenggroup5;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -59,6 +61,97 @@ public class ContactData implements ReceivedData{
             char mime = scanner.next().charAt(0); //can't read single chars so read as string and get first char
             char metaData = scanner.next().charAt(0);
             data.add(new ContactTriplet(stringData,mime,metaData));
+        }
+    }
+
+    /**
+     * ContactData
+     *
+     * create a Contact Data based off a uri that holds a path into the Contacts "database" in the
+     * Android device
+     *
+     * @param contactUri : the path to the start point of a Contact in the Contact "Database"
+     * @param context    : needed to query the database in the Android device
+     */
+    public ContactData(Uri contactUri, Context context){
+        data = new ArrayList<ContactTriplet>();
+
+        // handle contact results
+        String name;    // the chosen contacts name
+        String mime;    // the id of the piece of data in the contact we are looking at
+        int dataIdx;    // Index of DATA1 column
+        int data2Idx;   // Index of DATA2 column
+        int mimeIdx;    // Index of MIMETYPE column
+        int nameIdx;    // Index of DISPLAY_NAME column
+        /*
+        Contacts are stored in a "database" that we query and then traverse using Cursors
+        First we get the name of the chosen contact
+         */
+        Cursor cursor = context.getContentResolver().query(contactUri, //start query here
+                new String[]{ContactsContract.Contacts.DISPLAY_NAME}, //return table with one column, the name
+                null, null, null); //no filter, sorting
+
+        //move Cursor to first element in returned table, will be name of chosen contact
+        if (cursor.moveToFirst()) {
+            //Get Column index that holds names, will be zero but this is less fragile code
+            nameIdx = cursor.getColumnIndex(
+                    ContactsContract.Contacts.DISPLAY_NAME);
+            name = cursor.getString(nameIdx); //get the string at row 0, DISPLAY_NAME column
+            addName(name);
+                    /*
+                    Now that we have the name we query the contact "database" again, filtering results
+                    to only return results on the same row as our chosen contacts name
+
+                     */
+            // Set up the projection, the projection describes what data to return and how to order it
+            // in the the created "table"
+            String[] projection = {
+                    ContactsContract.Data.DISPLAY_NAME, //Name
+                    ContactsContract.Contacts.Data.DATA1, //Generic data piece (will be phone or email)
+                    ContactsContract.Contacts.Data.DATA2, //Meta info on DATA1 (e.g. is home, work)
+                    ContactsContract.Contacts.Data.MIMETYPE}; //Describes what is stored in DATA1 (i.e. PHONE or EMAIL)
+
+            // Query ContactsContract.Data
+            cursor = context.getContentResolver().query(
+                    ContactsContract.Data.CONTENT_URI, //start query here
+                    projection,
+                    ContactsContract.Data.DISPLAY_NAME + " = ?",
+                    new String[]{name},
+                    null);
+
+            //move to start of created result table
+            if (cursor.moveToFirst()) {
+                // Get the indexes of the MIME type and data1 and data2
+                mimeIdx = cursor.getColumnIndex(
+                        ContactsContract.Contacts.Data.MIMETYPE);
+                dataIdx = cursor.getColumnIndex(
+                        ContactsContract.Contacts.Data.DATA1);
+                data2Idx = cursor.getColumnIndex(
+                        ContactsContract.Contacts.Data.DATA2);
+
+                // Match the data to the MIME type, store in variables
+                do {
+                    mime = cursor.getString(mimeIdx);
+                    if (ContactsContract.CommonDataKinds.Email
+                            .CONTENT_ITEM_TYPE.equalsIgnoreCase(mime)) {
+                        String email = cursor.getString(dataIdx);
+                        int emailType = cursor.getInt(data2Idx);
+                        addEmail(email, emailType);
+                    }
+                    if (ContactsContract.CommonDataKinds.Phone
+                            .CONTENT_ITEM_TYPE.equalsIgnoreCase(mime)) {
+                        String phone = cursor.getString(dataIdx);
+                        int phoneType = cursor.getInt(data2Idx);
+                        addPhoneNumber(phone, phoneType);
+                    }
+                    if (ContactsContract.CommonDataKinds.StructuredPostal.
+                            CONTENT_ITEM_TYPE.equalsIgnoreCase(mime)) {
+                        String postal = cursor.getString(dataIdx);
+                        addPostalAddress(postal);
+                    }
+
+                } while (cursor.moveToNext());
+            }
         }
     }
 
