@@ -44,6 +44,10 @@ public class EncoderUtilsTest {
         File testPngFile = File.createTempFile("testing_png_file", ".png");
         testPngFile.deleteOnExit();
         assertEquals("image/png", EncoderUtils.getMimeType(testPngFile));
+
+        File testContactFile = File.createTempFile("testing_contact_file", "."+ContactData.FILE_EXTENSION);
+        testContactFile.deleteOnExit();
+        assertEquals(ContactData.FILE_EXTENSION, EncoderUtils.getMimeType(testContactFile));
     }
 
     // ======================================

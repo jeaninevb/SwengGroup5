@@ -29,6 +29,23 @@ import android.widget.Toast;
 @SdkSuppress(minSdkVersion = 18)
 public class DecoderUtilsTest {
 
+    private byte[] by =
+            {49, 54, 56, 124, 110, 117, 108, 108, 124, 45,
+                    49, 54, 56, 57, 51, 55, 57, 51, 49, 57, 124,
+                    49, 0, 35, 65, 97, 97, 97, 97, 32, 66, 98,
+                    98, 98, 32, 86, 99, 99, 99, 99, 32, 68, 100,
+                    100, 100, 100, 35, 78, 35, 63, 35, 104, 111,
+                    109, 101, 64, 99, 46, 99, 111, 109, 35, 69, 35,
+                    72, 35, 111, 116, 104, 101, 114, 64, 99, 46, 99,
+                    111, 109, 35, 69, 35, 79, 35, 119, 111, 114, 107,
+                    64, 99, 46, 99, 111, 109, 35, 69, 35, 87, 35, 48, 56,
+                    54, 32, 49, 50, 51, 32, 52, 53, 54, 55, 35, 80,
+                    35, 77, 35, 50, 56, 53, 49, 50, 51, 52, 53, 54,
+                    55, 35, 80, 35, 72, 35, 56, 56, 56, 49, 50, 51, 52,
+                    53, 54, 55, 35, 80, 35, 87, 35, 51, 53, 32, 71, 101,
+                    108, 32, 83, 116, 114, 101, 101, 116, 32, 10, 53, 52,
+                    54, 54, 10, 65, 117, 115, 116, 105, 110, 32, 44, 32, 84, 101,
+                    120, 97, 115, 10, 65, 109, 101, 114, 105, 99, 97, 32, 35, 65, 35, 63};
     //private static final String PACKAGE = "com.sonyericsson.android.socialphonebook";
 
     //As ContactData opens the device's default Contact App to insert contacts, different
@@ -54,6 +71,7 @@ public class DecoderUtilsTest {
         //+calls once the auto-input is functioning correctly
         ContactData cd = new ContactData();
         cd.addName("bob");
+
 
         Intent i = cd.TEST_getInsertIntent(context);
         //NEW_TASK flag needed to allow this Intent to act as a standalone app

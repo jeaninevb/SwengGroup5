@@ -67,7 +67,10 @@ public class EncoderUtils {
             String filePath = file.getAbsolutePath();
             String type = null;
             String extension = MimeTypeMap.getFileExtensionFromUrl(filePath);
-            if (extension != null) {
+            //special case needed for contact data, or else MIME will be stored as "null"
+            if(extension.equals(ContactData.FILE_EXTENSION)){
+                type = ContactData.FILE_EXTENSION;
+            }else if (extension != null) {
                 type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
             }
             return type;
