@@ -173,7 +173,7 @@ public class ContactData implements ReceivedData{
     //TODO: Remove this method (must also be removed from ReceivedData)
     public void printData(){
         for(ContactTriplet ct : data){
-            Log.v("ContactData_printData ",ct.getData()+" "+ct.getMime()+" "+ct.getMetaData());
+            Log.d("ContactData_printData ",ct.getData()+" "+ct.getMime()+" "+ct.getMetaData());
         }
     }
 
@@ -449,6 +449,19 @@ public class ContactData implements ReceivedData{
         data.add(new ContactTriplet(address, ContactTriplet.POSTAL, ContactTriplet.NO_DATA));
     }
 
+    @Override
+    public boolean equals(Object y){
+        if(y==this) return true;
+        if(y==null) return false;
+        if(this.getClass() != y.getClass()) return false;
+        ContactData that = (ContactData)y;
+        if(data.size() != that.data.size()) return false;
+        for(int i = 0; i < data.size(); i++){
+            if(!data.get(i).equals(that.data.get(i))) return false;
+        }
+        return true;
+    }
+
     /**
      * ContactTriplet
      *
@@ -482,6 +495,18 @@ public class ContactData implements ReceivedData{
         String getData(){ return data;}
         char getMime(){ return mime;}
         char getMetaData(){ return metaData;}
+
+        @Override
+        public boolean equals(Object y){
+            if(y==this) return true;
+            if(y==null) return false;
+            if(this.getClass() != y.getClass()) return false;
+            ContactTriplet that = (ContactTriplet)y;
+            if(!data.equals(that.data)) return false;
+            if(mime != that.mime) return false;
+            if(metaData != that.metaData) return false;
+            return true;
+        }
     }
 
     /**

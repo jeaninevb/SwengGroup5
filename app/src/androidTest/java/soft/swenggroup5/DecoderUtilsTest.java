@@ -1,12 +1,9 @@
 package soft.swenggroup5;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Instrumentation;
+
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.os.Build;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SdkSuppress;
@@ -16,20 +13,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertThat;
 
-import org.junit.Before;
-import android.support.test.runner.AndroidJUnit4;
 import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.By;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import android.support.test.uiautomator.Until;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,19 +27,6 @@ import java.util.List;
 @SdkSuppress(minSdkVersion = 18)
 public class DecoderUtilsTest {
 
-    private static final Byte[] VALID_CONTACT_DATA_ENCODED_WITHOUT_HEADER =
-            {35, 66, 97, 97, 97, 97, 32, 66, 98, 98, 98, 32, 86, 99, 99, 99, 99, 32, 68,
-                    100, 100, 100, 100, 35, 78, 35, 63, 35, 104, 111, 109, 101, 64, 99, 46, 99, 111, 109,
-                    35, 69, 35, 72, 35, 111, 116, 104, 101, 114, 64, 99, 46, 99, 111, 109, 35, 69, 35
-                    , 79, 35, 119, 111, 114, 107, 64, 99, 46, 99, 111, 109, 35, 69, 35, 87, 35, 48, 56
-                    , 54, 32, 49, 50, 51, 32, 52, 53, 54, 55, 35, 80, 35, 77, 35, 50, 56, 53, 49, 50,
-                    51, 52, 53, 54, 55, 35, 80, 35, 72, 35, 56, 56, 56, 49, 50, 51, 52, 53, 54, 55, 35,
-                    80, 35, 87, 35, 51, 53, 32, 71, 101, 108, 32, 83, 116, 114, 101, 101, 116, 32, 10,
-                    53, 52, 54, 54, 10, 65, 117, 115, 116, 105, 110, 32, 44, 32, 84, 101, 120, 97, 115,
-                    10, 65, 109, 101, 114, 105, 99, 97, 32, 35, 65, 35, 63};
-    private static final String[] VALID_CONTACT_DATA_ENCODED_NAME = {"Baaaa Bbbb Vcccc Ddddd"};
-    //private static final String PACKAGE = "com.sonyericsson.android.socialphonebook";
-
     //As ContactData opens the device's default Contact App to insert contacts, different
     //+ "resource_ids" must be used to identify the "save contact button" on the opened
     private static final String[] CONTACT_SAVE_BUTTON_ID = {
@@ -59,14 +34,21 @@ public class DecoderUtilsTest {
             "com.android.contacts:id/menu_save"                                      //Nexus 5
     };
 
+    //Contact Data encoded by EncoderUtils, will be replaced by actual Encoder calls soon
+    private static final Byte[] VALID_CONTACT_DATA_ENCODED_WITHOUT_HEADER =
+            {35, 84, 101, 115, 116, 32, 67, 111, 110, 116, 97, 99, 116, 35, 78, 35, 63, 35, 116, 101,
+                    115, 116, 64, 116, 101, 115, 116, 46, 99, 111, 109, 35, 69, 35, 72, 35, 49, 50, 51,
+                    52, 53, 54, 55, 56, 57, 35, 80, 35, 72, 35, 84, 101, 115, 116, 32, 83, 116, 114,
+                    101, 101, 116, 44, 32, 85, 83, 65, 35, 65, 35, 63};
+    //The phone number of the contact encoded above
+    private static final String VALID_CONTACT_DATA_ENCODED_PHONE_NUMBER = "123 456 789";
+
     private static final int WAIT_TIME = 8000; //8 seconds
-    private static final String STRING_TO_BE_TYPED = "UiAutomator";
-    private UiDevice mDevice;
 
     @Test
     public void test_addContact_normalInput() {
         // Initialize UiDevice instance, the object which will look at the current screen
-        mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
         // Start from the home screen
         mDevice.pressHome();
         //context needed to start Activities
@@ -113,30 +95,30 @@ public class DecoderUtilsTest {
             e.printStackTrace();
         }
 
-        assertEquals(null, null); //one test needed or else will auto-fail. Just annoys me.
-
-        //ContactData expected = getExpectedValidContactData();
+        ContactData expected = getExpectedValidContactData();
         ContactData result = getResultValidContactData(context);
-        //assertEquals(expected, result);
-       // */
+        assertEquals(true, expected.equals(result));
     }
 
+    //Return a ContactData that should be .equals() to the just decoded and stored Contact Data
     private ContactData getExpectedValidContactData(){
         ContactData con = new ContactData();
-
+        con.addName("Test Contact");
+        con.addEmail("test@test.com", ContactsContract.CommonDataKinds.Email.TYPE_HOME);
+        con.addPhoneNumber("123456789", ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
+        con.addPostalAddress("Test Street, USA");
         return con;
     }
 
+    //Get the contact data that has just been stored on the device
     private ContactData getResultValidContactData(Context context){
-        Cursor cursor = context.getContentResolver().query(
-                ContactsContract.Data.CONTENT_URI, //start query here
-                new String[]{ContactsContract.Contacts.DISPLAY_NAME}, //return table with one column, the name
-                ContactsContract.Data.DISPLAY_NAME + " = ?",
-                VALID_CONTACT_DATA_ENCODED_NAME,
-                null); //no filter, sorting
-        //ContactData con = new ContactData(cursor.getNotificationUri(), context);
-        //return con;
-        return new ContactData();
+        //Gets a URI pointing to the beginning of the Contact data that contains the phone
+        //+ number VALID_CONTACT_DATA_ENCODED_PHONE_NUMBER, this should be the data just
+        //+ inserted into the phone.
+        Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
+                Uri.encode(VALID_CONTACT_DATA_ENCODED_PHONE_NUMBER));
+        ContactData con = new ContactData(uri, context);
+        return con;
     }
 
 }
