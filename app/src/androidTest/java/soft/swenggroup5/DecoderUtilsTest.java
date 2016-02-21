@@ -115,19 +115,18 @@ public class DecoderUtilsTest {
 
         assertEquals(null, null); //one test needed or else will auto-fail. Just annoys me.
 
-        /*ContactData expected = getExpectedValidContactData();
+        //ContactData expected = getExpectedValidContactData();
         ContactData result = getResultValidContactData(context);
-        assertEquals(expected, result);
-        */
+        //assertEquals(expected, result);
+       // */
     }
 
-    /*private ContactData getExpectedValidContactData(){
+    private ContactData getExpectedValidContactData(){
         ContactData con = new ContactData();
 
         return con;
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     private ContactData getResultValidContactData(Context context){
         Cursor cursor = context.getContentResolver().query(
                 ContactsContract.Data.CONTENT_URI, //start query here
@@ -135,9 +134,9 @@ public class DecoderUtilsTest {
                 ContactsContract.Data.DISPLAY_NAME + " = ?",
                 VALID_CONTACT_DATA_ENCODED_NAME,
                 null); //no filter, sorting
-        ContactData con = new ContactData(cursor.getNotificationUri(), context);
-
-        return con;
-    }*/
+        //ContactData con = new ContactData(cursor.getNotificationUri(), context);
+        //return con;
+        return new ContactData();
+    }
 
 }
