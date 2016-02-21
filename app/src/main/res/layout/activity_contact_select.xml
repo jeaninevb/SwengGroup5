@@ -7,14 +7,52 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="soft.swenggroup5.ContactSelectActivity">
+    tools:context="soft.swenggroup5.ContactSelectActivity"
+    android:background="#505050">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp" />
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="130dp"
+        android:text="New Contact"
+        android:id="@+id/selectNewContact"
+
+        android:textSize="15sp"
+        android:textColor="@color/WHITE"
+
+        android:background="@drawable/smooth_button"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/imageView2" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Contact Select Activity: \nThis should never be visible"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=""
+        android:textColor="@color/WHITE"
+        android:textSize="30dp"
+        android:id="@+id/contactName"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/imageView2"
+        android:layout_marginTop="110dp"/>
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="130dp"
+        android:text="Main Menu"
+        android:id="@+id/mainMenu"
+
+        android:textSize="15sp"
+        android:textColor="@color/WHITE"
+
+        android:background="@drawable/smooth_button"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/imageView2" />
+
 </RelativeLayout>

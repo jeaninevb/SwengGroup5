@@ -6,8 +6,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.zxing.WriterException;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Contact Select Activity:
@@ -17,6 +25,7 @@ import java.io.File;
  */
 public class ContactSelectActivity extends AppCompatActivity {
 
+    public String CONTACT_NAME;
     // our ID for the Intent called in doLaunchContectPicker(), unneeded for now
     private static final int CONTACT_PICKER_RESULT = 1001;
 
@@ -33,6 +42,22 @@ public class ContactSelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_select);
         doLaunchContactPicker();
+
+        Button newContact = (Button)findViewById(R.id.selectNewContact);
+        Button mainMenu = (Button) findViewById(R.id.mainMenu);
+
+        newContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View w) {
+                startActivity(new Intent(ContactSelectActivity.this, ContactSelectActivity.class));
+            }
+        });
+        mainMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View w) {
+                startActivity(new Intent(ContactSelectActivity.this, MainActivity.class));
+            }
+        });
     }
 
     /**
@@ -97,6 +122,7 @@ public class ContactSelectActivity extends AppCompatActivity {
                         ContactsContract.Contacts.DISPLAY_NAME);
                 name = cursor.getString(nameIdx); //get the string at row 0, DISPLAY_NAME column
                 contactData.addName(name);
+                CONTACT_NAME = name;
                     /*
                     Now that we have the name we query the contact "database" again, filtering results
                     to only return results on the same row as our chosen contacts name
@@ -152,10 +178,22 @@ public class ContactSelectActivity extends AppCompatActivity {
                     } while (cursor.moveToNext());
                     try { //try needed to catch IOExceptions from toFile()
                         File contactFile = contactData.toFile(this);
-                        //TODO: Pass file to next Activity, the "display file" Activity
-                      //  MainActivity.encodeFile(contactFile);
-                    }catch(Exception e) {
-                        //TODO: Handle Exception smartly
+                        try {
+                            ImageView contactQRCode = (ImageView) findViewById(R.id.imageView2);
+                            contactQRCode.setImageBitmap(
+                                    EncoderUtils.generateQRCodeBitmap(
+                                            EncoderUtils.getFileBytes(contactFile)
+
+                                    )
+                            );
+                            TextView contactName = (TextView) findViewById(R.id.contactName);
+                            contactName.setText("Contact name: "+CONTACT_NAME);
+                        }
+                        catch (WriterException e) {
+                            Log.e("onActivityResult", e.toString());
+                        }
+                    }catch(IOException e) {
+                        Log.e("onActivityResult", e.toString());
                     }
 
                 }
