@@ -19,6 +19,8 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,17 +36,27 @@ public class DecoderUtilsTest {
             "com.android.contacts:id/menu_save"                                      //Nexus 5
     };
 
-    //Contact Data encoded by EncoderUtils, will be replaced by actual Encoder calls soon
-    private static final Byte[] VALID_CONTACT_DATA_ENCODED_WITHOUT_HEADER =
-            {35, 84, 101, 115, 116, 32, 67, 111, 110, 116, 97, 99, 116, 35, 78, 35, 63, 35, 116, 101,
-                    115, 116, 64, 116, 101, 115, 116, 46, 99, 111, 109, 35, 69, 35, 72, 35, 49, 50, 51,
-                    52, 53, 54, 55, 56, 57, 35, 80, 35, 72, 35, 84, 101, 115, 116, 32, 83, 116, 114,
-                    101, 101, 116, 44, 32, 85, 83, 65, 35, 65, 35, 63};
     //The phone number of the contact encoded above
     private static final String VALID_CONTACT_DATA_ENCODED_PHONE_NUMBER = "123 456 789";
 
     private static final int WAIT_TIME = 8000; //8 seconds
 
+    /**
+     * test_addContact_normalInput
+     *
+     * Tests:   DecodeUtils.decodeFile( String data )
+     *          ContactData.saveData()
+     *
+     * Tests if contact data can be correctly decoded and inserted on the running
+     * Android device. Only tests with a single contact at the moment.
+     * To test this, it creates A ContactData and then encodes it, we then decode
+     * the encoded data and try to insert the decoded data onto the device. Finally
+     * we check if the inserted data is the same as the data we originally encoded.
+     *
+     * TODO: Remove the inserted contact as for now it stays on device even after the test
+     * TODO: Test decodeFile() and saveData() in seperate test functions
+     *
+     */
     @Test
     public void test_addContact_normalInput() {
         // Initialize UiDevice instance, the object which will look at the current screen
@@ -54,7 +66,16 @@ public class DecoderUtilsTest {
         //context needed to start Activities
         Context context = InstrumentationRegistry.getContext();
 
-        List<Byte> dataAsList = new ArrayList<Byte>(Arrays.asList(VALID_CONTACT_DATA_ENCODED_WITHOUT_HEADER));
+        //Create a ContactData which will be encoded, for us to then decode.
+        ContactData contactToDecode = getExpectedValidContactData();
+        List<Byte> dataAsList = null;
+        try {
+            File f = contactToDecode.toFile(context);
+            dataAsList = EncoderUtils.getFileBytes(f);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         String data = EncoderUtils.byteListToString(dataAsList);
         ReceivedData decodedContact = DecoderUtils.decodeFile(data, ContactData.FILE_EXTENSION);
         Intent intent = decodedContact.TEST_saveData(context);
@@ -76,6 +97,7 @@ public class DecoderUtilsTest {
         do{
             saveButton = mDevice.findObject(new UiSelector()
                     .resourceId(CONTACT_SAVE_BUTTON_ID[resourceIdIndex]));
+            resourceIdIndex++;
         }while(resourceIdIndex < CONTACT_SAVE_BUTTON_ID.length && !saveButton.exists());
 
         //Might wrap entire test in one big try-catch instead
