@@ -12,13 +12,17 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
+import android.util.Log;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,76 +32,106 @@ import java.util.List;
 public class DecoderUtilsTest {
 
     //As ContactData opens the device's default Contact App to insert contacts, different
-    //+ "resource_ids" must be used to identify the "save contact button" on the opened
+    //+ "resource_ids" must be used to identify the "save contact button" on the opened app.
+    //+ These are needed to automate pushing the save button to write Contacts to the device
     private static final String[] CONTACT_SAVE_BUTTON_ID = {
             "com.sonyericsson.android.socialphonebook:id/save_menu_item",            //Sony Experia m2
             "com.android.contacts:id/menu_save"                                      //Nexus 5
     };
 
-    //Contact Data encoded by EncoderUtils, will be replaced by actual Encoder calls soon
-    private static final Byte[] VALID_CONTACT_DATA_ENCODED_WITHOUT_HEADER =
-            {35, 84, 101, 115, 116, 32, 67, 111, 110, 116, 97, 99, 116, 35, 78, 35, 63, 35, 116, 101,
-                    115, 116, 64, 116, 101, 115, 116, 46, 99, 111, 109, 35, 69, 35, 72, 35, 49, 50, 51,
-                    52, 53, 54, 55, 56, 57, 35, 80, 35, 72, 35, 84, 101, 115, 116, 32, 83, 116, 114,
-                    101, 101, 116, 44, 32, 85, 83, 65, 35, 65, 35, 63};
     //The phone number of the contact encoded above
     private static final String VALID_CONTACT_DATA_ENCODED_PHONE_NUMBER = "123 456 789";
 
     private static final int WAIT_TIME = 8000; //8 seconds
 
+
+    /**
+     * test_decodeFile_Contact_valid
+     *
+     * tests: DecoderUtils.decodeFile(data, ContactData.FILE_EXTENSION);
+     *
+     * Tests if a ContactData that has been encoded is equal to a ContactData constructed
+     * from decoding the encoded data.
+     *
+     */
     @Test
-    public void test_addContact_normalInput() {
-        // Initialize UiDevice instance, the object which will look at the current screen
-        UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-        // Start from the home screen
-        mDevice.pressHome();
-        //context needed to start Activities
-        Context context = InstrumentationRegistry.getContext();
-
-        List<Byte> dataAsList = new ArrayList<Byte>(Arrays.asList(VALID_CONTACT_DATA_ENCODED_WITHOUT_HEADER));
-        String data = EncoderUtils.byteListToString(dataAsList);
-        ReceivedData decodedContact = DecoderUtils.decodeFile(data, ContactData.FILE_EXTENSION);
-        Intent intent = decodedContact.TEST_saveData(context);
-        //NEW_TASK flag needed to allow this Intent to act as a standalone app
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
-        //Hackish method to have test wait until the Intent has fully started, hopefully this can
-        //+be changed later to wait until Intent is ready for use
+    public void test_decodeFile_contact_valid(){
         try {
-            Thread.sleep(WAIT_TIME);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            ContactData original = getExpectedValidContactData();
+            Context context = InstrumentationRegistry.getContext();
+            File f = original.toFile(context);
+            List<Byte> encoded = EncoderUtils.getFileBytes(f);
+            ReceivedData decodedData = DecoderUtils.decodeFile(EncoderUtils.byteListToString(encoded),ContactData.FILE_EXTENSION);
+            assertTrue(original.equals(decodedData));
+        }catch(Exception e){
+            Log.d("decodeFile_contact_vald", e.toString());
         }
-        //UiObject to represent the "Save new Contact" button in the Contact App
-        UiObject saveButton;
-        int resourceIdIndex = 0;
-        //The save button will have a different id for every Contact App.
-        //+ keep trying ids until one works.
-        do{
-            saveButton = mDevice.findObject(new UiSelector()
-                    .resourceId(CONTACT_SAVE_BUTTON_ID[resourceIdIndex]));
-        }while(resourceIdIndex < CONTACT_SAVE_BUTTON_ID.length && !saveButton.exists());
+    }
 
-        //Might wrap entire test in one big try-catch instead
-        try {
-            if(saveButton.exists()) {
+
+    /**
+     * test_saveData_Contact_valid
+     *
+     * Tests:   ContactData.saveData()
+     *
+     * Tests if contact data can be correctly decoded and inserted on the running
+     * Android device. Only tests with a single contact at the moment.
+     * To test this, it creates A ContactData and then encodes it, we then decode
+     * the encoded data and try to insert the decoded data onto the device. Finally
+     * we check if the inserted data is the same as the data we originally encoded.
+     *
+     * TODO: Remove the inserted contact as for now it stays on device even after the test
+     *
+     */
+    @Test
+    public void test_saveData_contact_valid() {
+        try{
+            // Initialize UiDevice instance, the object which will look at the current screen
+            UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+            // Start from the home screen
+            mDevice.pressHome();
+            //context needed to start Activities
+            Context context = InstrumentationRegistry.getContext();
+
+            //Create a ContactData which will be encoded, for us to then decode.
+            ContactData contactToDecode = getExpectedValidContactData();
+            List<Byte> dataAsList = null;
+            File f = contactToDecode.toFile(context);
+            dataAsList = EncoderUtils.getFileBytes(f);
+
+            String data = EncoderUtils.byteListToString(dataAsList);
+            ReceivedData decodedContact = DecoderUtils.decodeFile(data, ContactData.FILE_EXTENSION);
+            Intent intent = decodedContact.TEST_saveData(context);
+            //NEW_TASK flag needed to allow this Intent to act as a standalone app
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            //Hackish method to have test wait until the Intent has fully started, hopefully this can
+            //+be changed later to wait until Intent is ready for use
+            Thread.sleep(WAIT_TIME);
+            //UiObject to represent the "Save new Contact" button in the Contact App
+            UiObject saveButton;
+            int resourceIdIndex = 0;
+            //The save button will have a different id for every Contact App.
+            //+ keep trying ids until one works.
+            do {
+                saveButton = mDevice.findObject(new UiSelector()
+                        .resourceId(CONTACT_SAVE_BUTTON_ID[resourceIdIndex]));
+                resourceIdIndex++;
+            } while (resourceIdIndex < CONTACT_SAVE_BUTTON_ID.length && !saveButton.exists());
+
+            if (saveButton.exists()) {
                 //Presses the button. Will also probably cause "back button" to be called and return
                 //+ the device to the main "Contact App" activity
                 saveButton.click();
             }
-        } catch (UiObjectNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
             Thread.sleep(WAIT_TIME);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
-        ContactData expected = getExpectedValidContactData();
-        ContactData result = getResultValidContactData(context);
-        assertEquals(true, expected.equals(result));
+            ContactData expected = getExpectedValidContactData();
+            ContactData result = getResultValidContactData(context);
+            assertEquals(true, expected.equals(result));
+        }catch(Exception e){
+            Log.d("saveData_contact_valid", e.toString());
+        }
     }
 
     //Return a ContactData that should be .equals() to the just decoded and stored Contact Data
