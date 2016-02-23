@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="1dp"
+    android:paddingRight="1dp"
+    android:background="#0e0e0e"
+    tools:context=".ContactEncodeActivity">
+
+    <ImageButton
+        android:layout_width="400dp"
+        android:layout_height="130dp"
+        android:id="@+id/imageButton"
+        android:src="@mipmap/softlogo"
+        android:adjustViewBounds="false"
+        android:layout_alignParentTop="true"
+        android:longClickable="false"
+        android:background="#0e0e0e"
+        />
+
+
+</RelativeLayout>
