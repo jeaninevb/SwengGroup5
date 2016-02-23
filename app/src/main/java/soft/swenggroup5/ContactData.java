@@ -188,6 +188,7 @@ public class ContactData implements ReceivedData{
      *                is called. Needed to interact with much of the Android
      */
     public void saveData(Context context){
+
         context.startActivity( getInsertIntent(context));
     }
     /**

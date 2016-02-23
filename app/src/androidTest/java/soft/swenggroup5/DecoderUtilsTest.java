@@ -1,14 +1,17 @@
 package soft.swenggroup5;
 
 
+import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -86,6 +89,7 @@ public class DecoderUtilsTest {
     @Test
     public void test_saveData_contact_valid() {
         try{
+            
             // Initialize UiDevice instance, the object which will look at the current screen
             UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
             // Start from the home screen
@@ -129,9 +133,24 @@ public class DecoderUtilsTest {
             ContactData expected = getExpectedValidContactData();
             ContactData result = getResultValidContactData(context);
             assertEquals(true, expected.equals(result));
-        }catch(Exception e){
+
+            //Code to delete the just inserted Contact
+            //ContentProviderOperations are actions you can define to manipulate data on an
+            //+ Android device. They must be held in ArrayLists as they're supposed to be used
+            //+ in batches, even if we only use one here
+            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+            ops.add(ContentProviderOperation.newDelete(ContactsContract.RawContacts.CONTENT_URI) //delete anything in Contacts
+                    .withSelection(
+                            ContactsContract.Data.DISPLAY_NAME + " = ?", //that matches this selection, i.e.
+                            new String[]{"Test Contact"})                //+ anything with name = "Test Contact"
+                    .build());
+            context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops); //do operation
+
+        }catch(Exception e ){
             Log.d("saveData_contact_valid", e.toString());
+            Log.d("EEEEEEEEEEEEEEEEEEEE", "EEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOORRRRRRRRRRRRRRRRRR");
         }
+
     }
 
     //Return a ContactData that should be .equals() to the just decoded and stored Contact Data
