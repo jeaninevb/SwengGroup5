@@ -56,32 +56,6 @@ public class MainActivity extends AppCompatActivity {
         Button scanButton = (Button)findViewById(R.id.generate);
         Button contactButton= (Button)findViewById(R.id.contactButton);
 
-
-//        // Create a space that will be used to present the demo generated qr code
-//        ImageView imageView = (ImageView) findViewById(R.id.qrCode);
-//
-//        // Attempt to generate the qr code and put it into the ImageView
-//        try {
-//            Bitmap bitmap = encodeAsBitmap(STR);
-//            imageView.setImageBitmap(bitmap);
-//        } catch (WriterException e) {
-//            e.printStackTrace();
-//        }
-//        unnecessary at the moment
-
-//        /** Called when the user clicks the open contacts button */
-//        public void openContacts(View view) {
-//            // Do something in response to button
-//
-//                Intent intent = new Intent(this, ContactSelectActivity.class);
-//
-//        }
-//
-//        Button scanButton = (Button)findViewById(R.id.button);
-
-        // Create a space that will be used to present the demo generated qr code
-  //      ImageView imageView = (ImageView) findViewById(R.id.qrCode);
-
         try {
             // cannot initialize as a constant as an error must be handled.
             // TODO move this to unit tests

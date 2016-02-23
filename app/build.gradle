@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "soft.swenggroup5"
-        minSdkVersion 18 // required to enable up to date testing
+        minSdkVersion 17 // required to enable up to date testing
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"

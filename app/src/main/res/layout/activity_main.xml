@@ -11,6 +11,7 @@
     <ImageButton
         android:layout_width="400dp"
         android:layout_height="130dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/imageButton"
         android:src="@mipmap/softlogo"
         android:adjustViewBounds="false"
@@ -29,6 +30,7 @@
         android:textSize="25sp"
         android:textColor="@color/WHITE"
 
+        android:layout_centerHorizontal="true"
         android:layout_below="@+id/imageButton"
         android:layout_alignLeft="@+id/generate"
         android:layout_alignStart="@+id/generate"
@@ -38,10 +40,11 @@
     <Button
         android:layout_width="300dp"
         android:layout_height="130dp"
-        android:text="Receive File"
+        android:text="Scan"
 
         android:textSize="25sp"
         android:textColor="@color/WHITE"
+
 
         android:id="@+id/generate"
         android:layout_marginTop="71dp"
