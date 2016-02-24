@@ -19,6 +19,23 @@ public class DecoderUtils {
     /**
      * decodeFile
      *
+     * a String that should contain all the data gotten from decoded
+     * QR codes (i.e. contains a Encoded Header and file data), this method will extract
+     * the header and file data. If the passed hash in the header is correct, then this method
+     * will return a ReceivedData object which can be used to save the given file to a device.
+     *
+     * @param data a String that should contain all the data gotten from decoded
+     *             QR codes (i.e. contains a Encoded Header and file data)
+     * @return ReceivedData object that can be used to save the data to a Android
+     *         device and view info on the file
+     */
+    public static ReceivedData decodeFile(String data){
+        return null;
+    }
+
+    /**
+     * decodeFileData
+     *
      * given a string (that should contain the data gotten from decoded QR codes
      * without the encoding Header) returns a ReceivedData object that can be used
      * to save the data to a Android device and view info on the file
@@ -30,13 +47,12 @@ public class DecoderUtils {
      * @return  ReceivedData object that can be used to save the data to a Android
      *          device and view info on the file
      */
-    public static ReceivedData decodeFile(String data, String fileExtension){
-
+    public static ReceivedData decodeFileData(String data, String fileExtension ){
         switch(fileExtension){
-        case ContactData.FILE_EXTENSION:
-            return new ContactData( new Scanner(data) );
-        default://will return generic "FileData" object in later versions.
-            return null;
+            case ContactData.FILE_EXTENSION:
+                return new ContactData( new Scanner(data) );
+            default://will return generic "FileData" object in later versions.
+                return null;
         }
     }
 

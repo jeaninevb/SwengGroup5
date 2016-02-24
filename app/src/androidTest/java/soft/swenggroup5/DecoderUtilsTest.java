@@ -45,23 +45,48 @@ public class DecoderUtilsTest {
     /**
      * test_decodeFile_Contact_valid
      *
-     * tests: DecoderUtils.decodeFile(data, ContactData.FILE_EXTENSION);
+     * tests: DecoderUtils.decodeFileData(data, ContactData.FILE_EXTENSION);
      *
      * Tests if a ContactData that has been encoded is equal to a ContactData constructed
      * from decoding the encoded data.
      *
      */
     @Test
-    public void test_decodeFile_contact_valid(){
+    public void test_decodeFileData_contact_valid(){
         try {
             ContactData original = getExpectedValidContactData();
             Context context = InstrumentationRegistry.getContext();
             File f = original.toFile(context);
             List<Byte> encoded = EncoderUtils.getFileBytes(f);
-            ReceivedData decodedData = DecoderUtils.decodeFile(EncoderUtils.byteListToString(encoded),ContactData.FILE_EXTENSION);
+            ReceivedData decodedData = DecoderUtils.decodeFileData(EncoderUtils.byteListToString(encoded), ContactData.FILE_EXTENSION);
             assertTrue(original.equals(decodedData));
         }catch(Exception e){
-            Log.d("decodeFile_contact_vald", e.toString());
+            Log.d("dfd_contact_invalid", e.toString());
+        }
+    }
+
+    /**
+     * test_decodeFile_fileExtension_invalid
+     *
+     * tests: DecoderUtils.decodeFileData(data, INVALID);
+     *
+     * Tests if decodeFileData will correctly return null when given
+     * invalid file extensions.
+     *
+     */
+    @Test
+    public void test_decodeFileData_fileExtension_invalid(){
+        try {
+            ContactData original = getExpectedValidContactData();
+            Context context = InstrumentationRegistry.getContext();
+            File f = original.toFile(context);
+            List<Byte> encoded = EncoderUtils.getFileBytes(f);
+            assertTrue(null == DecoderUtils.decodeFileData(EncoderUtils.byteListToString(encoded), "Contact File"));
+            assertTrue(null == DecoderUtils.decodeFileData(EncoderUtils.byteListToString(encoded), ""));
+            assertTrue(null == DecoderUtils.decodeFileData(EncoderUtils.byteListToString(encoded), null));
+            assertTrue(null == DecoderUtils.decodeFileData(EncoderUtils.byteListToString(encoded), "text"));
+        }catch(Exception e){
+            Log.d("dfd_extension_invalid", e.toString());
         }
     }
 
@@ -98,7 +123,7 @@ public class DecoderUtilsTest {
             dataAsList = EncoderUtils.getFileBytes(f);
 
             String data = EncoderUtils.byteListToString(dataAsList);
-            ReceivedData decodedContact = DecoderUtils.decodeFile(data, ContactData.FILE_EXTENSION);
+            ReceivedData decodedContact = DecoderUtils.decodeFileData(data, ContactData.FILE_EXTENSION);
             Intent intent = decodedContact.TEST_saveData(context);
             //NEW_TASK flag needed to allow this Intent to act as a standalone app
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
