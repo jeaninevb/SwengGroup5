@@ -40,13 +40,29 @@ public class DecoderUtils {
         }
     }
 
+    /**
+     * validateFile
+     *
+     * When the user scans in the first QR code (when there are multiple or the only QR code when
+     * there is just one), the QR code contains some header information. One piece in the header
+     * is the hash code of the file represented by the qr code.
+     * To ensure that the user is about to save the information that they scanned, we must first
+     * compare the hash of the file created by the data in the QR code against the hash contained
+     * in the header. This becomes especially important when we deal with larger files as it could
+     * be possible to start scanning a sequence of QR codes and attempt to manipulate the data
+     * by scanning in QR codes from a different source. This function protects against that.
+     *
+     * @param file: the compiled file from the data scanned
+     * @param givenHash: the hash contained in the qr code
+     * @return boolean based on whether the compiled files hash matches that in the qr code header
+     */
     public static boolean validateFile(File file, int givenHash) {
         if(file != null) {
             if (DEBUG) Log.d("validateFile",
                     "File " + file + "not null. Return " + (file.hashCode() == givenHash));
             return file.hashCode() == givenHash;
         }
-        if (DEBUG) Log.d("validateFile", "File " + file + " was null, return false.");
+        if (DEBUG) Log.d("validateFile", "File was null, return false.");
         return false;
     }
 
