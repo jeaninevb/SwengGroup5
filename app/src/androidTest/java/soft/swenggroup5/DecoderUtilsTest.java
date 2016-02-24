@@ -1,9 +1,11 @@
 package soft.swenggroup5;
 
 
+import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SdkSuppress;
@@ -86,6 +88,7 @@ public class DecoderUtilsTest {
     @Test
     public void test_saveData_contact_valid() {
         try{
+
             // Initialize UiDevice instance, the object which will look at the current screen
             UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
             // Start from the home screen
@@ -127,11 +130,42 @@ public class DecoderUtilsTest {
             Thread.sleep(WAIT_TIME);
 
             ContactData expected = getExpectedValidContactData();
+            expected.printData();
             ContactData result = getResultValidContactData(context);
+            result.printData();
             assertEquals(true, expected.equals(result));
-        }catch(Exception e){
+            //close the Contacts App*/
+            mDevice.pressRecentApps();
+            Thread.sleep(WAIT_TIME);
+
+            //Nexus 5 close Contacts app Code
+            //Check if there is an element of this type, only exist in Nexus XMLs
+            //TODO: Won't work if Contacts is not the only open app, will fix this soon
+            UiObject app = mDevice.findObject(new UiSelector().resourceId( "com.android.systemui:id/task_view_content" ));
+            if(app.exists()){
+                app = mDevice.findObject(new UiSelector().descriptionContains("Contacts"));//find contact Element
+                app.dragTo(0, app.getBounds().centerY(), 5); //drag left very quickly
+                //Sony Experia close Contacts app code
+            }else{
+                app = mDevice.findObject(new UiSelector().descriptionContains("Contacts"));
+                app.swipeLeft(100);//drags left like dragTo but sony reads dragTo as clicks and opens app incorrectly
+            }
+
+            //Code to delete the just inserted Contact
+            //ContentProviderOperations are actions you can define to manipulate data on an
+            //+ Android device. They must be held in ArrayLists as they're supposed to be used
+            //+ in batches, even if we only use one here
+            ArrayList<ContentProviderOperation> ops = new ArrayList<ContentProviderOperation>();
+            ops.add(ContentProviderOperation.newDelete(ContactsContract.RawContacts.CONTENT_URI) //delete anything in Contacts
+                    .withSelection(
+                            ContactsContract.Data.DISPLAY_NAME + " = ?", //that matches this selection, i.e.
+                            new String[]{"Test Contact"})                //+ anything with name = "Test Contact"
+                    .build());
+            context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops); //do operation
+        }catch(Exception e ){
             Log.d("saveData_contact_valid", e.toString());
         }
+
     }
 
     //Return a ContactData that should be .equals() to the just decoded and stored Contact Data
