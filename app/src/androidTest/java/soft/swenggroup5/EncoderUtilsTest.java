@@ -64,9 +64,10 @@ public class EncoderUtilsTest {
         s.write('*');
         s.close();
 
-        // expected = "6|text/plain|hash(file)|1\0"
+        // expected = "test_encodeHeader_validInput|6|text/plain|hash(file)|1\0"
         StringBuilder expected = new StringBuilder();
-        expected.append("6|text/plain|")
+        expected.append((testTxtFile.getName()))
+                .append("|6|text/plain|")
                 .append(testTxtFile.hashCode())
                 .append("|1")
                 .append("\0");
@@ -86,7 +87,8 @@ public class EncoderUtilsTest {
 
         // expected = "0|null|hash(file)|1\0"
         StringBuilder expected = new StringBuilder();
-        expected.append("0|null|")
+        expected.append(testInvalidFileNoType.getName())
+                .append("|0|null|")
                 .append(testInvalidFileNoType.hashCode())
                 .append(("|1"))
                 .append("\0");

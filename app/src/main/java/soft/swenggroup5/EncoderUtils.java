@@ -144,10 +144,11 @@ public class EncoderUtils {
      * encodeHeader
      * <p/>
      * Takes a file and its position and returns an ArrayList of bytes representing
-     * 1. File size
-     * 2. File Type
-     * 3. Hash value
-     * 4. Number of qr codes
+     * 1. File name
+     * 2. File size
+     * 3. File Type
+     * 4. Hash value
+     * 5. Number of qr codes
      *
      * Note: NUMBER OF QR CODE + 5 is due to 4 bytes for the size, and 1 more for the end delimiter
      *
@@ -157,7 +158,9 @@ public class EncoderUtils {
     public static List<Byte> encodeHeader(File file) {
         if (file != null) {
             StringBuilder headerString = new StringBuilder();
-            headerString.append(String.valueOf(file.length()))
+            headerString.append(file.getName())
+                    .append(("|"))
+                    .append(String.valueOf(file.length()))
                     .append(("|"))
                     .append(EncoderUtils.getMimeType(file))
                     .append(("|"))
