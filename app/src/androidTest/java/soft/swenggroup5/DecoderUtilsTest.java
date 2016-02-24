@@ -11,7 +11,6 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -89,7 +88,7 @@ public class DecoderUtilsTest {
     @Test
     public void test_saveData_contact_valid() {
         try{
-            
+
             // Initialize UiDevice instance, the object which will look at the current screen
             UiDevice mDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
             // Start from the home screen
@@ -131,8 +130,26 @@ public class DecoderUtilsTest {
             Thread.sleep(WAIT_TIME);
 
             ContactData expected = getExpectedValidContactData();
+            expected.printData();
             ContactData result = getResultValidContactData(context);
+            result.printData();
             assertEquals(true, expected.equals(result));
+            //close the Contacts App*/
+            mDevice.pressRecentApps();
+            Thread.sleep(WAIT_TIME);
+
+            //Nexus 5 close Contacts app Code
+            //Check if there is an element of this type, only exist in Nexus XMLs
+            //TODO: Won't work if Contacts is not the only open app, will fix this soon
+            UiObject app = mDevice.findObject(new UiSelector().resourceId( "com.android.systemui:id/task_view_content" ));
+            if(app.exists()){
+                app = mDevice.findObject(new UiSelector().descriptionContains("Contacts"));//find contact Element
+                app.dragTo(0, app.getBounds().centerY(), 5); //drag left very quickly
+                //Sony Experia close Contacts app code
+            }else{
+                app = mDevice.findObject(new UiSelector().descriptionContains("Contacts"));
+                app.swipeLeft(100);//drags left like dragTo but sony reads dragTo as clicks and opens app incorrectly
+            }
 
             //Code to delete the just inserted Contact
             //ContentProviderOperations are actions you can define to manipulate data on an
@@ -145,10 +162,8 @@ public class DecoderUtilsTest {
                             new String[]{"Test Contact"})                //+ anything with name = "Test Contact"
                     .build());
             context.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops); //do operation
-
         }catch(Exception e ){
             Log.d("saveData_contact_valid", e.toString());
-            Log.d("EEEEEEEEEEEEEEEEEEEE", "EEEEEEEEEEEEEEEERRRRRRRRRRRRRRRRRRROOOOOOOOOOOOOOOOOOORRRRRRRRRRRRRRRRRR");
         }
 
     }
