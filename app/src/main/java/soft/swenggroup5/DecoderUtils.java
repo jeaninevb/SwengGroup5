@@ -1,5 +1,8 @@
 package soft.swenggroup5;
 
+import android.util.Log;
+
+import java.io.File;
 import java.util.Scanner;
 
 /**
@@ -9,6 +12,8 @@ import java.util.Scanner;
  *
  */
 public class DecoderUtils {
+
+    private final static boolean DEBUG = true;
 
 
     /**
@@ -33,6 +38,16 @@ public class DecoderUtils {
         default://will return generic "FileData" object in later versions.
             return null;
         }
+    }
+
+    public static boolean validateFile(File file, int givenHash) {
+        if(file != null) {
+            if (DEBUG) Log.d("validateFile",
+                    "File " + file + "not null. Return " + (file.hashCode() == givenHash));
+            return file.hashCode() == givenHash;
+        }
+        if (DEBUG) Log.d("validateFile", "File " + file + " was null, return false.");
+        return false;
     }
 
 }
