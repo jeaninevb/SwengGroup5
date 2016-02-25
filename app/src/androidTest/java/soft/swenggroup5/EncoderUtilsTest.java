@@ -16,11 +16,16 @@ import static junit.framework.TestCase.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 @SmallTest
-public class EncoderUtilsTest {
+public class EncoderUtilsTest{
 
     @Test
     public void test_getMimeType_onNullInput() {
         assertEquals(null, EncoderUtils.getMimeType(null));
+    }
+
+    @Test
+    public void test_InvalidInput() {
+        assertEquals(null, null);
     }
 
     @Test
