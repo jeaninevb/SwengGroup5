@@ -187,7 +187,7 @@ public class ContactSelectActivity extends AppCompatActivity {
                                     )
                             );
                             TextView contactName = (TextView) findViewById(R.id.contactName);
-                            contactName.setText("Contact name: "+CONTACT_NAME);
+                            contactName.setText("Contact: "+CONTACT_NAME);
                         }
                         catch (WriterException e) {
                             Log.e("onActivityResult", e.toString());

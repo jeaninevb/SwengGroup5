@@ -16,7 +16,7 @@
         android:id="@+id/imageView2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp" />
+        android:layout_marginTop="115dp" />
 
 
     <TextView
@@ -25,14 +25,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text=""
         android:textColor="@color/WHITE"
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:id="@+id/contactName"
-        android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/imageView2"
-        android:layout_marginTop="110dp"/>
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="20dp"
+        />
 
     <Button
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:text="Main Menu"
         android:id="@+id/mainMenu"
@@ -45,7 +45,7 @@
         android:layout_alignParentRight="true"
         />
     <Button
-        android:layout_width="200dp"
+        android:layout_width="150dp"
         android:layout_height="60dp"
         android:text="New Contact"
         android:id="@+id/selectNewContact"
