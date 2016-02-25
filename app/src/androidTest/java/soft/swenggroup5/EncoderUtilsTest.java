@@ -24,11 +24,6 @@ public class EncoderUtilsTest{
     }
 
     @Test
-    public void test_InvalidInput() {
-        assertEquals(null, null);
-    }
-
-    @Test
     public void test_getMimeType_onInvalidInput() throws IOException {
         File testInvalidFileNoType = File.createTempFile("test_getMimeType_onInvalidInput", null);
         testInvalidFileNoType.deleteOnExit();

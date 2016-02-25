@@ -20,7 +20,9 @@ import static junit.framework.TestCase.assertEquals;
 
 /**
  *  DecoderUtilAutomatorTest
- *  
+ *
+ *  Contains tests for DecoderUtils that uses auto-input code. Tests are only compatible with the
+ *  Nexus 4 at the moment.
  */
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
