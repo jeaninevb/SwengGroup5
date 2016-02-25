@@ -457,8 +457,17 @@ public class ContactData implements ReceivedData{
         if(this.getClass() != y.getClass()) return false;
         ContactData that = (ContactData)y;
         if(data.size() != that.data.size()) return false;
-        for(int i = 0; i < data.size(); i++){
-            if(!data.get(i).equals(that.data.get(i))) return false;
+        boolean[] used = new boolean[data.size()]; //make sure each triplet only matches once
+        for(int i = 0; i < data.size(); i++){ //try to find a match in 'that' for every
+            boolean matchFound = false;       //+ triplet in 'this'
+            for(int j = 0; j < data.size(); j++){
+                if(!used[j] && data.get(i).equals(that.data.get(j))) {
+                    matchFound = true;
+                    used[j] = true;
+                    break;
+                }
+            }
+            if(!matchFound) return false;
         }
         return true;
     }
