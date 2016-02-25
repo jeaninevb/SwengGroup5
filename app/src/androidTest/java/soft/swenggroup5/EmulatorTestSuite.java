@@ -11,7 +11,7 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        DecoderUtilsTest.class,
+        DecoderUtilAutomatorTest.class,
         DecoderUtilsTest.class,
         EncoderUtilsTest.class,
 })
