@@ -12,7 +12,6 @@ import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.io.File;
@@ -41,19 +40,7 @@ public class DecoderUtilAutomatorTest {
 
     private static final int WAIT_TIME = 5000; //5 seconds
     final static private int REQUEST_CODE_ASK_PERMISSIONS = 8888;
-
-
-    @Before
-    public void setup_permission_acquiral(){
-        Context context = InstrumentationRegistry.getContext();
-
-    }
-
-
-    @Test
-    public void testMe(){
-        assertEquals(true,true);
-    }
+    
     /**
      * test_saveData_Contact_valid
      *
