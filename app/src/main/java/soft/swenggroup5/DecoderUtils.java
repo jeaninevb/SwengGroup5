@@ -3,6 +3,8 @@ package soft.swenggroup5;
 import android.util.Log;
 
 import java.io.File;
+import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -15,6 +17,29 @@ public class DecoderUtils {
 
     private final static boolean DEBUG = true;
 
+    /**
+     * decodeHeader
+     *
+     * the data forming the header is decoded and is displayed in a hashtable
+     *
+     * @param header
+     * @return hashtable object, which contains the details of the header
+     */
+
+    public static Hashtable<String, String> decodeHeader(String header) {
+        if (header != null) {
+            Hashtable<String, String> headerValues = new Hashtable<String, String>();
+            String[] headerContents = header.split("|"); // split by the delimeter
+            headerValues.add("File Name", headerContents[0]); // add each value to the hashtable
+            headerValues.add("File Length", headerContents[1]);
+            headerValues.add("Mime Type", headerContents[2]);
+            headerValues.add("Hash Code", headerContents[3]);
+            headerValues.add("Number of QR Codes", headerContents[4]);
+            return headerValues;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * decodeFile
@@ -25,7 +50,7 @@ public class DecoderUtils {
      * will return a ReceivedData object which can be used to save the given file to a device.
      *
      * @param data a String that should contain all the data gotten from decoded
-     *             QR codes (i.e. contains a Encoded Header and file data)
+     *             QR codes (i.e. contains an Encoded Header and file data)
      * @return ReceivedData object that can be used to save the data to a Android
      *         device and view info on the file
      */
