@@ -6,13 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.google.zxing.WriterException;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +18,8 @@ import java.io.IOException;
  */
 public class ContactSelectActivity extends AppCompatActivity {
 
-    public String CONTACT_NAME;
+    public static String CONTACT_NAME;
+    public static File DATA_FILE;
     // our ID for the Intent called in doLaunchContectPicker(), unneeded for now
     private static final int CONTACT_PICKER_RESULT = 1001;
 
@@ -43,21 +37,6 @@ public class ContactSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact_select);
         doLaunchContactPicker();
 
-        Button newContact = (Button)findViewById(R.id.selectNewContact);
-        Button mainMenu = (Button) findViewById(R.id.mainMenu);
-
-        newContact.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View w) {
-                startActivity(new Intent(ContactSelectActivity.this, ContactSelectActivity.class));
-            }
-        });
-        mainMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View w) {
-                startActivity(new Intent(ContactSelectActivity.this, MainActivity.class));
-            }
-        });
     }
 
     /**
@@ -176,24 +155,13 @@ public class ContactSelectActivity extends AppCompatActivity {
                         }
 
                     } while (cursor.moveToNext());
-                    try { //try needed to catch IOExceptions from toFile()
-                        File contactFile = contactData.toFile(this);
-                        try {
-                            ImageView contactQRCode = (ImageView) findViewById(R.id.imageView2);
-                            contactQRCode.setImageBitmap(
-                                    EncoderUtils.generateQRCodeBitmap(
-                                            EncoderUtils.getFileBytes(contactFile)
 
-                                    )
-                            );
-                            TextView contactName = (TextView) findViewById(R.id.contactName);
-                            contactName.setText("Contact: "+CONTACT_NAME);
-                        }
-                        catch (WriterException e) {
-                            Log.e("onActivityResult", e.toString());
-                        }
-                    }catch(IOException e) {
-                        Log.e("onActivityResult", e.toString());
+
+                    try {
+                         DATA_FILE = contactData.toFile(this);
+                        startActivity(new Intent(ContactSelectActivity.this, ContactEncodeActivity.class));
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
 
                 }
