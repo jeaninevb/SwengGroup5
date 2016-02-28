@@ -4,7 +4,6 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.Hashtable;
-import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -30,15 +29,14 @@ public class DecoderUtils {
         if (header != null) {
             Hashtable<String, String> headerValues = new Hashtable<String, String>();
             String[] headerContents = header.split("|"); // split by the delimeter
-            headerValues.add("File Name", headerContents[0]); // add each value to the hashtable
-            headerValues.add("File Length", headerContents[1]);
-            headerValues.add("Mime Type", headerContents[2]);
-            headerValues.add("Hash Code", headerContents[3]);
-            headerValues.add("Number of QR Codes", headerContents[4]);
+            headerValues.put("File Name", headerContents[0]); // add each value to the hashtable
+            headerValues.put("File Length", headerContents[1]);
+            headerValues.put("Mime Type", headerContents[2]);
+            headerValues.put("Hash Code", headerContents[3]);
+            headerValues.put("Number of QR Codes", headerContents[4]);
             return headerValues;
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
