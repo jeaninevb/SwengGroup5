@@ -61,11 +61,11 @@ public class DecoderUtils {
         String header = getHeader(data);
         String fileData = getFileData(data);
         Hashtable<String, String> details = decodeHeader(header);
-        if(!validateFile(
-                fileDataToFile(fileData),
-                Integer.getInteger(details.get("Hash Code")))
-                )
-            return null;
+        //if(!validateFile(
+        //        fileDataToFile(fileData, details.get("File Name")),
+        //       Integer.getInteger(details.get("Hash Code")))
+        //        )
+        //   return null;
         return decodeFileData(fileData, details.get("Mime Type"));
 
     }
@@ -143,14 +143,14 @@ public class DecoderUtils {
     /**
      * fileDataToFile
      *
-     * Creates a file containing the data in the passed String, needed to use ValidateFile()
+     * Creates a file containing the data in the passed String, needed to use ValidateFile().
      *
      * @param s : the given file data
      * @return : a temporary file containing the data in s
      * @throws IOException : from File creation + filling
      */
-    private static File fileDataToFile(String s) throws IOException{
-        File f = File.createTempFile("test_validateFile_onInvalidInput", ".txt");
+    private static File fileDataToFile(String s, String name) throws IOException{
+        File f = new File(name);
         f.deleteOnExit();
         FileWriter writer = new FileWriter(f);
         writer.write(s);
@@ -159,14 +159,14 @@ public class DecoderUtils {
 
     //returns a String containing just the Header from data, which should contain the entire
     //+ encoded data.
-    private static String getHeader(String data){
-        return data.split("\0")[0];
+    public static String getHeader(String data){
+        return data.split(EncoderUtils.END_DLIMITER)[0];
     }
 
     //returns a String containing just the actual file data from data, which should contain
     //+ the entire encoded data.
-    private static String getFileData(String data){
-        return data.split("\0")[1];
+    public static String getFileData(String data){
+        return data.split(EncoderUtils.END_DLIMITER)[1];
     }
 
 }

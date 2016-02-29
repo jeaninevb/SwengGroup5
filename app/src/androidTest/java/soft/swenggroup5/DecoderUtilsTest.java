@@ -1,32 +1,28 @@
 package soft.swenggroup5;
 
 
-import android.content.ContentProviderOperation;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.UiDevice;
-import android.support.test.uiautomator.UiObject;
-import android.support.test.uiautomator.UiSelector;
 import android.util.Log;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
-import static junit.framework.TestCase.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
 public class DecoderUtilsTest{
+
 
     //The phone number of the test Contact data returned by getExpectedValidContactData()
     private static final String VALID_CONTACT_DATA_ENCODED_PHONE_NUMBER = "123 456 789";
@@ -80,7 +76,11 @@ public class DecoderUtilsTest{
     }
 
 
-
+    public static String validEncodedContact() throws IOException{
+        ContactData c = getExpectedValidContactData();
+        List<Byte> encoded = EncoderUtils.encodeFile(c.toFile(InstrumentationRegistry.getContext()));
+        return EncoderUtils.byteListToString(encoded);
+    }
 
     //Return a valid test ContactData
     public static ContactData getExpectedValidContactData(){

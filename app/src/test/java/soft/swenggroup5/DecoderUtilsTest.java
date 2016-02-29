@@ -1,9 +1,11 @@
 package soft.swenggroup5;
 
+
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 
 import static org.junit.Assert.assertEquals;
 
@@ -27,4 +29,33 @@ public class DecoderUtilsTest {
         f.deleteOnExit();
         assertEquals(true, DecoderUtils.validateFile(f, f.hashCode()));
     }
+
+    private static final String encodedContactData = "ContactData1272593348.condata~72~condata~1552044068~1\0#Test Contact#N#?#test@test.com#E#H#123 456 789#P#H#Test Street, USA#A#";
+    private static final String encodedContactHeader = "ContactData1272593348.condata~72~condata~1552044068~1";
+    private static final String encodedContactFileData = "#Test Contact#N#?#test@test.com#E#H#123 456 789#P#H#Test Street, USA#A#";
+
+    @Test
+    public void test_getHeader_onValidInput(){
+        String encoded = encodedContactData;
+        String resHeader = DecoderUtils.getHeader(encoded);
+        assertEquals(resHeader, encodedContactHeader);
+    }
+
+    @Test
+    public void test_getFileData_onValidInput(){
+        String encoded = encodedContactData;
+        String resFileData = DecoderUtils.getFileData(encoded);
+        assertEquals(resFileData, encodedContactFileData);
+    }
+
+    @Test
+    public void test_decodeHeader_onValidInput(){
+        Hashtable<String,String> values = DecoderUtils.decodeHeader(encodedContactHeader);
+        assertEquals( "ContactData1272593348.condata", values.get("File Name"));
+        assertEquals( "72", values.get("File Length"));
+        assertEquals( "condata", values.get("Mime Type"));
+        assertEquals( "1552044068", values.get("Hash Code"));
+        assertEquals( "1", values.get("Number of QR Codes"));
+    }
+
 }

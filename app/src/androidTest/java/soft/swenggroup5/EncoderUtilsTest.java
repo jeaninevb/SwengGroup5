@@ -64,12 +64,12 @@ public class EncoderUtilsTest{
         s.write('*');
         s.close();
 
-        // expected = "test_encodeHeader_validInput|6|text/plain|hash(file)|1\0"
+        // expected = "test_encodeHeader_validInput~6~text/plain~hash(file)~1\0"
         StringBuilder expected = new StringBuilder();
         expected.append((testTxtFile.getName()))
-                .append("|6|text/plain|")
+                .append("~6~text/plain~")
                 .append(testTxtFile.hashCode())
-                .append("|1")
+                .append("~1")
                 .append("\0");
 
         List<Byte> listOfBytes = new ArrayList<>();
@@ -85,12 +85,12 @@ public class EncoderUtilsTest{
         File testInvalidFileNoType = File.createTempFile("test_encodeHeader_invalidInput", null);
         testInvalidFileNoType.deleteOnExit();
 
-        // expected = "0|null|hash(file)|1\0"
+        // expected = "0~null~hash(file)~1\0"
         StringBuilder expected = new StringBuilder();
         expected.append(testInvalidFileNoType.getName())
-                .append("|0|null|")
+                .append("~0~null~")
                 .append(testInvalidFileNoType.hashCode())
-                .append(("|1"))
+                .append(("~1"))
                 .append("\0");
 
         List<Byte> listOfBytes = new ArrayList<>();

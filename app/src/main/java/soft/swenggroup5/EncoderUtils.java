@@ -30,7 +30,8 @@ public class EncoderUtils {
     private final static int HEIGHT = 400;
     private final static boolean DEBUG = true;
 
-    public final static String DELIMITER = "|";
+    public final static String DELIMITER = "~";
+    public final static String END_DLIMITER = "\0";
 
     /**
      * encodeFile
@@ -169,7 +170,7 @@ public class EncoderUtils {
                     .append(String.valueOf(file.hashCode()))
                     .append(DELIMITER)
                     .append(String.valueOf(EncoderUtils.numberOfQRCodes(headerString.length() + 5)))
-                    .append(String.valueOf("\0"));
+                    .append(END_DLIMITER);
 
             List<Byte> listOfBytes = new ArrayList<>();
             for (byte b : headerString.toString().getBytes()) {
