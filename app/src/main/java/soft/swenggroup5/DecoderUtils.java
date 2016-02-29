@@ -146,6 +146,7 @@ public class DecoderUtils {
      * Creates a file containing the data in the passed String, needed to use ValidateFile().
      *
      * @param s : the given file data
+     * @param name : the name of the file we will be matching hashes with
      * @return : a temporary file containing the data in s
      * @throws IOException : from File creation + filling
      */
