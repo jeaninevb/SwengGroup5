@@ -40,7 +40,7 @@ public class DecoderUtilAutomatorTest {
 
     private static final int WAIT_TIME = 5000; //5 seconds
     final static private int REQUEST_CODE_ASK_PERMISSIONS = 8888;
-    
+
     /**
      * test_saveData_Contact_valid
      *

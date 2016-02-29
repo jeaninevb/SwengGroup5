@@ -2,8 +2,14 @@ package soft.swenggroup5;
 
 import android.util.Log;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -24,11 +30,10 @@ public class DecoderUtils {
      * @param header
      * @return hashtable object, which contains the details of the header
      */
-
     public static Hashtable<String, String> decodeHeader(String header) {
         if (header != null) {
             Hashtable<String, String> headerValues = new Hashtable<String, String>();
-            String[] headerContents = header.split("|"); // split by the delimeter
+            String[] headerContents = header.split(EncoderUtils.DELIMITER); // split by the delimeter
             headerValues.put("File Name", headerContents[0]); // add each value to the hashtable
             headerValues.put("File Length", headerContents[1]);
             headerValues.put("Mime Type", headerContents[2]);
@@ -52,7 +57,37 @@ public class DecoderUtils {
      * @return ReceivedData object that can be used to save the data to a Android
      *         device and view info on the file
      */
-    public static ReceivedData decodeFile(String data){
+    public static ReceivedData decodeFile(String data) throws IOException{
+        String header = getHeader(data);
+        String fileData = getFileData(data);
+        Hashtable<String, String> details = decodeHeader(header);
+        if(!validateFile(
+                fileDataToFile(fileData),
+                Integer.getInteger(details.get("Hash Code")))
+                )
+            return null;
+        return decodeFileData(fileData, details.get("Mime Type"));
+
+    }
+
+    /**
+     * stringToByteList
+     *
+     * Given a String returns a Byte List containing the same "characters"
+     *
+     * @param s : The String to convert
+     * @return : a Byte List containing the same "characters" as s
+     */
+    public static List<Byte> stringToByteList(String s){
+        if (s != null) {
+            byte[] primitives = s.getBytes();
+            Byte[] data = new Byte[primitives.length];
+            for(int i = 0; i < data.length; i++)
+                data[i] = primitives[i];
+            if (DEBUG) Log.d("stringToByteList", "Returning " + data.toString());
+            return Arrays.asList(data);
+        }
+        if (DEBUG) Log.d("stringToByteList", "List was null, returning null");
         return null;
     }
 
@@ -103,6 +138,35 @@ public class DecoderUtils {
         }
         if (DEBUG) Log.d("validateFile", "File was null, return false.");
         return false;
+    }
+
+    /**
+     * fileDataToFile
+     *
+     * Creates a file containing the data in the passed String, needed to use ValidateFile()
+     *
+     * @param s : the given file data
+     * @return : a temporary file containing the data in s
+     * @throws IOException : from File creation + filling
+     */
+    private static File fileDataToFile(String s) throws IOException{
+        File f = File.createTempFile("test_validateFile_onInvalidInput", ".txt");
+        f.deleteOnExit();
+        FileWriter writer = new FileWriter(f);
+        writer.write(s);
+        return f;
+    }
+
+    //returns a String containing just the Header from data, which should contain the entire
+    //+ encoded data.
+    private static String getHeader(String data){
+        return data.split("\0")[0];
+    }
+
+    //returns a String containing just the actual file data from data, which should contain
+    //+ the entire encoded data.
+    private static String getFileData(String data){
+        return data.split("\0")[1];
     }
 
 }

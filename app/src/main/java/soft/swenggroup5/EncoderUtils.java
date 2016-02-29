@@ -30,6 +30,8 @@ public class EncoderUtils {
     private final static int HEIGHT = 400;
     private final static boolean DEBUG = true;
 
+    public final static String DELIMITER = "|";
+
     /**
      * encodeFile
      * <p/>
@@ -159,13 +161,13 @@ public class EncoderUtils {
         if (file != null) {
             StringBuilder headerString = new StringBuilder();
             headerString.append(file.getName())
-                    .append(("|"))
+                    .append(DELIMITER)
                     .append(String.valueOf(file.length()))
-                    .append(("|"))
+                    .append(DELIMITER)
                     .append(EncoderUtils.getMimeType(file))
-                    .append(("|"))
+                    .append(DELIMITER)
                     .append(String.valueOf(file.hashCode()))
-                    .append(("|"))
+                    .append(DELIMITER)
                     .append(String.valueOf(EncoderUtils.numberOfQRCodes(headerString.length() + 5)))
                     .append(String.valueOf("\0"));
 
