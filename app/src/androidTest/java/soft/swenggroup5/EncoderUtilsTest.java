@@ -9,8 +9,6 @@ import org.junit.runner.RunWith;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -47,12 +45,12 @@ public class EncoderUtilsTest{
     }
 
     @Test
-    public void test_encodeHeader_null() throws IOException {
-        assertEquals(null, EncoderUtils.encodeHeader(null));
+    public void test_generateHeader_null() throws IOException {
+        assertEquals(null, EncoderUtils.generateHeader(null));
     }
 
     @Test
-    public void test_encodeHeader_validInput() throws IOException {
+    public void test_generateHeader_validInput() throws IOException {
         File testTxtFile = File.createTempFile("test_encodeHeader_validInput", ".txt");
         testTxtFile.deleteOnExit();
         FileOutputStream s = new FileOutputStream(testTxtFile);
@@ -72,15 +70,11 @@ public class EncoderUtilsTest{
                 .append("~1")
                 .append("\0");
 
-        List<Byte> listOfBytes = new ArrayList<>();
-        for (byte b : expected.toString().getBytes()) {
-            listOfBytes.add((b));
-        }
-        assertEquals(listOfBytes, EncoderUtils.encodeHeader(testTxtFile));
+        assertEquals(expected.toString(), EncoderUtils.generateHeader(testTxtFile));
     }
 
     @Test
-    public void test_encodeHeader_invalidInput() throws IOException {
+    public void test_generateHeader_invalidInput() throws IOException {
 
         File testInvalidFileNoType = File.createTempFile("test_encodeHeader_invalidInput", null);
         testInvalidFileNoType.deleteOnExit();
@@ -93,10 +87,6 @@ public class EncoderUtilsTest{
                 .append(("~1"))
                 .append("\0");
 
-        List<Byte> listOfBytes = new ArrayList<>();
-        for (byte b : expected.toString().getBytes()) {
-            listOfBytes.add((b));
-        }
-        assertEquals(listOfBytes, EncoderUtils.encodeHeader(testInvalidFileNoType));
+        assertEquals(expected.toString(), EncoderUtils.generateHeader(testInvalidFileNoType));
     }
 }

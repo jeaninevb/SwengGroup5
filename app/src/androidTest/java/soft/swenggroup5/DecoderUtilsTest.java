@@ -14,9 +14,7 @@ import org.junit.runner.RunWith;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -42,8 +40,8 @@ public class DecoderUtilsTest{
             ContactData original = getExpectedValidContactData();
             Context context = InstrumentationRegistry.getContext();
             File f = original.toFile(context);
-            List<Byte> encoded = EncoderUtils.getFileBytes(f);
-            ReceivedData decodedData = DecoderUtils.decodeFileData(EncoderUtils.byteListToString(encoded), ContactData.FILE_EXTENSION);
+            String encoded = EncoderUtils.getFileContents(f);
+            ReceivedData decodedData = DecoderUtils.decodeFileData(encoded, ContactData.FILE_EXTENSION);
             assertTrue(original.equals(decodedData));
         }catch(Exception e){
             Log.d("dfd_contact_invalid", e.toString());
@@ -65,11 +63,11 @@ public class DecoderUtilsTest{
             ContactData original = getExpectedValidContactData();
             Context context = InstrumentationRegistry.getContext();
             File f = original.toFile(context);
-            List<Byte> encoded = EncoderUtils.getFileBytes(f);
-            assertTrue(null == DecoderUtils.decodeFileData(EncoderUtils.byteListToString(encoded), "Contact File"));
-            assertTrue(null == DecoderUtils.decodeFileData(EncoderUtils.byteListToString(encoded), ""));
-            assertTrue(null == DecoderUtils.decodeFileData(EncoderUtils.byteListToString(encoded), null));
-            assertTrue(null == DecoderUtils.decodeFileData(EncoderUtils.byteListToString(encoded), "text"));
+            String encoded = EncoderUtils.getFileContents(f);
+            assertTrue(null == DecoderUtils.decodeFileData(encoded, "Contact File"));
+            assertTrue(null == DecoderUtils.decodeFileData(encoded, ""));
+            assertTrue(null == DecoderUtils.decodeFileData(encoded, null));
+            assertTrue(null == DecoderUtils.decodeFileData(encoded, "text"));
         }catch(Exception e){
             Log.d("dfd_extension_invalid", e.toString());
         }
@@ -78,8 +76,7 @@ public class DecoderUtilsTest{
 
     public static String validEncodedContact() throws IOException{
         ContactData c = getExpectedValidContactData();
-        List<Byte> encoded = EncoderUtils.encodeFile(c.toFile(InstrumentationRegistry.getContext()));
-        return EncoderUtils.byteListToString(encoded);
+        return EncoderUtils.encodeFile(c.toFile(InstrumentationRegistry.getContext()));
     }
 
     //Return a valid test ContactData
@@ -100,8 +97,6 @@ public class DecoderUtilsTest{
         //+ inserted into the phone.
         Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI,
                 Uri.encode(VALID_CONTACT_DATA_ENCODED_PHONE_NUMBER));
-        ContactData con = new ContactData(uri, context);
-        return con;
+        return new ContactData(uri, context);
     }
-
 }

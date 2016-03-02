@@ -5,8 +5,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -36,19 +34,19 @@ public class EncoderUtilsTest {
 
     //test null input for getFileBytes
     @Test
-    public void test_getFileBytes_onNullInput(){
-        assertEquals(null, EncoderUtils.getFileBytes(null));
+    public void test_getFileContents_onNullInput(){
+        assertEquals(null, EncoderUtils.getFileContents(null));
     }
 
     @Test
-    public void test_getFileBytes_onInvalidInput() throws IOException {
+    public void test_getFileContents_onInvalidInput() throws IOException {
         File testInvalidFile = File.createTempFile("test_null_file", null);
         testInvalidFile.deleteOnExit();
-        assertEquals(new ArrayList<Byte>(), EncoderUtils.getFileBytes(testInvalidFile));
+        assertEquals("", EncoderUtils.getFileContents(testInvalidFile));
     }
 
     @Test
-    public void test_getFileBytes_onValidInput() throws IOException {
+    public void test_getFileContents_onValidInput() throws IOException {
         File testValidTxtFile = File.createTempFile("test_txt_file", ".txt");
         testValidTxtFile.deleteOnExit();
         FileOutputStream s = new FileOutputStream(testValidTxtFile);
@@ -59,36 +57,10 @@ public class EncoderUtilsTest {
         s.write('t');
         s.write('*');
         s.close();
-        List<Byte> expected = new ArrayList<Byte>();
-        expected.add((byte) '*');
-        expected.add((byte) 't');
-        expected.add((byte) 'e');
-        expected.add((byte) 's');
-        expected.add((byte) 't');
-        expected.add((byte) '*');
-        assertEquals(expected, EncoderUtils.getFileBytes(testValidTxtFile));
+        String expected = "*test*";
+        assertEquals(expected, EncoderUtils.getFileContents(testValidTxtFile));
 
 
-    }
-
-    @Test
-    public void test_byteListToString_onNullInput() {
-        assertEquals(null, EncoderUtils.byteListToString(null));
-    }
-
-    @Test
-    public void test_byteListToString_onInvalidInput() {
-        List<Byte> testList = new ArrayList<Byte>();
-        assertEquals("", EncoderUtils.byteListToString(testList));
-    }
-
-    @Test
-    public void test_byteListToString_onValidInput() {
-        List<Byte> testList = new ArrayList<Byte>();
-        testList.add((byte)'A');
-        testList.add((byte)'B');
-        testList.add((byte)'C');
-        assertEquals("ABC", EncoderUtils.byteListToString(testList));
     }
 }
 

@@ -14,9 +14,9 @@ import android.util.Log;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -65,11 +65,9 @@ public class DecoderUtilAutomatorTest {
 
         //Create a ContactData which will be encoded, for us to then decode.
         ContactData contactToDecode = DecoderUtilsTest.getExpectedValidContactData();
-        List<Byte> dataAsList = null;
         File f = contactToDecode.toFile(context);
-        dataAsList = EncoderUtils.getFileBytes(f);
+        String data = EncoderUtils.getFileContents(f);
 
-        String data = EncoderUtils.byteListToString(dataAsList);
         ReceivedData decodedContact = DecoderUtils.decodeFileData(data, ContactData.FILE_EXTENSION);
         Intent intent = decodedContact.TEST_saveData(context);
         //NEW_TASK flag needed to allow this Intent to act as a standalone app
