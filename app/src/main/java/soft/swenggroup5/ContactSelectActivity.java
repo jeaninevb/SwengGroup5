@@ -1,7 +1,6 @@
 package soft.swenggroup5;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -85,7 +84,7 @@ public class ContactSelectActivity extends AppCompatActivity {
                     ImageView contactQRCode = (ImageView) findViewById(R.id.imageView2);
                     contactQRCode.setImageBitmap(
                             EncoderUtils.generateQRCodeBitmap(
-                                    EncoderUtils.getFileBytes(contactFile)
+                                    EncoderUtils.encodeFile(contactFile)
                             )
                     );
                 }

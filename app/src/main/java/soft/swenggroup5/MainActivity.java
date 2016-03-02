@@ -11,6 +11,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.Hashtable;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -93,6 +95,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Log.d("Scan_Button", "Scanned");
+                try {
+                    Hashtable<String, String> ht = DecoderUtils.decodeHeader(result.getContents());
+                    for(String k : ht.keySet()) {
+                        Toast.makeText(this, k + ":"+ ht.get(k), Toast.LENGTH_LONG).show();
+                        Thread.sleep(1000);
+                    }
+
+                }
+                catch (Exception e) {}
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
