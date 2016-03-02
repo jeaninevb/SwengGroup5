@@ -13,6 +13,23 @@ import static org.junit.Assert.assertEquals;
 
 public class DecoderUtilsTest {
 
+    private static final String CONTACT_TEST_FILE_NAME = "ContactData1272593348.condata";
+    private static final String CONTACT_TEST_FILE_LENGTH = "72";
+    private static final String CONTACT_TEST_MIME_TYPE = "condata";
+    private static final String CONTACT_TEST_HASH_CODE = "1552044068";
+    private static final String CONTACT_TEST_NUM_QR_CODES = "1";
+
+    private static final String CONTACT_TEST_GENERATED_HEADER =
+            CONTACT_TEST_FILE_NAME + EncoderUtils.DELIMITER
+            + CONTACT_TEST_FILE_LENGTH + EncoderUtils.DELIMITER
+            + CONTACT_TEST_MIME_TYPE + EncoderUtils.DELIMITER
+            + CONTACT_TEST_HASH_CODE + EncoderUtils.DELIMITER
+            + CONTACT_TEST_NUM_QR_CODES;
+
+    private static final String CONTACT_TEST_FILE_DATA = "#Test Contact#N#?#test@test.com#E#H#123 456 789#P#H#Test Street, USA#A#?";
+    private static final String CONTACT_TEST_ENCODED_DATA =
+            CONTACT_TEST_GENERATED_HEADER + EncoderUtils.END_DLIMITER + CONTACT_TEST_FILE_DATA;
+
     @Test
     public void test_validateFile_onNullInput() {
         assertEquals(false, DecoderUtils.validateFile(null, 0));
@@ -32,37 +49,29 @@ public class DecoderUtilsTest {
         assertEquals(true, DecoderUtils.validateFile(f, f.hashCode()));
     }
 
-    private static final String encodedContactData = "ContactData1272593348.condata~72~condata~1552044068~1\0#Test Contact#N#?#test@test.com#E#H#123 456 789#P#H#Test Street, USA#A#?";
-    private static final String encodedContactHeader = "ContactData1272593348.condata~72~condata~1552044068~1";
-    private static final String encodedContactFileData = "#Test Contact#N#?#test@test.com#E#H#123 456 789#P#H#Test Street, USA#A#?";
-
     @Test
     public void test_getHeader_onValidInput(){
-        String encoded = encodedContactData;
-        String resHeader = DecoderUtils.getHeader(encoded);
-        assertEquals(resHeader, encodedContactHeader);
+        assertEquals(CONTACT_TEST_GENERATED_HEADER, DecoderUtils.getHeader(CONTACT_TEST_ENCODED_DATA));
     }
 
     @Test
     public void test_getFileData_onValidInput(){
-        String encoded = encodedContactData;
-        String resFileData = DecoderUtils.getFileData(encoded);
-        assertEquals(resFileData, encodedContactFileData);
+        assertEquals(CONTACT_TEST_FILE_DATA, DecoderUtils.getFileData(CONTACT_TEST_ENCODED_DATA));
     }
 
     @Test
     public void test_decodeHeader_onValidInput(){
-        Hashtable<String,String> values = DecoderUtils.decodeHeader(encodedContactHeader);
-        assertEquals( "ContactData1272593348.condata", values.get("File Name"));
-        assertEquals( "72", values.get("File Length"));
-        assertEquals( "condata", values.get("Mime Type"));
-        assertEquals( "1552044068", values.get("Hash Code"));
-        assertEquals( "1", values.get("Number of QR Codes"));
+        Hashtable<String,String> values = DecoderUtils.decodeHeader(CONTACT_TEST_GENERATED_HEADER);
+        assertEquals(CONTACT_TEST_FILE_NAME, values.get("File Name"));
+        assertEquals(CONTACT_TEST_FILE_LENGTH, values.get("File Length"));
+        assertEquals(CONTACT_TEST_MIME_TYPE, values.get("Mime Type"));
+        assertEquals(CONTACT_TEST_HASH_CODE, values.get("Hash Code"));
+        assertEquals(CONTACT_TEST_NUM_QR_CODES, values.get("Number of QR Codes"));
     }
 
     @Test
     public void test_decodeFile_onValidInput() throws IOException{
-        ReceivedData resData = DecoderUtils.decodeFile(encodedContactData);
+        ReceivedData resData = DecoderUtils.decodeFile(CONTACT_TEST_ENCODED_DATA);
         assertEquals("Test Contact" + " Contact Data", resData.toString());
         ContactData exp = new ContactData();
         exp.addPhoneNumber("123 456 789", ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
@@ -71,5 +80,4 @@ public class DecoderUtilsTest {
         exp.addName("Test Contact");
         assertEquals(exp, resData);
     }
-
 }
