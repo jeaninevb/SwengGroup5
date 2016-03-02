@@ -63,14 +63,10 @@ public class EncoderUtilsTest{
         s.close();
 
         // expected = "test_encodeHeader_validInput~6~text/plain~hash(file)~1\0"
-        StringBuilder expected = new StringBuilder();
-        expected.append((testTxtFile.getName()))
-                .append("~6~text/plain~")
-                .append(testTxtFile.hashCode())
-                .append("~1")
-                .append("\0");
+        String expected = testTxtFile.getName()
+                + "~6~text/plain~" + testTxtFile.hashCode() + "~1" + "\0";
 
-        assertEquals(expected.toString(), EncoderUtils.generateHeader(testTxtFile));
+        assertEquals(expected, EncoderUtils.generateHeader(testTxtFile));
     }
 
     @Test
@@ -80,13 +76,9 @@ public class EncoderUtilsTest{
         testInvalidFileNoType.deleteOnExit();
 
         // expected = "0~null~hash(file)~1\0"
-        StringBuilder expected = new StringBuilder();
-        expected.append(testInvalidFileNoType.getName())
-                .append("~0~null~")
-                .append(testInvalidFileNoType.hashCode())
-                .append(("~1"))
-                .append("\0");
+        String expected = testInvalidFileNoType.getName()
+                + "~0~null~" + testInvalidFileNoType.hashCode() + "~1" + "\0";
 
-        assertEquals(expected.toString(), EncoderUtils.generateHeader(testInvalidFileNoType));
+        assertEquals(expected, EncoderUtils.generateHeader(testInvalidFileNoType));
     }
 }
