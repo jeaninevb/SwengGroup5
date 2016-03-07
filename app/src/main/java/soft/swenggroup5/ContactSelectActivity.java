@@ -21,8 +21,11 @@ import java.io.IOException;
  */
 public class ContactSelectActivity extends AppCompatActivity {
 
+    public static String CONTACT_NAME;
+    public static File DATA_FILE;
     // our ID for the Intent called in doLaunchContectPicker(), unneeded for now
     private static final int CONTACT_PICKER_RESULT = 1001;
+
 
     /**
      * onCreate
@@ -36,6 +39,7 @@ public class ContactSelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_select);
         doLaunchContactPicker();
+
     }
 
     /**
@@ -100,4 +104,3 @@ public class ContactSelectActivity extends AppCompatActivity {
         }
     }
 }
-
