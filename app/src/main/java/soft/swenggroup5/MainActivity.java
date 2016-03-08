@@ -1,7 +1,13 @@
 package soft.swenggroup5;
 
+import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +17,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 
@@ -22,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
      * INTEGRATOR: Object that is used to access the integrated scanner
      */
     private final IntentIntegrator INTEGRATOR = new IntentIntegrator(this);
+    private boolean hasPermissions;
+    private String[] neededPermissions = {
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    private static final int REQUEST_CODE_ASK_PERMISSIONS = 81;
 
     /**
      * onCreate
@@ -44,33 +58,120 @@ public class MainActivity extends AppCompatActivity {
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /**
-                 * setDesiredBarcodeFormats: setting the scanner to scan qr codes, this can be
-                 * changed to scan other codes (bar codes) and may become useful if we want to
-                 * implement extended functionality beyond V1
-                 * setPrompt: a string shown to the user when scanning. May make this dynamic
-                 * to show how many qr codes have been scanned so far (probably V1)
-                 * setCameraId: use a specific camera of the device (front or back)
-                 * setBeepEnabled: when true, audible beep occurs when scan occurs
-                 * setBarcodeImageEnabled: Set to true to enable saving the barcode image and
-                 * sending its path in the result Intent.
-                 * initiateScan: open the scanner (after it has been configured)
-                 */
-                INTEGRATOR.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-                INTEGRATOR.setPrompt("Scan the files qr code");
-                INTEGRATOR.setCameraId(0);
-                INTEGRATOR.setBeepEnabled(false);
-                INTEGRATOR.setBarcodeImageEnabled(true);
-                INTEGRATOR.initiateScan();
+                getPermissions();
+                if(hasPermissions)
+                    startCameraScan();
             }
         });
+
         contactButton.setOnClickListener(new View.OnClickListener() {
             @Override
-        public void onClick(View w) {
-                // switch to the contact select activity
-                startActivity(new Intent(MainActivity.this, ContactSelectActivity.class));
+            public void onClick(View w) {
+                getPermissions();
+                if (hasPermissions)
+                    startContactSelect();
             }
         });
+    }
+
+    //return null if none needed
+    private void getPermissions(){
+        boolean needToShowRationale = false; //is there any permission that has been permanently denied / first time
+        ArrayList<String> neededPerms = new ArrayList<String>(); //list of not-granted permissions
+        for(String currentPermission : neededPermissions){//go through all possible permissions
+            //get current permission state for this permission
+            int hasThisPermission = ContextCompat.checkSelfPermission(MainActivity.this,
+                    currentPermission);
+            if(hasThisPermission != PackageManager.PERMISSION_GRANTED)
+            {
+                neededPerms.add(currentPermission);
+                //is this permission permanently denied / first time ask
+                if(!ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                        currentPermission)) {
+                    needToShowRationale = true;
+                }
+            }
+        }
+        //if list is empty, no needed permissions, ie all permissions already granted
+        if(neededPerms.size() <= 0){
+            hasPermissions = true;
+            return;
+        }
+        final String [] permissionList = neededPerms.toArray(new String[1]);
+        if(needToShowRationale) {
+            //make message box explaining reason these permissions are needed, opens permission box if 'ok' pressed
+            showMessageOKCancel("Please allow access to all these functions",
+                    new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(MainActivity.this, "Rationale Clicked", Toast.LENGTH_SHORT).show();
+                            ActivityCompat.requestPermissions(MainActivity.this,
+                                    permissionList,
+                                    REQUEST_CODE_ASK_PERMISSIONS);
+                        }
+                    }
+            );
+        }else{ //not all permissions granted, but none permanently denied
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    permissionList,
+                    REQUEST_CODE_ASK_PERMISSIONS);
+        }
+        return;
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_PERMISSIONS:
+                for(Integer result : grantResults){
+                    if(result != PackageManager.PERMISSION_GRANTED){
+                        hasPermissions = false;
+                        return;
+                    }
+                }
+                hasPermissions = true;
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    private void startCameraScan(){
+        /**
+         * setDesiredBarcodeFormats: setting the scanner to scan qr codes, this can be
+         * changed to scan other codes (bar codes) and may become useful if we want to
+         * implement extended functionality beyond V1
+         * setPrompt: a string shown to the user when scanning. May make this dynamic
+         * to show how many qr codes have been scanned so far (probably V1)
+         * setCameraId: use a specific camera of the device (front or back)
+         * setBeepEnabled: when true, audible beep occurs when scan occurs
+         * setBarcodeImageEnabled: Set to true to enable saving the barcode image and
+         * sending its path in the result Intent.
+         * initiateScan: open the scanner (after it has been configured)
+         */
+        INTEGRATOR.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+        INTEGRATOR.setPrompt("Scan the files qr code");
+        INTEGRATOR.setCameraId(0);
+        INTEGRATOR.setBeepEnabled(false);
+        INTEGRATOR.setBarcodeImageEnabled(true);
+        INTEGRATOR.initiateScan();
+    }
+
+    private void startContactSelect(){
+        // switch to the contact select activity
+        startActivity(new Intent(MainActivity.this, ContactSelectActivity.class));
     }
 
     /**
