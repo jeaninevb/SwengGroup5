@@ -74,7 +74,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    //return null if none needed
+    /**
+     * getPermissions
+     *
+     * checks if an app has the needed permissions and updates 'hasPermissions' accordingly. If this is run
+     * on a pre API 23 device it will just set 'hasPermissions' to true. If run on an API 23 device onwards, this
+     * method will open the runtime permission request windows if permissions are missing. If permissions are
+     * permanently denied displays a warning.
+     *
+     */
     private void getPermissions(){
         boolean needToShowRationale = false; //is there any permission that has been permanently denied / first time
         ArrayList<String> neededPerms = new ArrayList<String>(); //list of not-granted permissions
@@ -120,11 +128,20 @@ public class MainActivity extends AppCompatActivity {
         return;
     }
 
-
+    /**
+     * onRequestPermissionResult
+     *
+     * The callback return method when a "Request Permission" dialog window closes.
+     *
+     * @param requestCode : the code passed on the dialog window's creation
+     * @param permissions : the list of permissions passed to the dialog window on it's creation
+     * @param grantResults : the resulting state of the permissions in the previous parameter
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CODE_ASK_PERMISSIONS:
+                //go through all permission statuses, if any still denied mark hasPermissions = false
                 for(Integer result : grantResults){
                     if(result != PackageManager.PERMISSION_GRANTED){
                         hasPermissions = false;
@@ -138,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    //Used to create a dialog window to display a warning when permissions are permanently denied.
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(MainActivity.this)
                 .setMessage(message)
