@@ -18,7 +18,6 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -125,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                     permissionList,
                     REQUEST_CODE_ASK_PERMISSIONS);
         }
-        return;
     }
 
     /**
@@ -209,19 +207,18 @@ public class MainActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                Log.d("Scan_Button", "Cancelled scan");
+                Log.d("onActivityResult", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Log.d("Scan_Button", "Scanned");
+                Log.d("onActivityResult", "Scanned");
                 try {
-                    Hashtable<String, String> ht = DecoderUtils.decodeHeader(result.getContents());
-                    for(String k : ht.keySet()) {
-                        Toast.makeText(this, k + ":"+ ht.get(k), Toast.LENGTH_LONG).show();
-                        Thread.sleep(1000);
-                    }
-
+                    Intent showScannedContact = new Intent(getApplicationContext(), ContactDecodeActivity.class);
+                    showScannedContact.putExtra("scanned_data", result.getContents());
+                    startActivity(showScannedContact);
                 }
-                catch (Exception e) {}
+                catch (Exception e) {
+                    Log.e("onActivityResult", e.toString());
+                }
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {

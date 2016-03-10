@@ -28,6 +28,7 @@ import java.util.Scanner;
  */
 public class ContactData implements ReceivedData{
 
+    private final boolean DEBUG = true;
     public static final String FILE_EXTENSION = "condata";
     public static final char DELIMITER = '#'; //delimiter in the text file ContactData creates/reads
     private ArrayList<ContactTriplet> data; //holds all the data about acontact, ContactTriplet is defined below
@@ -173,7 +174,7 @@ public class ContactData implements ReceivedData{
     //TODO: Remove this method (must also be removed from ReceivedData)
     public void printData(){
         for(ContactTriplet ct : data){
-            Log.d("ContactData_printData ",ct.getData()+" "+ct.getMime()+" "+ct.getMetaData());
+            Log.d("printData ",ct.getData() + " " + ct.getMime() + " " + ct.getMetaData());
         }
     }
 
@@ -188,8 +189,12 @@ public class ContactData implements ReceivedData{
      *                is called. Needed to interact with much of the Android
      */
     public void saveData(Context context){
+        if (DEBUG) Log.d("saveData", "Starting to save data to phone");
+        Intent i = this.getInsertIntent(context);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
 
-        context.startActivity( getInsertIntent(context));
+        if (DEBUG) Log.d("saveData", "Finished saving data to phone");
     }
     /**
      * getInsertIntent
@@ -209,12 +214,15 @@ public class ContactData implements ReceivedData{
         //creates an Intent that will open the default Contact app to insert a new contact
         Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
         intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+        if (DEBUG) Log.d("getInsertIntent", "Intent to save to device started");
 
         //now we pass default data for the new contact
         int phoneNumberCount = 0;
         int emailCount = 0;
         for(ContactTriplet ct : data){
+            if (DEBUG) Log.d("getInsertIntent", "ContactTriplets: " + ct.getData());
             if(ct.getMime() == ContactTriplet.PHONE){
+                if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has a phone mime");
                 intent.putExtra(getCurrentPhoneExtraConstant(phoneNumberCount), ct.getData());
                 switch(ct.metaData){//pass what type of phone number you just added
                     case ContactTriplet.HOME:
@@ -233,17 +241,21 @@ public class ContactData implements ReceivedData{
                 }
                 phoneNumberCount++;
             }else if(ct.getMime() == ContactTriplet.EMAIL){
+                if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has an email mime");
                 intent.putExtra(getCurrentEmailExtraConstant(emailCount), ct.data);
                 switch(ct.metaData){
                     case ContactTriplet.HOME:
+                        if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has a home meta");
                         intent.putExtra(getCurrentEmailTypeExtraConstant(emailCount),
                                 ContactsContract.CommonDataKinds.Email.TYPE_HOME);
                         break;
                     case ContactTriplet.WORK:
+                        if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has a work meta");
                         intent.putExtra(getCurrentEmailTypeExtraConstant(emailCount),
                                 ContactsContract.CommonDataKinds.Email.TYPE_WORK);
                         break;
                     case ContactTriplet.OTHER:
+                        if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has other meta");
                         intent.putExtra(getCurrentEmailTypeExtraConstant(emailCount),
                                 ContactsContract.CommonDataKinds.Email.TYPE_OTHER);
                         break;
@@ -253,9 +265,11 @@ public class ContactData implements ReceivedData{
                 emailCount++;
                 //no meta data given for name or Address for now.
             }else if(ct.getMime() == ContactTriplet.NAME){
+                if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has a name mime");
                 intent.putExtra(ContactsContract.Intents.Insert.NAME, ct.data);
             }
             else if(ct.getMime() == ContactTriplet.POSTAL){
+                if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has a postal mime");
                 intent.putExtra(ContactsContract.Intents.Insert.POSTAL, ct.data);
             }
         }

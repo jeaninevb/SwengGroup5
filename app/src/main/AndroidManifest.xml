@@ -26,6 +26,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ContactSelectActivity"></activity>
+        <activity android:name=".ContactDecodeActivity"></activity>
         <activity android:name=".ContactEncodeActivity"></activity>
         <activity android:name=".SplashScreen">
             <intent-filter>

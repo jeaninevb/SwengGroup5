@@ -2,14 +2,10 @@ package soft.swenggroup5;
 
 import android.util.Log;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Hashtable;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -68,27 +64,6 @@ public class DecoderUtils {
         //   return null;
         return decodeFileData(fileData, details.get("Mime Type"));
 
-    }
-
-    /**
-     * stringToByteList
-     *
-     * Given a String returns a Byte List containing the same "characters"
-     *
-     * @param s : The String to convert
-     * @return : a Byte List containing the same "characters" as s
-     */
-    public static List<Byte> stringToByteList(String s){
-        if (s != null) {
-            byte[] primitives = s.getBytes();
-            Byte[] data = new Byte[primitives.length];
-            for(int i = 0; i < data.length; i++)
-                data[i] = primitives[i];
-            if (DEBUG) Log.d("stringToByteList", "Returning " + data.toString());
-            return Arrays.asList(data);
-        }
-        if (DEBUG) Log.d("stringToByteList", "List was null, returning null");
-        return null;
     }
 
     /**
@@ -161,7 +136,8 @@ public class DecoderUtils {
     //returns a String containing just the Header from data, which should contain the entire
     //+ encoded data.
     public static String getHeader(String data){
-        return data.split(EncoderUtils.END_DLIMITER)[0];
+        if (DEBUG) Log.d("getHeader", "Header: " + data.split(EncoderUtils.END_DLIMITER)[0].trim());
+        return data.split(EncoderUtils.END_DLIMITER)[0].trim();
     }
 
     //returns a String containing just the actual file data from data, which should contain

@@ -45,7 +45,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             ImageView contactQRCode = (ImageView) findViewById(R.id.imageView2);
             contactQRCode.setImageBitmap(
                     EncoderUtils.generateQRCodeBitmap(
-                            EncoderUtils.getFileContents(contactFile)
+                            EncoderUtils.encodeFile(contactFile)
 
                     )
             );
