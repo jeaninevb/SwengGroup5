@@ -7,6 +7,10 @@ import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -54,15 +58,25 @@ public class ContactData implements ReceivedData{
      *                in the format of files created by ContactData's toFile() method
      * @throws java.io.IOException :  from creating a Scanner using a File
      */
-    public ContactData(Scanner scanner){
+    public ContactData(/*Scanner scanner*/ String s){
         data = new ArrayList<ContactTriplet>();
-        scanner.useDelimiter(""+DELIMITER);
+        /*scanner.useDelimiter(""+DELIMITER);
         while(scanner.hasNext()){
             String stringData = scanner.next();
             char mime = scanner.next().charAt(0); //can't read single chars so read as string and get first char
             char metaData = scanner.next().charAt(0);
             data.add(new ContactTriplet(stringData,mime,metaData));
+        }*/
+        try {
+            JSONArray jas = new JSONArray(s);
+            for(int i = 0; i < jas.length(); i++){
+                JSONObject  jo = jas.getJSONObject(i);
+                data.add( new ContactTriplet(jo));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        printData();
     }
 
     /**
@@ -191,7 +205,6 @@ public class ContactData implements ReceivedData{
     public void saveData(Context context){
         if (DEBUG) Log.d("saveData", "Starting to save data to phone");
         Intent i = this.getInsertIntent(context);
-        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
 
         if (DEBUG) Log.d("saveData", "Finished saving data to phone");
@@ -355,18 +368,15 @@ public class ContactData implements ReceivedData{
         //createTempFile makes a file with a random filename, but we must still delete the file later ourselves
         File outputFile = File.createTempFile("ContactData", "."+FILE_EXTENSION, outputDir);
         outputFile.deleteOnExit();
-        BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-        //write the content of Contact to the file
-        for(ContactTriplet triplet : data){
-            writer.write(DELIMITER);
-            writer.write(triplet.getData());
-            writer.write(DELIMITER);
-            writer.write(triplet.getMime());
-            writer.write(DELIMITER);
-            writer.write(triplet.getMetaData());
-        }
-        writer.close();
-
+        JSONArray jas = new JSONArray();
+        try {
+            for(ContactTriplet tr : data){
+                jas.put(tr.toJSONObject());
+            }
+        }catch (Exception e){ e.printStackTrace();}
+        FileWriter wr = new FileWriter(outputFile);
+        wr.write(jas.toString());
+        wr.close();
         return outputFile;
     }
 
@@ -504,6 +514,10 @@ public class ContactData implements ReceivedData{
         public static final char OTHER = 'O';
         public static final char POSTAL = 'A';
 
+        public static final String JSON_DATA_KEY = "Data";
+        public static final String JSON_MIME_KEY = "Mime";
+        public static final String JSON_META_DATA_KEY = "Meta";
+
 
         String data;
         char mime;
@@ -514,6 +528,12 @@ public class ContactData implements ReceivedData{
             this.data = data;
             this.mime = mime;
             this.metaData = metaData;
+        }
+
+        public ContactTriplet(JSONObject js) throws JSONException{
+            data = js.getString(JSON_DATA_KEY);
+            mime = js.getString(JSON_MIME_KEY).charAt(0);
+            metaData = js.getString(JSON_META_DATA_KEY).charAt(0);
         }
 
         String getData(){ return data;}
@@ -530,6 +550,14 @@ public class ContactData implements ReceivedData{
             if(mime != that.mime) return false;
             if(metaData != that.metaData) return false;
             return true;
+        }
+
+        public JSONObject toJSONObject() throws JSONException{
+            JSONObject js = new JSONObject();
+            js.put(JSON_DATA_KEY, data);
+            js.put(JSON_MIME_KEY, mime+"");
+            js.put(JSON_META_DATA_KEY, metaData+"");
+            return js;
         }
     }
 

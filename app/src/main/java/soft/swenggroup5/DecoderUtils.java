@@ -83,7 +83,7 @@ public class DecoderUtils {
     public static ReceivedData decodeFileData(String data, String fileExtension ){
         switch(fileExtension){
             case ContactData.FILE_EXTENSION:
-                return new ContactData( new Scanner(data) );
+                return new ContactData( data );
             default://will return generic "FileData" object in later versions.
                 return null;
         }

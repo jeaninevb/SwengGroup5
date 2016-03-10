@@ -56,7 +56,7 @@ public class ContactDecodeActivity extends AppCompatActivity {
         saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
-                data.saveData(getApplicationContext());
+                data.saveData(ContactDecodeActivity.this);
             }
         });
 
