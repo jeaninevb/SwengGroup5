@@ -32,7 +32,7 @@ public class ContactDecodeActivity extends AppCompatActivity {
 
 
                 TextView contactName = (TextView) findViewById(R.id.contactName);
-                contactName.setText("Contact: " + fileData);
+                contactName.setText("Do you want to save the contact? \n(Data: " + fileData);
 //
 //                TextView contactNumber = (TextView) findViewById(R.id.contactNumber);
 //                contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
