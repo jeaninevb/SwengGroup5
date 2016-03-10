@@ -74,7 +74,7 @@ public class DecoderUtilsTest{
     }
 
 
-    public static String validEncodedContact() throws IOException{
+    public static String validEncodedContact() throws Exception{
         ContactData c = getExpectedValidContactData();
         return EncoderUtils.encodeFile(c.toFile(InstrumentationRegistry.getContext()));
     }
@@ -85,6 +85,8 @@ public class DecoderUtilsTest{
         con.addName("Test Contact");
         con.addEmail("test@test.com", ContactsContract.CommonDataKinds.Email.TYPE_HOME);
         con.addPhoneNumber(VALID_CONTACT_DATA_ENCODED_PHONE_NUMBER,
+                ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
+        con.addPhoneNumber("086123456",
                 ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
         con.addPostalAddress("Test Street, USA");
         return con;

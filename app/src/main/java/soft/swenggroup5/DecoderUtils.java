@@ -53,7 +53,7 @@ public class DecoderUtils {
      * @return ReceivedData object that can be used to save the data to a Android
      *         device and view info on the file
      */
-    public static ReceivedData decodeFile(String data) throws IOException{
+    public static ReceivedData decodeFile(String data) throws Exception{
         String header = getHeader(data);
         String fileData = getFileData(data);
         Hashtable<String, String> details = decodeHeader(header);
@@ -80,10 +80,10 @@ public class DecoderUtils {
      * @return  ReceivedData object that can be used to save the data to a Android
      *          device and view info on the file
      */
-    public static ReceivedData decodeFileData(String data, String fileExtension ){
+    public static ReceivedData decodeFileData(String data, String fileExtension) throws Exception{
         switch(fileExtension){
             case ContactData.FILE_EXTENSION:
-                return new ContactData( data );
+                return new ContactData(data);
             default://will return generic "FileData" object in later versions.
                 return null;
         }
