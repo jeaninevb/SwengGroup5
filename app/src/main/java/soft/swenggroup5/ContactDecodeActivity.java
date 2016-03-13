@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Tomas on 10/03/2016.
@@ -32,13 +33,16 @@ public class ContactDecodeActivity extends AppCompatActivity {
 
 
                 TextView contactName = (TextView) findViewById(R.id.contactName);
-                contactName.setText("Do you want to save the contact? \n(Data: " + fileData);
+                contactName.setText("Do you want to save the contact? \n(Data: " + fileData+")");
 //
 //                TextView contactNumber = (TextView) findViewById(R.id.contactNumber);
 //                contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
             }
             catch (Exception e) {
                 Log.e("onCreate", e.toString());
+
+                TextView contactName = (TextView) findViewById(R.id.contactName);
+                contactName.setText("QR code incorrectly read. Please scan again.");
             }
 
 
@@ -56,7 +60,15 @@ public class ContactDecodeActivity extends AppCompatActivity {
         saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
-                data.saveData(ContactDecodeActivity.this);
+                if(data != null) {
+                    data.saveData(ContactDecodeActivity.this);
+                }else{
+                    Toast toast = Toast.makeText(
+                            ContactDecodeActivity.this,
+                            "QR code incorrectly read.\nPlease scan again.",
+                            Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
 

@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
                 getPermissions();
                 if(hasPermissions)
                     startCameraScan();
+                else{
+                    displayToast("Permission have not yet been granted.");
+                }
             }
         });
 
@@ -69,8 +72,19 @@ public class MainActivity extends AppCompatActivity {
                 getPermissions();
                 if (hasPermissions)
                     startContactSelect();
+                else{
+                    displayToast("Permission have not yet been granted.");
+                }
             }
         });
+    }
+
+    private void displayToast(String text){
+        Toast toast = Toast.makeText(
+                MainActivity.this,
+                text,
+                Toast.LENGTH_SHORT);
+        toast.show();
     }
 
     /**
@@ -112,7 +126,6 @@ public class MainActivity extends AppCompatActivity {
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(MainActivity.this, "Rationale Clicked", Toast.LENGTH_SHORT).show();
                             ActivityCompat.requestPermissions(MainActivity.this,
                                     permissionList,
                                     REQUEST_CODE_ASK_PERMISSIONS);
