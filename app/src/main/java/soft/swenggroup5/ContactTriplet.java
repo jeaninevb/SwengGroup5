@@ -16,7 +16,7 @@ import org.json.JSONObject;
  * email ..etc and 'meta data' which is extra info about 'main'. E.g. is it a home, work or mobile number
  *
  */
-class ContactTriplet
+final class ContactTriplet
 {
     //the valid values for mime
     public static final char PHONE = 'P';
@@ -35,9 +35,9 @@ class ContactTriplet
     public static final String JSON_META_DATA_KEY = "Meta";
 
 
-    String data; //the main piece of data
-    char mime;  //the type of data 'data' is
-    char metaData; //extra data on 'data'
+    final private String data; //the main piece of data
+    final private char mime;  //the type of data 'data' is
+    final private char metaData; //extra data on 'data'
 
     public ContactTriplet(String data, char mime, char metaData)
     {
@@ -52,9 +52,15 @@ class ContactTriplet
         metaData = js.getString(JSON_META_DATA_KEY).charAt(0);
     }
 
-    String getData(){ return data;}
-    char getMime(){ return mime;}
-    char getMetaData(){ return metaData;}
+    String getData(){
+        return data;
+    }
+    char getMime(){
+        return mime;
+    }
+    char getMetaData(){
+        return metaData;
+    }
 
     @Override
     public boolean equals(Object y){

@@ -285,11 +285,11 @@ public class ContactData implements ReceivedData{
                 //no meta data given for name or Address for now.
             }else if(ct.getMime() == ContactTriplet.NAME){
                 if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has a name mime");
-                intent.putExtra(ContactsContract.Intents.Insert.NAME, ct.data);
+                intent.putExtra(ContactsContract.Intents.Insert.NAME, ct.getData());
             }
             else if(ct.getMime() == ContactTriplet.POSTAL){
                 if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has a postal mime");
-                intent.putExtra(ContactsContract.Intents.Insert.POSTAL, ct.data);
+                intent.putExtra(ContactsContract.Intents.Insert.POSTAL, ct.getData());
             }
         }
         return intent;
@@ -306,18 +306,21 @@ public class ContactData implements ReceivedData{
      *                         numbers into the Intent without overwriting old ones.
      */
     private void addPhoneDataToIntent(Intent intent, ContactTriplet triplet, int phoneNumberCount){
-        if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has a phone mime");
+        if (DEBUG) Log.d("addPhoneDataToIntent", "ContactTriplet has a phone mime");
         intent.putExtra(getCurrentPhoneExtraConstant(phoneNumberCount), triplet.getData());
-        switch(triplet.metaData){//pass what type of phone number you just added
+        switch(triplet.getMetaData()){//pass what type of phone number you just added
             case ContactTriplet.HOME:
+                if (DEBUG) Log.d("addPhoneDataToIntent", "ContactTriplet has a phone home meta");
                 intent.putExtra(getCurrentPhoneTypeExtraConstant(phoneNumberCount),
                         ContactsContract.CommonDataKinds.Phone.TYPE_HOME);
                 break;
             case ContactTriplet.WORK:
+                if (DEBUG) Log.d("addPhoneDataToIntent", "ContactTriplet has a phone work meta");
                 intent.putExtra(getCurrentPhoneTypeExtraConstant(phoneNumberCount),
                         ContactsContract.CommonDataKinds.Phone.TYPE_WORK);
                 break;
             case ContactTriplet.OTHER:
+                if (DEBUG) Log.d("addPhoneDataToIntent", "ContactTriplet has a phone other meta");
                 intent.putExtra(getCurrentPhoneTypeExtraConstant(phoneNumberCount),
                         ContactsContract.CommonDataKinds.Phone.TYPE_OTHER);
                 break;
@@ -336,21 +339,21 @@ public class ContactData implements ReceivedData{
      *                     into the Intent without overwriting old ones.
      */
     private void addEmailDataToIntent(Intent intent, ContactTriplet triplet, int emailCount){
-        if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has an email mime");
-        intent.putExtra(getCurrentEmailExtraConstant(emailCount), triplet.data);
-        switch(triplet.metaData){
+        if (DEBUG) Log.d("addEmailDataToIntent", "ContactTriplet has an email mime");
+        intent.putExtra(getCurrentEmailExtraConstant(emailCount), triplet.getData());
+        switch(triplet.getMetaData()){
             case ContactTriplet.HOME:
-                if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has a home meta");
+                if (DEBUG) Log.d("addEmailDataToIntent", "ContactTriplet has a email home meta");
                 intent.putExtra(getCurrentEmailTypeExtraConstant(emailCount),
                         ContactsContract.CommonDataKinds.Email.TYPE_HOME);
                 break;
             case ContactTriplet.WORK:
-                if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has a work meta");
+                if (DEBUG) Log.d("addEmailDataToIntent", "ContactTriplet has a email work meta");
                 intent.putExtra(getCurrentEmailTypeExtraConstant(emailCount),
                         ContactsContract.CommonDataKinds.Email.TYPE_WORK);
                 break;
             case ContactTriplet.OTHER:
-                if (DEBUG) Log.d("getInsertIntent", "ContactTriplet has other meta");
+                if (DEBUG) Log.d("addEmailDataToIntent", "ContactTriplet has a email other meta");
                 intent.putExtra(getCurrentEmailTypeExtraConstant(emailCount),
                         ContactsContract.CommonDataKinds.Email.TYPE_OTHER);
                 break;

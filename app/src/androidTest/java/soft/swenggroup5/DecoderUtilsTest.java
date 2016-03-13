@@ -23,7 +23,7 @@ public class DecoderUtilsTest{
 
 
     //The phone number of the test Contact data returned by getExpectedValidContactData()
-    private static final String VALID_CONTACT_DATA_ENCODED_PHONE_NUMBER = "123 456 789";
+    private static final String VALID_CONTACT_DATA_ENCODED_PHONE_NUMBER = "888 222 789";
 
     /**
      * test_decodeFile_Contact_valid
