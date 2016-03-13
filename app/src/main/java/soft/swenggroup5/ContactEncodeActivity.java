@@ -49,6 +49,9 @@ public class ContactEncodeActivity  extends AppCompatActivity {
 
                     )
             );
+
+            contactQRCode.setAdjustViewBounds(true); //allow alteration to ImageViews size/scale
+            contactQRCode.setScaleType(ImageView.ScaleType.FIT_CENTER);//scale as large as possible while still inside parent
             TextView contactName = (TextView) findViewById(R.id.contactName);
             contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
 
