@@ -1,5 +1,6 @@
 package soft.swenggroup5;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,7 +34,7 @@ public class ContactDecodeActivity extends AppCompatActivity {
 
 
                 TextView contactName = (TextView) findViewById(R.id.contactName);
-                contactName.setText("Do you want to save the contact? \n(Data: " + data.getName() +")");
+                contactName.setText("Do you want to save the contact: '" + data.getName() +"'?");
 //
 //                TextView contactNumber = (TextView) findViewById(R.id.contactNumber);
 //                contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
@@ -54,7 +55,7 @@ public class ContactDecodeActivity extends AppCompatActivity {
         scanAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
-                // TODO placeholder for now
+                startActivity(new Intent(ContactDecodeActivity.this, MainActivity.class));
             }
         });
         saveContact.setOnClickListener(new View.OnClickListener() {

@@ -232,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
                 catch (Exception e) {
                     Log.e("onActivityResult", e.toString());
                 }
-                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
             }
         } else {
             // This is important, otherwise the result will not be passed to the fragment
