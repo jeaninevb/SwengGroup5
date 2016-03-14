@@ -12,6 +12,8 @@ import com.google.zxing.common.BitMatrix;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * EncoderUtils
@@ -227,5 +229,27 @@ public class EncoderUtils {
         }
         if (DEBUG) Log.d("generateQRCodeBitmap", "List was null, returning null");
         return null;
+    }
+
+    /**
+     * generateQRCodeBitmaps
+     *
+     * Takes a string and returns bitmaps representational of the string as a qr code
+     *
+     * @param data: String to generate a qr code for
+     * @return bitmaps representing the qr code generated for the passed string
+     * @throws WriterException
+     */
+    public static List<Bitmap> generateQRCodeBitmaps(String data) throws WriterException {
+        String strings;
+        List<Bitmap> bitmaps = new ArrayList<>();
+        int index = 0;
+        while (index < data.length()) {
+           // strings.add(data.substring(index, Math.min(index + 2000, data.length())));
+            strings = data.substring(index, Math.min(index + 2000, data.length()));
+            bitmaps.add(generateQRCodeBitmap(strings));
+            index += 2000;
+        }
+        return bitmaps;
     }
 }
