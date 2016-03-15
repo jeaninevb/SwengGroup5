@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#505050">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="The contact has been saved"
+        android:textColor="@color/WHITE"
+        android:textSize="28dp"
+        android:id="@+id/contactName"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
+        />
+
+    <Button
+        android:layout_marginTop="50dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:text="New Contact"
+        android:id="@+id/selectNewContact"
+
+        android:textSize="15sp"
+        android:textColor="@color/WHITE"
+
+        android:background="@drawable/smooth_button"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal" />
+
+    <Button
+        android:layout_marginTop="60dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:text="Main Menu"
+        android:id="@+id/mainMenu"
+
+        android:textSize="15sp"
+        android:textColor="@color/WHITE"
+
+        android:background="@drawable/smooth_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center_horizontal" />
+
+
+</LinearLayout>
