@@ -8,6 +8,13 @@ import android.widget.Toast;
 
 import java.io.File;
 
+/**
+ * FileSelectActivity
+ *
+ * An activity that opens a user choosen File Browser where they can pick a file to be encoded
+ * as a QR code. If no File browser is installed on the device then a toast is displayed instead.
+ *
+ */
 public class FileSelectActivity extends AppCompatActivity {
 
     // our ID for the Intent called in doLaunchContectPicker(), unneeded for now
@@ -45,6 +52,7 @@ public class FileSelectActivity extends AppCompatActivity {
             // Potentially direct the user to the Market with a Dialog
             Toast.makeText(this, "Please install a File Manager.",
                     Toast.LENGTH_SHORT).show();
+            //TODO: Make this activity close it's self, finish() probably can't be used as in onCreate()
         }
     }
 
@@ -57,14 +65,15 @@ public class FileSelectActivity extends AppCompatActivity {
      * it's path into an Intent and passes the info onto the EncodeActivity. Then calls finish() as
      * this activity has no more functionality and we don't want the user returning here.
      *
-     * @param requestCode
-     * @param resultCode
-     * @param data
+     * @param requestCode : the code  passed with startActivityForResult so the correct code can be run
+     * @param resultCode : a code representing how the returning activity went
+     * @param data : an intent containing the data the Activity has collected
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) { //if File Intent ended with the user selecting a File
             Uri fileUri = data.getData(); //Get the URI that represents the chosen file
             File file = new File(fileUri.getPath()); //get the choosen file
+            //TODO: Check if the file isn't too large for QR codes to manage
             Intent intent = new Intent(FileSelectActivity.this, ContactEncodeActivity.class);
             //save the file name and file path to the passing Intent so EncodeActivity can use them
             intent.putExtra(ContactEncodeActivity.FILE_NAME_KEY, file.getName());
