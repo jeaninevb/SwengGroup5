@@ -20,7 +20,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
 
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_encode);
+        setContentView(R.layout.sending_codes);
 
         Button newContact = (Button) findViewById(R.id.selectNewContact);
         Button mainMenu = (Button) findViewById(R.id.mainMenu);
@@ -39,6 +39,29 @@ public class ContactEncodeActivity  extends AppCompatActivity {
         });
 
 
+        //previous and next buttons for sending_codes.xml    haven't finished the onClick part
+        Button nextCode = (Button) findViewById(R.id.nextCode);
+        Button previousCode = (Button) findViewById(R.id.previousCode);
+
+        nextCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View w) {
+                //startActivity(new Intent(ContactEncodeActivity.this, MainActivity.class));
+            }
+        });
+        previousCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View w) {
+                //startActivity(new Intent(ContactEncodeActivity.this, MainActivity.class));
+            }
+        });
+
+
+
+
+
+
+
         File contactFile = ContactSelectActivity.DATA_FILE;
         try {
 
@@ -54,6 +77,12 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             contactQRCode.setScaleType(ImageView.ScaleType.FIT_CENTER);//scale as large as possible while still inside parent
             TextView contactName = (TextView) findViewById(R.id.contactName);
             contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
+
+/*            //textView for order of code pages
+            TextView currentCode = (TextView) findViewById(R.id.currentCode);
+            currentCode.setText("1/1");*/
+
+
 
         } catch (WriterException e) {
             Log.e("onActivityResult", e.toString());
