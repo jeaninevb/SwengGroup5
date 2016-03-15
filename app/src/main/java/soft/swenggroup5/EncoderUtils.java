@@ -45,7 +45,7 @@ public class EncoderUtils {
      * debugging constants
      * Set to false for release version
      */
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     /**
      * encodeFile
@@ -150,7 +150,7 @@ public class EncoderUtils {
                         "File " + file + ". Returning byte list of size" + fileContents.length());
                 return fileContents.toString();
             } catch (IOException e) {
-                Log.e("getFileBytes", e.toString());
+                if (DEBUG) Log.e("getFileBytes", e.toString());
             }
         }
         if (DEBUG) Log.d("getFileBytes", "File was null. Returning null");
@@ -210,7 +210,7 @@ public class EncoderUtils {
                 result = new MultiFormatWriter()
                         .encode(data, BarcodeFormat.QR_CODE, WIDTH, HEIGHT, null);
             } catch (IllegalArgumentException e) {
-                Log.e("generateQRCodeBitmap", e.toString());
+                if (DEBUG) Log.e("generateQRCodeBitmap", e.toString());
                 return null;
             }
             int width = result.getWidth();

@@ -18,6 +18,8 @@ import java.io.File;
  */
 public class ContactEncodeActivity  extends AppCompatActivity {
 
+    private static final boolean DEBUG = false;
+
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_encode);
@@ -56,7 +58,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
 
         } catch (WriterException e) {
-            Log.e("onActivityResult", e.toString());
+            if (DEBUG) Log.e("onActivityResult", e.toString());
         }
 
 

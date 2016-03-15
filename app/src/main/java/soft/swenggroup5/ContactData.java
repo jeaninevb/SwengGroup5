@@ -30,7 +30,7 @@ import java.util.ArrayList;
  */
 public class ContactData implements ReceivedData{
 
-    private final boolean DEBUG = true;
+    private final boolean DEBUG = false;
     public static final String FILE_EXTENSION = "condata";
     public ArrayList<ContactTriplet> tripletData; //holds all the data about acontact, ContactTriplet is defined below
 
@@ -201,7 +201,7 @@ public class ContactData implements ReceivedData{
     //TODO: Remove this method (must also be removed from ReceivedData)
     public void printData(){
         for(ContactTriplet ct : tripletData){
-            Log.d("printData ",ct.getData() + " " + ct.getMime() + " " + ct.getMetaData());
+            if (DEBUG) Log.d("printData ",ct.getData() + " " + ct.getMime() + " " + ct.getMetaData());
         }
     }
 

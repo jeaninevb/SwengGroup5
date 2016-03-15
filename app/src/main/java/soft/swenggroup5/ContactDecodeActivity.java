@@ -14,6 +14,8 @@ import android.widget.Toast;
  */
 public class ContactDecodeActivity extends AppCompatActivity {
 
+    private static final boolean DEBUG = false;
+
     ContactData data = null;
 
     @Override
@@ -40,7 +42,7 @@ public class ContactDecodeActivity extends AppCompatActivity {
 //                contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
             }
             catch (Exception e) {
-                Log.e("onCreate", e.toString());
+                if (DEBUG) Log.e("onCreate", e.toString());
 
                 TextView contactName = (TextView) findViewById(R.id.contactName);
                 contactName.setText("QR code incorrectly read. Please scan again.");

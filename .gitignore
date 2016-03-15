@@ -12,3 +12,7 @@ jvm_test_results.txt
 
 # Bash result output
 x
+
+# keystore and release info
+SOFTkeystore.jks
+app/app-release.apk

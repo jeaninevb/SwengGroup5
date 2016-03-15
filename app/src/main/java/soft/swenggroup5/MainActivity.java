@@ -22,6 +22,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final boolean DEBUG = false;
+
     /**
      * Constants
      *
@@ -220,17 +222,17 @@ public class MainActivity extends AppCompatActivity {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             if (result.getContents() == null) {
-                Log.d("onActivityResult", "Cancelled scan");
+                if (DEBUG) Log.d("onActivityResult", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                Log.d("onActivityResult", "Scanned");
+                if (DEBUG) Log.d("onActivityResult", "Scanned");
                 try {
                     Intent showScannedContact = new Intent(getApplicationContext(), ContactDecodeActivity.class);
                     showScannedContact.putExtra("scanned_data", result.getContents());
                     startActivity(showScannedContact);
                 }
                 catch (Exception e) {
-                    Log.e("onActivityResult", e.toString());
+                    if (DEBUG) Log.e("onActivityResult", e.toString());
                 }
             }
         } else {

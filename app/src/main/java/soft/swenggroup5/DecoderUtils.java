@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Hashtable;
-import java.util.Scanner;
 
 /**
  * DecoderUtils
@@ -16,7 +15,7 @@ import java.util.Scanner;
  */
 public class DecoderUtils {
 
-    private final static boolean DEBUG = true;
+    private final static boolean DEBUG = false;
 
     /**
      * decodeHeader
