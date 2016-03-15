@@ -14,8 +14,6 @@ import java.io.IOException;
  *
  */
 public class ContactSelectActivity extends AppCompatActivity {
-    public static String CONTACT_NAME;
-    public static File DATA_FILE;
     // our ID for the Intent called in doLaunchContectPicker(), unneeded for now
     private static final int CONTACT_PICKER_RESULT = 1001;
     /**
@@ -65,11 +63,15 @@ public class ContactSelectActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) { //if Contact Intent ended with the user selecting a Contact
             Uri contactUri = data.getData(); //Get the URI that represents the chosen contact
             ContactData contactData = new ContactData(contactUri, ContactSelectActivity.this);
-            CONTACT_NAME = contactData.getName();
+            Intent intent = new Intent(ContactSelectActivity.this, ContactEncodeActivity.class);
+            //save the file name to the passing Intent so EncodeActivity can use it
+            intent.putExtra(ContactEncodeActivity.FILE_NAME_KEY, contactData.getName());
 
             try {
-                DATA_FILE = contactData.toFile(this);
-                startActivity(new Intent(ContactSelectActivity.this, ContactEncodeActivity.class));
+                File file = contactData.toFile(this);
+                //save the file path to the passing Intent so EncodeActivity can reach the file in it's intent
+                intent.putExtra(ContactEncodeActivity.FILE_PATH_KEY, file.getAbsolutePath());
+                startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();
             }

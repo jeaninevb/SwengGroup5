@@ -18,6 +18,9 @@ import java.io.File;
  */
 public class ContactEncodeActivity  extends AppCompatActivity {
 
+    public static final String FILE_NAME_KEY = "soft.swenggroup5.EncodeActivity.FILENAMEKEY";
+    public static final String FILE_PATH_KEY = "soft.swenggroup5.EncodeActivity.FILEPATHKEY";
+
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sending_codes);
@@ -56,13 +59,10 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-        File contactFile = ContactSelectActivity.DATA_FILE;
+        //The intent passed on startActivity
+        Intent receivedIntent = getIntent();
+        String filePath = receivedIntent.getStringExtra(FILE_PATH_KEY);
+        File contactFile = new File(filePath);
         try {
 
             ImageView contactQRCode = (ImageView) findViewById(R.id.imageView2);
@@ -76,7 +76,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             contactQRCode.setAdjustViewBounds(true); //allow alteration to ImageViews size/scale
             contactQRCode.setScaleType(ImageView.ScaleType.FIT_CENTER);//scale as large as possible while still inside parent
             TextView contactName = (TextView) findViewById(R.id.contactName);
-            contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
+            contactName.setText("Contact: " + receivedIntent.getStringExtra(FILE_NAME_KEY));
 
 /*            //textView for order of code pages
             TextView currentCode = (TextView) findViewById(R.id.currentCode);

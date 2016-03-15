@@ -4,11 +4,8 @@
     android:sharedUserId="soft.swenggroup5.uid">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-
-
 
     <application
         android:allowBackup="true"
@@ -22,19 +19,21 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".ContactSelectActivity"></activity>
-        <activity android:name=".ContactDecodeActivity"></activity>
-        <activity android:name=".ContactEncodeActivity"></activity>
+        <activity android:name=".ContactSelectActivity" />
+        <activity android:name=".ContactDecodeActivity" />
+        <activity android:name=".ContactEncodeActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+        <activity android:name=".FileSelectActivity"></activity>
     </application>
 
 </manifest>
