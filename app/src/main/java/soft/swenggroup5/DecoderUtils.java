@@ -84,8 +84,8 @@ public class DecoderUtils {
         switch(fileExtension){
             case ContactData.FILE_EXTENSION:
                 return new ContactData(data);
-            default://will return generic "FileData" object in later versions.
-                return null;
+            default:
+                return new FileData(data, fileExtension);
         }
     }
 

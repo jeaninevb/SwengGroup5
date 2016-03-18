@@ -35,7 +35,8 @@
         </activity>
         <activity android:name=".FileSelectActivity" />
         <activity android:name=".FileBrowserActivity" />
-        <activity android:name=".FileSaveActivity"></activity>
+        <activity android:name=".FileSaveActivity" />
+        <activity android:name=".CameraActivity"></activity>
     </application>
 
 </manifest>
