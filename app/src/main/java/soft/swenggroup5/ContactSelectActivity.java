@@ -1,12 +1,11 @@
 package soft.swenggroup5;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+
 import java.io.File;
-import java.io.IOException;
 /**
  * Contact Select Activity:
  * In Short: Activity that allows a user to select a contact, if cancelled returns to the previous
