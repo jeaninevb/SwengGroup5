@@ -2,6 +2,7 @@ package soft.swenggroup5;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 /**
  * Created by CrusaderCrab on 15/03/2016.
@@ -31,6 +32,11 @@ public class FileData implements ReceivedData {
 
     @Override
     public void printData() {
+        Log.d("FileData.printData()", " First 10 chars of data " + fileData.substring(0, 10) + " File Extension: " + fileExtension);
+    }
 
+    @Override
+    public String toString(){
+        return "File of type "+fileExtension;
     }
 }

@@ -33,7 +33,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FileSelectActivity"></activity>
+        <activity android:name=".FileSelectActivity" />
+        <activity android:name=".FileBrowserActivity"></activity>
     </application>
 
 </manifest>
