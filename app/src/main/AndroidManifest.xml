@@ -34,7 +34,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".FileSelectActivity" />
-        <activity android:name=".FileBrowserActivity"></activity>
+        <activity android:name=".FileBrowserActivity" />
+        <activity android:name=".FileSaveActivity"></activity>
     </application>
 
 </manifest>
