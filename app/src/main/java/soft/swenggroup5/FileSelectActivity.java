@@ -18,7 +18,8 @@ import java.io.File;
 public class FileSelectActivity extends AppCompatActivity {
 
     // our ID for the Intent called in doLaunchContectPicker(), unneeded for now
-    private static final int FILE_PICKER_RESULT = 1002;
+    private static final int THIRD_PARTY_FILE_PICKER_RESULT = 1002;
+    private static final int ACTIVITY_FILE_PICKER_RESULT = 1003;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +46,12 @@ public class FileSelectActivity extends AppCompatActivity {
                     //createChooser is an Intent that wraps our intent. In the chooser Intent, the
                     //+ user selects their preferred file browser
                     Intent.createChooser(intent, "Select a File to Upload"),
-                    FILE_PICKER_RESULT);
+                    THIRD_PARTY_FILE_PICKER_RESULT);
             //It's possible that the device has no valid file browsers, ActivityNotFound is thrown
             //+ if this is the case.
         } catch (android.content.ActivityNotFoundException ex) {
             // Potentially direct the user to the Market with a Dialog
-            Toast.makeText(this, "Please install a File Manager.",
-                    Toast.LENGTH_SHORT).show();
-            //TODO: Make this activity close it's self, finish() probably can't be used as in onCreate()
+            getFileWithBuiltinBrowser();
         }
     }
 
@@ -70,18 +69,35 @@ public class FileSelectActivity extends AppCompatActivity {
      * @param data : an intent containing the data the Activity has collected
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) { //if File Intent ended with the user selecting a File
+        if (resultCode == RESULT_OK && requestCode == THIRD_PARTY_FILE_PICKER_RESULT) {
             Uri fileUri = data.getData(); //Get the URI that represents the chosen file
             File file = new File(fileUri.getPath()); //get the choosen file
-            //TODO: Check if the file isn't too large for QR codes to manage
-            Intent intent = new Intent(FileSelectActivity.this, ContactEncodeActivity.class);
-            //save the file name and file path to the passing Intent so EncodeActivity can use them
-            intent.putExtra(ContactEncodeActivity.FILE_NAME_KEY, file.getName());
-            intent.putExtra(ContactEncodeActivity.FILE_PATH_KEY, file.getAbsolutePath());
-            startActivity(intent);
+            sendFileToBeEncoded(file);
             finish(); //this activity is now longer needed so just close it
+        }else if(resultCode == RESULT_OK && requestCode == ACTIVITY_FILE_PICKER_RESULT){
+            String filePath = data.getStringExtra(FileBrowserActivity.RESULT_KEY);
+            File file = new File(filePath);
+            sendFileToBeEncoded(file);
+            finish();
         } else { //if !RESULT_OK, i.e. user cancelled file app
             finish(); //end Activity, will return to previous activity (i.e. The Home Activity in Version 1)
         }
+    }
+
+    //sends the selected file to the encoding activity to be displayed as qr codes(s)
+    private void sendFileToBeEncoded(File file){
+        //TODO: Check if the file isn't too large for QR codes to manage
+        Intent intent = new Intent(FileSelectActivity.this, ContactEncodeActivity.class);
+        //save the file name and file path to the passing Intent so EncodeActivity can use them
+        intent.putExtra(ContactEncodeActivity.FILE_NAME_KEY, file.getName());
+        intent.putExtra(ContactEncodeActivity.FILE_PATH_KEY, file.getAbsolutePath());
+        startActivity(intent);
+    }
+
+    //creates an Activity of the builtin FileBrowserActivity for the user to select a file
+    private void getFileWithBuiltinBrowser(){
+        Intent startingIntent = new Intent(FileSelectActivity.this, FileBrowserActivity.class);
+        startingIntent.putExtra(FileBrowserActivity.DISPLAYING_KEY, FileBrowserActivity.FILE_SELECT_ONLY);
+        startActivityForResult(startingIntent, ACTIVITY_FILE_PICKER_RESULT);
     }
 }
