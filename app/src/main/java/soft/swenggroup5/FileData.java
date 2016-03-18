@@ -9,7 +9,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Created by CrusaderCrab on 15/03/2016.
+ * FileData
+ *
+ * Class for holding File Data and saving it to a user-specified arbitary location.
+ * Implements ReceivedData and is meant be used as part of decoding and saving generic files
+ * from QR codes
+ *
  */
 public class FileData implements ReceivedData {
 
@@ -24,6 +29,15 @@ public class FileData implements ReceivedData {
         }
     }
 
+    /**saveData
+     *
+     * Used to save the held file data to a user specified arbitary location on the device. First
+     * saves the file to a temp location then uses FileSaveActivity to have the user specify where
+     * they want the file actually saved. The temp file is moved there then.
+     *
+     * @param context the context ("the calling Activity") where this method
+     *                is called. Needed to interact with much of the Android
+     */
     @Override
     public void saveData(Context context){
         try {
@@ -37,6 +51,16 @@ public class FileData implements ReceivedData {
 
     }
 
+    /**
+     * makeTempFile
+     *
+     * saves the data stored in this FileData to a temporary location. The temp file will automatically
+     * destroy itself at the end of the applications life cycle if not already deleted beforehand.
+     *
+     * @param context : to get the location of this apps private memory space
+     * @return outputFile : the Temp File
+     * @throws IOException : from java.io method calls
+     */
     private File makeTempFile(Context context) throws IOException{
         //create the Contact file
         File outputDir = context.getCacheDir(); // get folder path for this app
