@@ -1,11 +1,15 @@
 package soft.swenggroup5;
 
+import android.content.Intent;
 import android.util.Log;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -30,11 +34,10 @@ public class DecoderUtils {
         if (header != null) {
             Hashtable<String, String> headerValues = new Hashtable<String, String>();
             String[] headerContents = header.split(EncoderUtils.DELIMITER); // split by the delimeter
-            headerValues.put("File Name", headerContents[0]); // add each value to the hashtable
-            headerValues.put("File Length", headerContents[1]);
+            headerValues.put("QR code index", headerContents[0]); // add each value to the hashtable
+            headerValues.put("Number of QR Codes", headerContents[1]);
             headerValues.put("Mime Type", headerContents[2]);
             headerValues.put("Hash Code", headerContents[3]);
-            headerValues.put("Number of QR Codes", headerContents[4]);
             return headerValues;
         }
         return null;
@@ -58,10 +61,10 @@ public class DecoderUtils {
         String fileData = getFileData(data);
         Hashtable<String, String> details = decodeHeader(header);
         //if(!validateFile(
-        //        fileDataToFile(fileData, details.get("File Name")),
-        //       Integer.getInteger(details.get("Hash Code")))
+        //        fileData,
+        //        Integer.getInteger(details.get("Hash Code")))
         //        )
-        //   return null;
+        //  return null;
         return decodeFileData(fileData, details.get("Mime Type"));
 
     }
@@ -101,36 +104,18 @@ public class DecoderUtils {
      * be possible to start scanning a sequence of QR codes and attempt to manipulate the data
      * by scanning in QR codes from a different source. This function protects against that.
      *
-     * @param file: the compiled file from the data scanned
+     * @param fileString: the compiled file from the data scanned as a string
      * @param givenHash: the hash contained in the qr code
      * @return boolean based on whether the compiled files hash matches that in the qr code header
      */
-    public static boolean validateFile(File file, int givenHash) {
-        if(file != null) {
+    public static boolean validateFile(String fileString, int givenHash) {
+        if(fileString != null) {
             if (DEBUG) Log.d("validateFile",
-                    "File " + file + "not null. Return " + (file.hashCode() == givenHash));
-            return file.hashCode() == givenHash;
+                    "File " + fileString + "not null. Return " + (fileString.hashCode() == givenHash));
+            return fileString.hashCode() == givenHash;
         }
-        if (DEBUG) Log.d("validateFile", "File was null, return false.");
+        if (DEBUG) Log.d("validateFile", "FileString was null, return false.");
         return false;
-    }
-
-    /**
-     * fileDataToFile
-     *
-     * Creates a file containing the data in the passed String, needed to use ValidateFile().
-     *
-     * @param s : the given file data
-     * @param name : the name of the file we will be matching hashes with
-     * @return : a temporary file containing the data in s
-     * @throws IOException : from File creation + filling
-     */
-    private static File fileDataToFile(String s, String name) throws IOException{
-        File f = new File(name);
-        f.deleteOnExit();
-        FileWriter writer = new FileWriter(f);
-        writer.write(s);
-        return f;
     }
 
     //returns a String containing just the Header from data, which should contain the entire
@@ -144,6 +129,34 @@ public class DecoderUtils {
     //+ the entire encoded data.
     public static String getFileData(String data){
         return data.split(EncoderUtils.END_DLIMITER)[1];
+    }
+
+    //returns the index stored in the the given QRCode
+    public static int getQRCodeIndex(String code){
+        return Integer.parseInt(code.split(EncoderUtils.DELIMITER)[0]);
+    }
+
+    //returns the total no of codes needed as stored in the the given QRCode
+    public static int getTotalQRCodeNumber(String code){
+        return Integer.parseInt(code.split(EncoderUtils.DELIMITER)[1]);
+    }
+
+    /** combineQRCodes
+     *
+     *  Given an arrayList of Strings (that are expected to be formatted like the strings generated
+     *  by EncoderUtils) combines them into a single string without the middle headers but
+     *  with the top header( which should be with the string in index 0 of the passed arraylist)
+     *
+     * @param codes : the qr codes to combine, in ascending index order
+     * @return : the codes appended, without the middle headers but with the top header
+     */
+    public static String combineQRCodes(ArrayList<String> codes){
+        StringBuilder combined = new StringBuilder();
+        combined.append( codes.get(0) );
+        for(String code : codes){
+            combined.append( getFileData(code) );
+        }
+        return combined.toString();
     }
 
 }

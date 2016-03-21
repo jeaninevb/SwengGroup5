@@ -328,7 +328,8 @@ public class EncoderUtils {
         header.append(index);
         header.append(DELIMITER);
         header.append(max);
-        header.append(DELIMITER);
+        header.append(DELIMITER);    //this delimiter is added so index and max can be gotten from the top
+                                     //+ and middle headers with the same code.
         header.append(END_DLIMITER);
         return header.toString();
     }
