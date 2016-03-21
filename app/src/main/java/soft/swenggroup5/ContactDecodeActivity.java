@@ -14,7 +14,7 @@ import android.widget.Toast;
  */
 public class ContactDecodeActivity extends AppCompatActivity {
 
-    ContactData data = null;
+    ReceivedData data = null;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -27,14 +27,14 @@ public class ContactDecodeActivity extends AppCompatActivity {
             String scannedData = extras.getString("scanned_data");
 
             try {
-                data = (ContactData) DecoderUtils.decodeFile(scannedData);
+                data =  DecoderUtils.decodeFile(scannedData);
                 data.printData();
 
                 String fileData = DecoderUtils.getFileData(scannedData);
 
 
-                TextView contactName = (TextView) findViewById(R.id.contactName);
-                contactName.setText("Do you want to save the contact: '" + data.getName() +"'?");
+                TextView fileName = (TextView) findViewById(R.id.contactName);
+                fileName.setText("Do you want to save the contact: '" + data.toString() +"'?");
 //
 //                TextView contactNumber = (TextView) findViewById(R.id.contactNumber);
 //                contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
@@ -42,8 +42,8 @@ public class ContactDecodeActivity extends AppCompatActivity {
             catch (Exception e) {
                 Log.e("onCreate", e.toString());
 
-                TextView contactName = (TextView) findViewById(R.id.contactName);
-                contactName.setText("QR code incorrectly read. Please scan again.");
+                TextView fileName = (TextView) findViewById(R.id.contactName);
+                fileName.setText("QR code incorrectly read. Please scan again.");
             }
 
 
