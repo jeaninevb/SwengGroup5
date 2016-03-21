@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.transform.dom.DOMLocator;
+
 /**
  * EncoderUtils
  *
@@ -252,4 +254,122 @@ public class EncoderUtils {
         }
         return bitmaps;
     }
+
+    /**********************************************************************************************/
+    /*      Multi QR code version of EncoderUtils. I have not replaced the old code with this until
+    *       all references to the old code have been removed. I don't want to suddenly break everything
+    *       on everyone.
+    */
+    /**********************************************************************************************/
+
+    /** encodeFileToQRStrings
+     *
+     * Given a file returns a List<String> containing the file broken up into a number of strings
+     * that can be converted into QR codes using generateQRCodeBitmap. The Strings already contain
+     * the QR code headers. The first QR code (i.e. the one with the full header) is placed in the
+     * first index of the returned list
+     *
+     * @param file : the file to break up into Strings that can become QR codes
+     * @return : the given file broken up into Strings that can become QR codes
+     */
+    public static List<String> encodeFileToQRStrings(File file){
+        if(file == null){
+            if(DEBUG) Log.d("encodeFileToQRStrings", "file given was null");
+            return null;
+        }
+        String fileString = getFileContents(file);
+        String header = generateTopHeader(file, fileString);
+        int max = numberOfQRCodes((int) file.length());
+        ArrayList<String> fileData = getQRChunks(fileString, max);
+        ArrayList<String> qrStrings = new ArrayList<String>(max);
+        qrStrings.add(header + qrStrings.get(0));
+        for(int i = 1; i < max; i++){
+            qrStrings.add(generateMiddleHeader(i, max) + qrStrings.get(i));
+        }
+        return qrStrings;
+    }
+
+    /**generateTopHeader
+     *
+     * Generates the header that will be prefixed up the data in the first QR code. It is in the
+     * format:
+     *      index~no of total qr codes~file extension~hash code'/0'
+     *
+     * @param file : the file this header will represent
+     * @param fileString : the first parameter stored in a string.
+     *                   passed in so that it can be calced once elsewhere and just passed around
+     * @return : the header that represents the passed in file
+     */
+    private static String generateTopHeader(File file, String fileString){
+        StringBuilder header = new StringBuilder();
+        header.append("0"); //header for first file, so will always have index 0
+        header.append(DELIMITER);
+        header.append(numberOfQRCodes((int)file.length()));
+        header.append(DELIMITER);
+        header.append(getTopMimeType(file));
+        header.append(DELIMITER);
+        header.append(fileString.hashCode());
+        header.append(END_DLIMITER);
+        return header.toString();
+    }
+
+
+    /**generateMiddleHeader
+     *
+     * Creates a string in the format of a 'middle' header, which are the headers that are prefixed
+     * to all QR codes for a file bar the first qr code (which gets the 'Top' header).
+     *
+     * @param index : the index of the qr code this header will be prefixed to
+     * @param max : the total number of qr codes for this file
+     * @return : the header containing the passed in information
+     */
+    private static String generateMiddleHeader(int index, int max){
+        StringBuilder header = new StringBuilder();
+        header.append(index);
+        header.append(DELIMITER);
+        header.append(max);
+        header.append(DELIMITER);
+        header.append(END_DLIMITER);
+        return header.toString();
+    }
+
+
+    /**getQRChunks
+     *
+     * Given a String (that should represent the data in a file), breaks up the string into a list
+     * of substrings that are all at most MAX_QR_CODE_DATA_SIZE length.
+     *
+     * @param fileString : the string to break up
+     * @param noOfCodes : the number of chunks the string should break up into.
+     * @return : an arrayList holding all the substrings
+     */
+    private static ArrayList<String> getQRChunks(String fileString, int noOfCodes){
+        ArrayList<String> chunks = new ArrayList<String>(noOfCodes);
+        for(int i = 0; i < (noOfCodes-1); i++){ //get all but the last chunk
+            chunks.add(fileString.substring(i*MAX_QR_CODE_DATA_SIZE, (i+1)*MAX_QR_CODE_DATA_SIZE));
+        }
+        //the last chunk is gotten seperately so that .substring() doesnt try to index off the
+        //+ end of the passed in string
+        chunks.add(fileString.substring((noOfCodes - 1) * MAX_QR_CODE_DATA_SIZE));
+        return chunks;
+    }
+
+
+    /**getTopMimeType
+     *
+     * Returns the extension of a given file.
+     *
+     * @param file
+     * @return
+     */
+    private static String getTopMimeType(File file){
+        if (file != null) {
+           return MimeTypeMap.getFileExtensionFromUrl(file.getAbsolutePath());
+        }
+        if (DEBUG) Log.d("encodeFile", "File is null.");
+        return null;
+    }
+
+
+
 }
