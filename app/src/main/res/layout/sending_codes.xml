@@ -23,12 +23,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="1/1"
+        android:text="John"
         android:textColor="@color/WHITE"
         android:textSize="20dp"
         android:id="@+id/contactName"
         android:layout_marginLeft="160dp"
         android:layout_marginTop="70dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="1/1"
+        android:textColor="@color/WHITE"
+        android:textSize="30dp"
+        android:id="@+id/currentCode"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="70dp"
+        android:layout_alignLeft="@+id/previousCode"
+        android:layout_alignBottom="@+id/previousCode"
+        android:paddingBottom="10dp"
+        android:textAlignment="center"
         />
 
     <Button

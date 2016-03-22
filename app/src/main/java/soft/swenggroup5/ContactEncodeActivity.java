@@ -78,9 +78,9 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             TextView contactName = (TextView) findViewById(R.id.contactName);
             contactName.setText("Contact: " + receivedIntent.getStringExtra(FILE_NAME_KEY));
 
-/*            //textView for order of code pages
+            //textView for order of code pages
             TextView currentCode = (TextView) findViewById(R.id.currentCode);
-            currentCode.setText("1/1");*/
+            currentCode.setText("1/1");
 
 
 
