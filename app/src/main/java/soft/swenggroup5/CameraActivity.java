@@ -21,6 +21,8 @@ public class CameraActivity extends AppCompatActivity {
 
     private ArrayList<String> scannedStrings;
     private final IntentIntegrator INTEGRATOR = new IntentIntegrator(this);
+    private int TOTAL_QR_CODES=-1;                          //Set to unreachable value
+    private int CURRENT_INDEX=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,26 +106,41 @@ public class CameraActivity extends AppCompatActivity {
 
     //adds the just scanned in QR code to the list of codes. May possibly remove headers of codes
     //TODO: Actual Implementation
-    private void addQRtoList(String data){
-        scannedStrings.add(data);
+    private void addQRtoList(String input){
+        if(DecoderUtils.getQRCodeIndex(input)==CURRENT_INDEX+1) {   //If it is next qr code add
+            CURRENT_INDEX++;
+            scannedStrings.add(input);
+        }
     }
 
     //checks if the passed qr code has not already been scanned and stored
     //TODO: Actual Implementation
     private boolean newQRCode(String input){
-        return true;
+        if(DecoderUtils.getQRCodeIndex(input)==0) {
+            TOTAL_QR_CODES = DecoderUtils.getTotalQRCodeNumber(input);
+            CURRENT_INDEX = 0;
+            return true;
+        }
+        return false;
     }
 
     //checks if the passed qr code is the last code in a file transfer
     //TODO: Actual Implementation
-    private boolean finalQRReceived(String qrString){
-        return true;
+    private boolean finalQRReceived(String input){
+        if(DecoderUtils.getQRCodeIndex(input)==TOTAL_QR_CODES && CURRENT_INDEX==TOTAL_QR_CODES) {
+            return true;
+        }
+        return false;
     }
 
     //returns all the codes as a single string
     //TODO: Actual Implementation
     private String getTotalData(){
-        return scannedStrings.get(0);
+        StringBuilder data = new StringBuilder();
+        for(int i=0; i<scannedStrings.size();i++){
+            data.append(scannedStrings.get(i));
+        }
+        return data.toString();
     }
 
 
