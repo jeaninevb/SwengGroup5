@@ -32,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private String[] neededPermissions = {
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.READ_CALENDAR,
+            Manifest.permission.WRITE_CALENDAR,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 81;
@@ -58,9 +60,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getPermissions();
-                if(hasPermissions)
+                if(hasPermissions) {
                     startCameraScan();
-                else{
+                }else{
                     displayToast("Permission have not yet been granted.");
                 }
             }
@@ -70,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View w) {
                 getPermissions();
-                if (hasPermissions)
+                if (hasPermissions) {
                     startContactSelect();
-                else{
+                }else{
                     displayToast("Permission have not yet been granted.");
                 }
             }
