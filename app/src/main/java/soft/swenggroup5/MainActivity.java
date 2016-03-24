@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private String[] neededPermissions = {
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.READ_CALENDAR,
+            Manifest.permission.WRITE_CALENDAR,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 81;
@@ -60,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getPermissions();
-                if(hasPermissions)
+                if(hasPermissions) {
                     startCameraScan();
-                else{
+                }else{
                     displayToast("Permission have not yet been granted.");
                 }
             }
@@ -72,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View w) {
                 getPermissions();
-                if (hasPermissions)
+                if (hasPermissions) {
                     startContactSelect();
-                else{
+                }else{
                     displayToast("Permission have not yet been granted.");
                 }
             }
@@ -179,24 +181,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startCameraScan(){
-        /**
-         * setDesiredBarcodeFormats: setting the scanner to scan qr codes, this can be
-         * changed to scan other codes (bar codes) and may become useful if we want to
-         * implement extended functionality beyond V1
-         * setPrompt: a string shown to the user when scanning. May make this dynamic
-         * to show how many qr codes have been scanned so far (probably V1)
-         * setCameraId: use a specific camera of the device (front or back)
-         * setBeepEnabled: when true, audible beep occurs when scan occurs
-         * setBarcodeImageEnabled: Set to true to enable saving the barcode image and
-         * sending its path in the result Intent.
-         * initiateScan: open the scanner (after it has been configured)
-         */
-        INTEGRATOR.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        INTEGRATOR.setPrompt("Scan the files qr code");
-        INTEGRATOR.setCameraId(0);
-        INTEGRATOR.setBeepEnabled(false);
-        INTEGRATOR.setBarcodeImageEnabled(true);
-        INTEGRATOR.initiateScan();
+        Intent cameraIntent = new Intent(MainActivity.this, CameraActivity.class);
+        startActivity(cameraIntent);
     }
 
     private void startContactSelect(){
