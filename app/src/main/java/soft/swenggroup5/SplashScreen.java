@@ -8,7 +8,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 /**
- * Created by Sam on 10/02/2016.
+ * splitFileSize
+ *
+ * Creates an initial startup screen for the app.
+ * Uses rotate and fade_out as animations
+ *
+ * @param savedInstanceState: required param to instantiate the super class
  */
 public class SplashScreen extends Activity{
 
@@ -28,6 +33,7 @@ public class SplashScreen extends Activity{
 
             }
 
+            // Upon the animation finishing, the app will be sent to the main activity screen
             @Override
             public void onAnimationEnd(Animation animation) {
                 iv.startAnimation(an2);

@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="soft.swenggroup5">
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    package="soft.swenggroup5"
+    android:sharedUserId="soft.swenggroup5.uid"
+    android:versionCode="1"
+    android:versionName="FirstPublish">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+
+
 
     <application
         android:allowBackup="true"
@@ -22,6 +28,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".ContactSelectActivity"></activity>
+        <activity android:name=".ContactDecodeActivity"></activity>
+        <activity android:name=".ContactEncodeActivity"></activity>
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
