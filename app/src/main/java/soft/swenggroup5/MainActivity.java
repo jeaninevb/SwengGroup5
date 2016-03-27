@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private String[] neededPermissions = {
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.READ_CALENDAR,
+            Manifest.permission.WRITE_CALENDAR,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private static final int REQUEST_CODE_ASK_PERMISSIONS = 81;
@@ -60,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getPermissions();
-                if(hasPermissions)
+                if(hasPermissions) {
                     startCameraScan();
-                else{
+                }else{
                     displayToast("Permission have not yet been granted.");
                 }
             }
@@ -72,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View w) {
                 getPermissions();
-                if (hasPermissions)
+                if (hasPermissions) {
                     startContactSelect();
-                else{
+                }else{
                     displayToast("Permission have not yet been granted.");
                 }
             }
@@ -179,65 +181,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startCameraScan(){
-        /**
-         * setDesiredBarcodeFormats: setting the scanner to scan qr codes, this can be
-         * changed to scan other codes (bar codes) and may become useful if we want to
-         * implement extended functionality beyond V1
-         * setPrompt: a string shown to the user when scanning. May make this dynamic
-         * to show how many qr codes have been scanned so far (probably V1)
-         * setCameraId: use a specific camera of the device (front or back)
-         * setBeepEnabled: when true, audible beep occurs when scan occurs
-         * setBarcodeImageEnabled: Set to true to enable saving the barcode image and
-         * sending its path in the result Intent.
-         * initiateScan: open the scanner (after it has been configured)
-         */
-        INTEGRATOR.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        INTEGRATOR.setPrompt("Scan the files qr code");
-        INTEGRATOR.setCameraId(0);
-        INTEGRATOR.setBeepEnabled(false);
-        INTEGRATOR.setBarcodeImageEnabled(true);
-        INTEGRATOR.initiateScan();
+        Intent cameraIntent = new Intent(MainActivity.this, CameraActivity.class);
+        startActivity(cameraIntent);
     }
 
     private void startContactSelect(){
         // switch to the contact select activity
         startActivity(new Intent(MainActivity.this, ContactSelectActivity.class));
-    }
-
-    /**
-     * onActivityResult
-     *
-     * Defines what happens when a successful read of a qr code occurs. Right now (at base), when
-     * a qr code is successfully scanned, the scanner is exited and the contents of the scan
-     * are briefly shown on the device screen
-     *
-     * TODO the body of this function will need to be moved to DecodeUtils
-     *
-     * @param requestCode: Needed to pass to the intent integrator and super class
-     * @param resultCode: Needed to pass to the intent integrator and super class
-     * @param data: Needed to pass to the intent integrator and super class
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                if (DEBUG) Log.d("onActivityResult", "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                if (DEBUG) Log.d("onActivityResult", "Scanned");
-                try {
-                    Intent showScannedContact = new Intent(getApplicationContext(), ContactDecodeActivity.class);
-                    showScannedContact.putExtra("scanned_data", result.getContents());
-                    startActivity(showScannedContact);
-                }
-                catch (Exception e) {
-                    if (DEBUG) Log.e("onActivityResult", e.toString());
-                }
-            }
-        } else {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 }

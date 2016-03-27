@@ -23,7 +23,7 @@
         android:layout_width="@dimen/splash_screen_square"
         android:layout_height="@dimen/splash_screen_square"
         android:id="@+id/imageView"
-        android:src="@mipmap/splash"
+        android:src="@mipmap/qrimage"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="43dp"
