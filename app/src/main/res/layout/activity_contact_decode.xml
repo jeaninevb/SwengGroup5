@@ -8,7 +8,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="soft.swenggroup5.ContactDecodeActivity"
-    android:background="#505050">
+    android:background="@drawable/gradient">
 
 
     <TextView
@@ -44,7 +44,7 @@
         android:textSize="15sp"
         android:textColor="@color/WHITE"
 
-        android:background="@drawable/smooth_button"
+        android:background="@drawable/raised_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         />
