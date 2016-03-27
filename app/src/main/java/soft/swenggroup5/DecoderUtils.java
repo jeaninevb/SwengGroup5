@@ -8,12 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
-<<<<<<< HEAD
-=======
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
->>>>>>> 3f40c7c4e43160bf5360ecdffac751aa6a687f79
 
 /**
  * DecoderUtils

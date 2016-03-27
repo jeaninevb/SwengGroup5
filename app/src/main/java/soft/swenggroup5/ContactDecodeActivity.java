@@ -16,7 +16,6 @@ public class ContactDecodeActivity extends AppCompatActivity {
 
     private static final boolean DEBUG = false;
 
-    ContactData data = null;
     ReceivedData data = null;
 
     @Override
