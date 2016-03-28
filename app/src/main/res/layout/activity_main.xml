@@ -8,6 +8,7 @@
     android:background="@drawable/gradient"
     tools:context=".MainActivity">
 
+    
     <ImageButton
         android:layout_width="400dp"
         android:layout_height="130dp"
