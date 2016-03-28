@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:paddingLeft="1dp"
     android:paddingRight="1dp"
-    android:background="@drawable/gradient"
+    android:background="#505050"
     tools:context=".MainActivity">
 
     <ImageButton
@@ -17,38 +17,35 @@
         android:adjustViewBounds="false"
         android:layout_alignParentTop="true"
         android:longClickable="false"
-        android:background="#000000"
+        android:background="#505050"
         />
 
     <Button
         android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:text="Send"
+        android:layout_height="130dp"
+        android:text="Send Contact"
         android:id="@+id/contactButton"
+        android:onClick="contacts"
 
         android:textSize="25sp"
         android:textColor="@color/WHITE"
 
-        android:background="@drawable/raised_button"
+        android:background="@drawable/smooth_button"
+        android:layout_marginTop="34dp"
         android:layout_below="@+id/imageButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="63dp" />
-
+        android:layout_alignStart="@+id/generate" />
 
     <Button
         android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:text="Scan"
-
+        android:layout_height="130dp"
+        android:text="Send Text"
         android:textSize="25sp"
         android:textColor="@color/WHITE"
-
-
         android:id="@+id/generate"
-        android:layout_marginTop="51dp"
-        android:background="@drawable/smooth_button"
+        android:layout_marginTop="71dp"
         android:layout_below="@+id/contactButton"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/smooth_button"/>
 
 
 </RelativeLayout>

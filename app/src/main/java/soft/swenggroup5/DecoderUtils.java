@@ -1,17 +1,9 @@
 package soft.swenggroup5;
 
-import android.content.Intent;
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
 
 /**
  * DecoderUtils
@@ -134,6 +126,7 @@ public class DecoderUtils {
 
     //returns the index stored in the the given QRCode
     public static int getQRCodeIndex(String code){
+        Log.d("TAG", "Code: " + code);
         return Integer.parseInt(code.split(EncoderUtils.DELIMITER)[0]);
     }
 

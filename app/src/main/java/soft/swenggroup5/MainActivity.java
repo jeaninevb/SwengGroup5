@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -75,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View w) {
                 getPermissions();
                 if (hasPermissions) {
-                    startContactSelect();
+                    Log.d("onCreate_MA", "Send button clicked");
+                    startActivity(new Intent(MainActivity.this, EncodeOptionsActivity.class));
                 }else{
                     displayToast("Permission have not yet been granted.");
                 }
@@ -188,42 +188,5 @@ public class MainActivity extends AppCompatActivity {
     private void startContactSelect(){
         // switch to the contact select activity
         startActivity(new Intent(MainActivity.this, ContactSelectActivity.class));
-    }
-
-    /**
-     * onActivityResult
-     *
-     * Defines what happens when a successful read of a qr code occurs. Right now (at base), when
-     * a qr code is successfully scanned, the scanner is exited and the contents of the scan
-     * are briefly shown on the device screen
-     *
-     * TODO the body of this function will need to be moved to DecodeUtils
-     *
-     * @param requestCode: Needed to pass to the intent integrator and super class
-     * @param resultCode: Needed to pass to the intent integrator and super class
-     * @param data: Needed to pass to the intent integrator and super class
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if (result != null) {
-            if (result.getContents() == null) {
-                if (DEBUG) Log.d("onActivityResult", "Cancelled scan");
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
-            } else {
-                if (DEBUG) Log.d("onActivityResult", "Scanned");
-                try {
-                    Intent showScannedContact = new Intent(getApplicationContext(), ContactDecodeActivity.class);
-                    showScannedContact.putExtra("scanned_data", result.getContents());
-                    startActivity(showScannedContact);
-                }
-                catch (Exception e) {
-                    if (DEBUG) Log.e("onActivityResult", e.toString());
-                }
-            }
-        } else {
-            // This is important, otherwise the result will not be passed to the fragment
-            super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 }

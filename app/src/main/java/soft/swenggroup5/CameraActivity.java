@@ -29,6 +29,7 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         scannedStrings = new ArrayList<String>();
+        Log.d("onCreate", "Starting camera scan activity");
         startCameraScan();
     }
 
@@ -74,21 +75,25 @@ public class CameraActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("onActivityResult_CA", "Begun result handling");
         //if cancelled go back to home screen
         if(resultCode == RESULT_CANCELED ){
+            Log.d("onActivityResult_CA", "resultCode is RESULT_CANCELED");
             finish();
             return;
         }
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             String qrString = result.getContents();
+            Log.d("TAG", "qrString: " + qrString);
             if (qrString == null) {
                 Log.d("onActivityResult", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else if( newQRCode(qrString) ){ //if a new QR code add to list of codes
-                Log.d("onActivityResult", "Scanned");
+                Log.d("onActivityResult", "Scanned new String: " + qrString);
                 addQRtoList(qrString);
-                if(finalQRReceived(qrString)) { //if this was the final QR code,
+                if(finalQRReceived(qrString)) { //if this was the final QR code
+                    Log.d("onActivityResult", "Scanned final qrCode. Now have " + getTotalData());
                     Intent showScannedContact = new Intent(CameraActivity.this, ContactDecodeActivity.class);
                     showScannedContact.putExtra("scanned_data", getTotalData());
                     startActivity(showScannedContact);
@@ -107,7 +112,7 @@ public class CameraActivity extends AppCompatActivity {
     //adds the just scanned in QR code to the list of codes. May possibly remove headers of codes
     //TODO: Actual Implementation
     private void addQRtoList(String input){
-        if(DecoderUtils.getQRCodeIndex(input)==CURRENT_INDEX+1) {   //If it is next qr code add
+        if(DecoderUtils.getQRCodeIndex(input)==CURRENT_INDEX) {   //If it is next qr code add
             CURRENT_INDEX++;
             scannedStrings.add(input);
         }
@@ -116,18 +121,25 @@ public class CameraActivity extends AppCompatActivity {
     //checks if the passed qr code has not already been scanned and stored
     //TODO: Actual Implementation
     private boolean newQRCode(String input){
-        if(DecoderUtils.getQRCodeIndex(input)==0) {
+        if(DecoderUtils.getQRCodeIndex(input) == 1) {
+            Log.d("newQRCode", "Total qrs = " + DecoderUtils.getTotalQRCodeNumber(input) + ". Current = " + 1);
             TOTAL_QR_CODES = DecoderUtils.getTotalQRCodeNumber(input);
-            CURRENT_INDEX = 0;
+            CURRENT_INDEX = 1;
             return true;
         }
-        return false;
+        if(scannedStrings.contains(input)) {
+            return false;
+        }
+        return true;
     }
 
     //checks if the passed qr code is the last code in a file transfer
     //TODO: Actual Implementation
     private boolean finalQRReceived(String input){
-        if(DecoderUtils.getQRCodeIndex(input)==TOTAL_QR_CODES && CURRENT_INDEX==TOTAL_QR_CODES) {
+        Log.d("finalQRReceived", "TOTAL = " + TOTAL_QR_CODES);
+        Log.d("finalQRReceived", "CURRENT = " + CURRENT_INDEX);
+        Log.d("finalQRReceived", "index = " + DecoderUtils.getQRCodeIndex(input));
+        if(DecoderUtils.getQRCodeIndex(input) == TOTAL_QR_CODES && CURRENT_INDEX == TOTAL_QR_CODES + 1) {
             return true;
         }
         return false;
@@ -137,7 +149,9 @@ public class CameraActivity extends AppCompatActivity {
     //TODO: Actual Implementation
     private String getTotalData(){
         StringBuilder data = new StringBuilder();
-        for(int i=0; i<scannedStrings.size();i++){
+        Log.d("getTotalData", "Number of scanned strings = " + scannedStrings.size());
+        for(int i = 0; i < scannedStrings.size(); i++){
+            Log.d("getTotalData", "Adding: " + scannedStrings.get(i));
             data.append(scannedStrings.get(i));
         }
         return data.toString();

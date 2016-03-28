@@ -12,36 +12,34 @@ import android.widget.TextView;
 import com.google.zxing.WriterException;
 
 import java.io.File;
-import java.util.List;
+import java.io.PrintWriter;
 
 /**
- * Created by jvictoriab on 2/23/16.
+ * Created by Sam on 28/3/16.
  */
-public class ContactEncodeActivity  extends AppCompatActivity {
+public class TextEncodeActivity  extends AppCompatActivity {
 
-    private static final boolean DEBUG = false;
-    public static final String FILE_NAME_KEY = "soft.swenggroup5.EncodeActivity.FILENAMEKEY";
-    public static final String FILE_PATH_KEY = "soft.swenggroup5.EncodeActivity.FILEPATHKEY";
-
+    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sending_codes);
 
-        Log.d("onCreate_CEA", "On create");
-
-        Button newContact = (Button) findViewById(R.id.selectNewContact);
+        Button finish = (Button) findViewById(R.id.selectNewContact);
         Button mainMenu = (Button) findViewById(R.id.mainMenu);
 
-        newContact.setOnClickListener(new View.OnClickListener() {
+        finish.setText("Go back");
+
+        finish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
-                startActivity(new Intent(ContactEncodeActivity.this, ContactSelectActivity.class));
+                finish();
             }
         });
+
         mainMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
-                startActivity(new Intent(ContactEncodeActivity.this, MainActivity.class));
+                startActivity(new Intent(TextEncodeActivity.this, MainActivity.class));
             }
         });
 
@@ -63,32 +61,49 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             }
         });
 
+        TextView title = (TextView) findViewById(R.id.contactName);
+        title.setText("Your text:");
+
+
+
+
         //The intent passed on startActivity
-        Intent receivedIntent = getIntent();
-        String filePath = receivedIntent.getStringExtra(FILE_PATH_KEY);
-        File contactFile = new File(filePath);
+        Bundle extras = getIntent().getExtras();
+        String textToEncode = extras.getString("textEntry");
+
         try {
-            List<String> qrCodes = EncoderUtils.encodeFileToQRStrings(contactFile);
+            File temp = File.createTempFile("EnteredText", "customtxtentry");
+            temp.deleteOnExit();
+
+            PrintWriter w = new PrintWriter(temp);
+            w.print(textToEncode);
 
             ImageView contactQRCode = (ImageView) findViewById(R.id.imageView2);
-            Log.d("TAG", "Encoded into a qr code: " + qrCodes.get(0));
-            contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(0)));
+            contactQRCode.setImageBitmap(
+                    EncoderUtils.generateQRCodeBitmap(
+                            EncoderUtils.encodeFile(temp)
 
+                    )
+            );
             contactQRCode.setAdjustViewBounds(true); //allow alteration to ImageViews size/scale
             contactQRCode.setScaleType(ImageView.ScaleType.FIT_CENTER);//scale as large as possible while still inside parent
-            TextView contactName = (TextView) findViewById(R.id.contactName);
-            contactName.setText("Contact: " + receivedIntent.getStringExtra(FILE_NAME_KEY));
 
             //textView for order of code pages
             TextView currentCode = (TextView) findViewById(R.id.currentCode);
-            currentCode.setText("1/" + (qrCodes.size() - 1));
+            currentCode.setText("1/1");
 
-
-
-        } catch (WriterException e) {
-            if (DEBUG) Log.e("onActivityResult", e.toString());
         }
+        catch (Exception e) {}
+
 
 
     }
 }
+
+
+// Jeanine Burke:
+// Lingfeng, go to res/activity_contact_encode.xml and insert "Done" and "Select New Contact" buttons
+// each with specific IDs
+// Here, Create the "Done" button referencing the button ID in res/activity_contact_encode.xml
+// Create the "Select New Contact" button referencing the button ID in res/activity_contact_encode.xml
+// Look at MainActivity.java to compare.

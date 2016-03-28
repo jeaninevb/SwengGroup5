@@ -30,6 +30,10 @@
         <activity android:name=".ContactSelectActivity" />
         <activity android:name=".ContactDecodeActivity" />
         <activity android:name=".ContactEncodeActivity" />
+        <activity android:name=".TextEntryActivity" />
+        <activity android:name=".TextEncodeActivity" />
+        <activity android:name=".TextDecodeActivity" />
+        <activity android:name=".EncodeOptionsActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

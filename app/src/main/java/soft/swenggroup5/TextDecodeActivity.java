@@ -10,9 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 /**
- * Created by Tomas on 10/03/2016.
+ * Created by Sam on 28/03/2016.
  */
-public class ContactDecodeActivity extends AppCompatActivity {
+public class TextDecodeActivity extends AppCompatActivity {
 
     private static final boolean DEBUG = false;
     ReceivedData data = null;
@@ -20,7 +20,7 @@ public class ContactDecodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_decode);
+        setContentView(R.layout.activity_text_decode);
 
         Bundle extras = getIntent().getExtras();
 
@@ -35,8 +35,8 @@ public class ContactDecodeActivity extends AppCompatActivity {
                 String fileData = DecoderUtils.getFileData(scannedData);
 
 
-                TextView fileName = (TextView) findViewById(R.id.contactName);
-                fileName.setText("Do you want to save the contact: '" + data.toString() +"'?");
+                TextView fileName = (TextView) findViewById(R.id.textEntry);
+                fileName.setText("Encoded text: '" + data.toString());
 //
 //                TextView contactNumber = (TextView) findViewById(R.id.contactNumber);
 //                contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
@@ -44,7 +44,7 @@ public class ContactDecodeActivity extends AppCompatActivity {
             catch (Exception e) {
                 if (DEBUG) Log.e("onCreate", e.toString());
 
-                TextView fileName = (TextView) findViewById(R.id.contactName);
+                TextView fileName = (TextView) findViewById(R.id.textEntry);
                 fileName.setText("QR code incorrectly read. Please scan again.");
             }
 
@@ -52,30 +52,28 @@ public class ContactDecodeActivity extends AppCompatActivity {
         }
 
         Button scanAgain = (Button) findViewById(R.id.scanAgain);
-        Button saveContact = (Button) findViewById(R.id.saveFile);
+        Button saveText = (Button) findViewById(R.id.saveText);
 
         scanAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
-                startActivity(new Intent(ContactDecodeActivity.this, CameraActivity.class));
-                ContactDecodeActivity.this.finish();
+                startActivity(new Intent(TextDecodeActivity.this, CameraActivity.class));
+                TextDecodeActivity.this.finish();
             }
         });
-        saveContact.setOnClickListener(new View.OnClickListener() {
+        saveText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
                 if(data != null) {
-                    data.saveData(ContactDecodeActivity.this);
+                    data.saveData(TextDecodeActivity.this);
                 }else{
                     Toast toast = Toast.makeText(
-                            ContactDecodeActivity.this,
+                            TextDecodeActivity.this,
                             "QR code incorrectly read.\nPlease scan again.",
                             Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
         });
-
     }
-
 }
