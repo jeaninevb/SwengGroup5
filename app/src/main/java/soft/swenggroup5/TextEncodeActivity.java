@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.PrintWriter;
 
 /**
- * Created by jvictoriab on 2/23/16.
+ * Created by Sam on 28/3/16.
  */
 public class TextEncodeActivity  extends AppCompatActivity {
 
@@ -72,7 +72,7 @@ public class TextEncodeActivity  extends AppCompatActivity {
         String textToEncode = extras.getString("textEntry");
 
         try {
-            File temp = File.createTempFile("EnteredText", "txt");
+            File temp = File.createTempFile("EnteredText", "customtxtentry");
             temp.deleteOnExit();
 
             PrintWriter w = new PrintWriter(temp);

@@ -32,6 +32,7 @@
         <activity android:name=".ContactEncodeActivity" />
         <activity android:name=".TextEntryActivity" />
         <activity android:name=".TextEncodeActivity" />
+        <activity android:name=".TextDecodeActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
