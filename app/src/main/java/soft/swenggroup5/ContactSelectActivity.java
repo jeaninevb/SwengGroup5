@@ -1,9 +1,11 @@
 package soft.swenggroup5;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import java.io.File;
 /**
@@ -25,6 +27,7 @@ public class ContactSelectActivity extends AppCompatActivity {
     protected  void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_select);
+        Log.d("onCreate_CSA", "On create");
         doLaunchContactPicker();
     }
     /**
@@ -35,6 +38,7 @@ public class ContactSelectActivity extends AppCompatActivity {
      * of the intent are given as parameters to onActivityResult
      */
     public void doLaunchContactPicker() {
+        Log.d("doLaunchContactPicker", "Started");
         Intent contactPickerIntent = new Intent(Intent.ACTION_PICK,
                 ContactsContract.Contacts.CONTENT_URI);
         startActivityForResult(contactPickerIntent, CONTACT_PICKER_RESULT);

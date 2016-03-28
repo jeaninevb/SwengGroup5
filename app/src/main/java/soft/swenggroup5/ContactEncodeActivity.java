@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.google.zxing.WriterException;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * Created by jvictoriab on 2/23/16.
@@ -25,6 +26,8 @@ public class ContactEncodeActivity  extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sending_codes);
+
+        Log.d("onCreate_CEA", "On create");
 
         Button newContact = (Button) findViewById(R.id.selectNewContact);
         Button mainMenu = (Button) findViewById(R.id.mainMenu);
@@ -65,14 +68,11 @@ public class ContactEncodeActivity  extends AppCompatActivity {
         String filePath = receivedIntent.getStringExtra(FILE_PATH_KEY);
         File contactFile = new File(filePath);
         try {
+            List<String> qrCodes = EncoderUtils.encodeFileToQRStrings(contactFile);
 
             ImageView contactQRCode = (ImageView) findViewById(R.id.imageView2);
-            contactQRCode.setImageBitmap(
-                    EncoderUtils.generateQRCodeBitmap(
-                            EncoderUtils.encodeFile(contactFile)
-
-                    )
-            );
+            Log.d("TAG", "Encoded into a qr code: " + qrCodes.get(0));
+            contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(0)));
 
             contactQRCode.setAdjustViewBounds(true); //allow alteration to ImageViews size/scale
             contactQRCode.setScaleType(ImageView.ScaleType.FIT_CENTER);//scale as large as possible while still inside parent
@@ -81,7 +81,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
 
             //textView for order of code pages
             TextView currentCode = (TextView) findViewById(R.id.currentCode);
-            currentCode.setText("1/1");
+            currentCode.setText("1/" + (qrCodes.size() - 1));
 
 
 

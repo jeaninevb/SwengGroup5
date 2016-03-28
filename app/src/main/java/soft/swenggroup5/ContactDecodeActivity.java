@@ -26,6 +26,7 @@ public class ContactDecodeActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             String scannedData = extras.getString("scanned_data");
+            Log.d("onCreate_CDA", "Scanned data: " + scannedData);
 
             try {
                 data =  DecoderUtils.decodeFile(scannedData);

@@ -45,7 +45,7 @@ public class EncoderUtils {
      * debugging constants
      * Set to false for release version
      */
-    private final static boolean DEBUG = false;
+    private final static boolean DEBUG = true;
 
     /**
      * encodeFile
@@ -278,11 +278,15 @@ public class EncoderUtils {
         String fileString = getFileContents(file);
         String header = generateTopHeader(file, fileString);
         int max = numberOfQRCodes((int) file.length());
-        ArrayList<String> fileData = getQRChunks(fileString, max);
-        ArrayList<String> qrStrings = new ArrayList<String>(max);
-        qrStrings.add(header + qrStrings.get(0));
+        ArrayList<String> qrStrings = getQRChunks(fileString, max);
+        Log.d("encodeFileToQRStrings", "Adding: " + header + qrStrings.get(0));
+        Log.d("encodeFileToQRStrings", "Before qrString(0): " + qrStrings.get(0));
+        qrStrings.add(0, header + qrStrings.get(0));
+        Log.d("encodeFileToQRStrings", "After qrString(0): " + qrStrings.get(0));
+        Log.d("encodeFileToQRStrings", "Max = " + max);
         for(int i = 1; i < max; i++){
-            qrStrings.add(generateMiddleHeader(i, max) + qrStrings.get(i));
+            Log.d("encodeFileToQRStrings", "Adding: " + generateMiddleHeader(i, max) + qrStrings.get(i));
+            qrStrings.add(generateMiddleHeader(i + 1, max) + qrStrings.get(i));
         }
         return qrStrings;
     }
@@ -300,7 +304,7 @@ public class EncoderUtils {
      */
     private static String generateTopHeader(File file, String fileString){
         StringBuilder header = new StringBuilder();
-        header.append("0"); //header for first file, so will always have index 0
+        header.append("1"); //header for first file, so will always have index 0
         header.append(DELIMITER);
         header.append(numberOfQRCodes((int)file.length()));
         header.append(DELIMITER);
