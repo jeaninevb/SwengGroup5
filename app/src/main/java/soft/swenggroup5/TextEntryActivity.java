@@ -7,12 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.google.zxing.WriterException;
-
-import java.io.File;
 
 /**
  * Created by Sam on 21/3/16.
@@ -36,7 +30,7 @@ public class TextEntryActivity  extends AppCompatActivity {
                 Log.d("onCreate_TEA", "Contents of text entry box:" + textEntryBox.getText().toString());
                 String text  = textEntryBox.getText().toString();
                 Intent i = new Intent(TextEntryActivity.this, TextEncodeActivity.class);
-                i.putExtra(text, "enteredText");
+                i.putExtra("enteredText", text);
                 startActivity(i);
             }
         });

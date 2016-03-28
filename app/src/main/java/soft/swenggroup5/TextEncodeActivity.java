@@ -9,10 +9,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.zxing.WriterException;
-
 import java.io.File;
-import java.io.PrintWriter;
+import java.io.FileOutputStream;
+import java.util.List;
 
 /**
  * Created by Sam on 28/3/16.
@@ -64,27 +63,29 @@ public class TextEncodeActivity  extends AppCompatActivity {
         TextView title = (TextView) findViewById(R.id.contactName);
         title.setText("Your text:");
 
-
-
-
         //The intent passed on startActivity
         Bundle extras = getIntent().getExtras();
-        String textToEncode = extras.getString("textEntry");
+        String textToEncode = extras.getString("enteredText");
+        Log.d("onCreate_TEA", "Text to encode: " + textToEncode);
 
         try {
-            File temp = File.createTempFile("EnteredText", "customtxtentry");
+            File temp = File.createTempFile("EnteredText", ".customtxtentry");
             temp.deleteOnExit();
 
-            PrintWriter w = new PrintWriter(temp);
-            w.print(textToEncode);
+            FileOutputStream stream = new FileOutputStream(temp);
+            try {
+                stream.write(textToEncode.getBytes());
+            } finally {
+                stream.close();
+            }
 
+            Log.d("onCreate_TEA", "About to encode file into QR strings");
+            List<String> qrCodes = EncoderUtils.encodeFileToQRStrings(temp);
+            Log.d("onCreate_TEA", "Finished encoding file into QR strings");
             ImageView contactQRCode = (ImageView) findViewById(R.id.imageView2);
-            contactQRCode.setImageBitmap(
-                    EncoderUtils.generateQRCodeBitmap(
-                            EncoderUtils.encodeFile(temp)
+            Log.d("TAG", "Encoded into a qr code: " + qrCodes.get(0));
+            contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(0)));
 
-                    )
-            );
             contactQRCode.setAdjustViewBounds(true); //allow alteration to ImageViews size/scale
             contactQRCode.setScaleType(ImageView.ScaleType.FIT_CENTER);//scale as large as possible while still inside parent
 

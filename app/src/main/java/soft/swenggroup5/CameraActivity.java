@@ -54,7 +54,7 @@ public class CameraActivity extends AppCompatActivity {
          * initiateScan: open the scanner (after it has been configured)
          */
         INTEGRATOR.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-        INTEGRATOR.setPrompt("Scan the files qr code");
+        INTEGRATOR.setPrompt("Scan the file's QR code.");
         INTEGRATOR.setCameraId(0);
         INTEGRATOR.setBeepEnabled(false);
         INTEGRATOR.setBarcodeImageEnabled(true);
