@@ -25,7 +25,6 @@
         android:layout_height="100dp"
         android:text="Send"
         android:id="@+id/contactButton"
-        android:onClick="contacts"
 
         android:textSize="25sp"
         android:textColor="@color/WHITE"
