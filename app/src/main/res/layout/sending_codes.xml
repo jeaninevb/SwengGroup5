@@ -73,6 +73,8 @@
             android:textColor="@color/WHITE"
             android:textSize="20dp"
             android:id="@+id/contactName"
+            android:singleLine="true"
+            android:ellipsize="end"
             />
 
         <ImageView
