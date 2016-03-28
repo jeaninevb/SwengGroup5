@@ -50,7 +50,7 @@
         />
     <Button
 
-        android:text="Scan Again"
+        android:text="Main menu"
         android:id="@+id/scanAgain"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"

@@ -57,7 +57,7 @@ public class ContactDecodeActivity extends AppCompatActivity {
         scanAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
-                startActivity(new Intent(ContactDecodeActivity.this, CameraActivity.class));
+                startActivity(new Intent(ContactDecodeActivity.this, MainActivity.class));
                 ContactDecodeActivity.this.finish();
             }
         });
