@@ -80,6 +80,9 @@ public class DecoderUtils {
         switch(fileExtension){
             case ContactData.FILE_EXTENSION:
                 return new ContactData(data);
+            case "customtxtentry":
+                Log.d("decodeFileData", "Text entry data scanned");
+                return new TextData(data, fileExtension);
             default:
                 return new FileData(data, fileExtension);
         }

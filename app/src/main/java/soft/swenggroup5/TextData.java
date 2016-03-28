@@ -16,13 +16,13 @@ import java.io.IOException;
  * from QR codes
  *
  */
-public class FileData implements ReceivedData {
+public class TextData implements ReceivedData {
 
     private final String fileData;
     private final String fileExtension;
 
-    public FileData(String data, String fileExtension){
-        ContactDecodeActivity.type = "File Data";
+    public TextData(String data, String fileExtension){
+        ContactDecodeActivity.type = "Text Data";
         this.fileData = data;
         this.fileExtension = fileExtension;
         if( fileExtension == null){
@@ -41,15 +41,7 @@ public class FileData implements ReceivedData {
      */
     @Override
     public void saveData(Context context){
-        try {
-            File temp = makeTempFile(context);
-            Intent startingIntent = new Intent(context, FileSaveActivity.class);
-            startingIntent.putExtra(FileSaveActivity.TEMP_FILE_PATH_KEY, temp.getAbsolutePath());
-            context.startActivity(startingIntent);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
+        return;
     }
 
     /**
@@ -86,6 +78,6 @@ public class FileData implements ReceivedData {
 
     @Override
     public String toString(){
-        return "File of type "+fileExtension;
+        return "You have scanned: ";
     }
 }
