@@ -34,15 +34,16 @@
         android:background="#000000"/>
 
     <Button
-        android:layout_width="150dp"
-        android:layout_height="60dp"
+
         android:text="Main Menu"
         android:id="@+id/mainMenu"
-        android:textSize="15sp"
-        android:textColor="@color/WHITE"
-        android:background="@drawable/smooth_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:textSize="16sp"
+        android:textColor="@color/WHITE"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        style="?android:attr/buttonBarButtonStyle"
         />
 
     <Button
@@ -50,11 +51,11 @@
         android:layout_height="60dp"
         android:text="Generate QR Code"
         android:id="@+id/textQRCode"
-        android:textSize="15sp"
-        android:textColor="@color/WHITE"
-        android:background="@drawable/smooth_button"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:textSize="16sp"
+        android:textColor="#4dffff"
+        style="?android:attr/buttonBarButtonStyle"
         />
 
 </RelativeLayout>

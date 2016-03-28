@@ -19,11 +19,14 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="60dp"
-                android:text="Next Code"
-                android:id="@+id/nextCode"
-                android:textSize="15sp"
-                android:textColor="@color/WHITE"
-                android:background="@drawable/smooth_button"
+                android:text="Previous Code"
+                android:id="@+id/previousCode"
+
+                android:textSize="16sp"
+
+                android:textColor="#4dffff"
+
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_alignParentLeft="true"
                 />
 
@@ -43,13 +46,13 @@
             <Button
                 android:layout_width="100dp"
                 android:layout_height="60dp"
-                android:text="Previous Code"
-                android:id="@+id/previousCode"
+                android:text="Next Code"
+                android:id="@+id/nextCode"
 
-                android:textSize="15sp"
-                android:textColor="@color/WHITE"
+                android:textSize="16sp"
+                android:textColor="#00ff99"
 
-                android:background="@drawable/smooth_button"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_alignParentRight="true"
                 />
 

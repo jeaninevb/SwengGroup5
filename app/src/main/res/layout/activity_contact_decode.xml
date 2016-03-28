@@ -36,30 +36,28 @@
         <!--/>-->
 
     <Button
-        android:layout_width="150dp"
-        android:layout_height="60dp"
+
         android:text="Save"
         android:id="@+id/saveFile"
-
-        android:textSize="15sp"
-        android:textColor="@color/WHITE"
-
-        android:background="@drawable/raised_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        />
-    <Button
+        android:textSize="16sp"
+        android:textColor="#4dffff"
         android:layout_width="150dp"
         android:layout_height="60dp"
+        style="?android:attr/buttonBarButtonStyle"
+        />
+    <Button
+
         android:text="Scan Again"
         android:id="@+id/scanAgain"
-
-        android:textSize="15sp"
-        android:textColor="@color/WHITE"
-
-        android:background="@drawable/smooth_button"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:textSize="16sp"
+        android:textColor="@color/WHITE"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        style="?android:attr/buttonBarButtonStyle"
         />
 
 </RelativeLayout>
