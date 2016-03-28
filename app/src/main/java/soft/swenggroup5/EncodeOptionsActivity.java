@@ -51,7 +51,7 @@ public class EncodeOptionsActivity extends AppCompatActivity {
                         }
                         else if (myItemInt == 2) {
                             Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
-                            startActivity(new Intent(EncodeOptionsActivity.this, FileBrowserActivity.class));
+                            startActivity(new Intent(EncodeOptionsActivity.this, FileSelectActivity.class));
                         }
                         else if( myItemInt == 3) {
                             Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");

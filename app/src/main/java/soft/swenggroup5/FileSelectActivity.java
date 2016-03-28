@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -20,6 +21,7 @@ public class FileSelectActivity extends AppCompatActivity {
     // our ID for the Intent called in doLaunchContectPicker(), unneeded for now
     private static final int THIRD_PARTY_FILE_PICKER_RESULT = 1002;
     private static final int ACTIVITY_FILE_PICKER_RESULT = 1003;
+    private static final boolean DEBUG = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,22 +39,7 @@ public class FileSelectActivity extends AppCompatActivity {
      * FILE_PICKER_RESULT
      */
     private void startFileChooserIntent(){
-        //create intent that tells the Activity that fulfils to list all openable files
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT); //return choose
-        intent.setType("*/*"); //match all files and directories
-        intent.addCategory(Intent.CATEGORY_OPENABLE); //
-        try {
-            startActivityForResult(
-                    //createChooser is an Intent that wraps our intent. In the chooser Intent, the
-                    //+ user selects their preferred file browser
-                    Intent.createChooser(intent, "Select a File to Upload"),
-                    THIRD_PARTY_FILE_PICKER_RESULT);
-            //It's possible that the device has no valid file browsers, ActivityNotFound is thrown
-            //+ if this is the case.
-        } catch (android.content.ActivityNotFoundException ex) {
-            // Potentially direct the user to the Market with a Dialog
-            getFileWithBuiltinBrowser();
-        }
+        getFileWithBuiltinBrowser();
     }
 
     /**
@@ -71,6 +58,7 @@ public class FileSelectActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == THIRD_PARTY_FILE_PICKER_RESULT) {
             Uri fileUri = data.getData(); //Get the URI that represents the chosen file
+            if(DEBUG) Log.d("FileSelect.onResult", "Third Party URI: " + fileUri.getPath());
             File file = new File(fileUri.getPath()); //get the choosen file
             sendFileToBeEncoded(file);
             finish(); //this activity is now longer needed so just close it
