@@ -23,10 +23,10 @@
         android:layout_width="@dimen/splash_screen_square"
         android:layout_height="@dimen/splash_screen_square"
         android:id="@+id/imageView"
-        android:src="@mipmap/qrimage"
-        android:layout_alignParentBottom="true"
+        android:src="@mipmap/qrimage2"
+        android:background="#505050"
+        android:layout_below="@+id/imageButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="43dp"
-        android:background="#505050"/>
+        android:layout_marginTop="50dp" />
 
 </RelativeLayout>
