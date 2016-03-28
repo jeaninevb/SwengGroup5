@@ -84,6 +84,9 @@ public class EncoderUtils {
                 if(DEBUG) Log.d("getMimeType",
                         "File " + file + " has the Mime Type " + ContactData.FILE_EXTENSION);
                 return ContactData.FILE_EXTENSION;
+            }
+            else if(extension.equals("customtxtentry")) {
+                return "customtxtentry";
             } else {
                 if (DEBUG) Log.d("getMimeType",
                         "File " + file + " has the Mime Type "
@@ -276,7 +279,10 @@ public class EncoderUtils {
             return null;
         }
         String fileString = getFileContents(file);
+        Log.d("encodeFileToQRStrings", "File contents: " + fileString);
         String header = generateTopHeader(file, fileString);
+        Log.d("encodeFileToQRStrings", "Header: " + header);
+        Log.d("encodeFileToQRStrings", "File length: " + file.length());
         int max = numberOfQRCodes((int) file.length());
         ArrayList<String> qrStrings = getQRChunks(fileString, max);
         Log.d("encodeFileToQRStrings", "Adding: " + header + qrStrings.get(0));
