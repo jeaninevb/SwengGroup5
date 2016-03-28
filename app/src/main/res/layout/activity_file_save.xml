@@ -32,7 +32,6 @@
             android:gravity="left"
             android:ellipsize="end"
             android:singleLine="true"
-
             android:textColor="@color/WHITE"/>
 
         <Button
@@ -42,7 +41,6 @@
             android:layout_alignParentRight="true"
             android:text="Choose"
             android:onClick="directorySelectOnClick"
-
             android:textColor="@color/WHITE"
             style="?android:attr/buttonBarButtonStyle"/>
 
@@ -63,7 +61,6 @@
             android:id="@+id/filenametextedit"
             android:layout_gravity="center_horizontal"
             android:hint="enter file name"
-
             android:textColor="@color/WHITE"
             android:textColorHint="@color/WHITE"/>
 
@@ -74,8 +71,6 @@
             android:id="@+id/savefilebutton"
             android:layout_gravity="center_horizontal"
             android:onClick="saveFileOnClick"
-
-
             android:textColor="#4dffff"
             style="?android:attr/buttonBarButtonStyle"
             />

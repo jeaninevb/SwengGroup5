@@ -121,7 +121,6 @@ public class CameraActivity extends AppCompatActivity {
     private boolean newQRCode(String input){
         if(CURRENT_INDEX==-1 && DecoderUtils.getQRCodeIndex(input) == 1) {
             Log.d("newQRCode", "Total qrs = " + DecoderUtils.getTotalQRCodeNumber(input) + ". Current = " + 1);
-            Log.d("NEW_XXX", input);
             TOTAL_QR_CODES = DecoderUtils.getTotalQRCodeNumber(input);
             CURRENT_INDEX = 0;
             return true;

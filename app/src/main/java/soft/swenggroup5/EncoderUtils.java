@@ -288,19 +288,14 @@ public class EncoderUtils {
         Log.d("encodeFileToQRStrings", "Max = " + max);
         ArrayList<String> qrChunks = getQRChunks(fileString, max);
         ArrayList<String> qrStrings = new ArrayList<String>(qrChunks.size());
-        //Log.d("encodeFileToQRStrings", "Adding: " + header + qrChunks.get(0));
-        //Log.d("encodeFileToQRStrings", "Before qrString(0): " + qrChunks.get(0));
+        Log.d("encodeFileToQRStrings", "Adding: " + header + qrChunks.get(0));
+        Log.d("encodeFileToQRStrings", "Before qrString(0): " + qrChunks.get(0));
         qrStrings.add(header + qrChunks.get(0));
-        //Log.d("encodeFileToQRStrings", "After qrString(0): " + qrStrings.get(0));
+        Log.d("encodeFileToQRStrings", "After qrString(0): " + qrStrings.get(0));
         for(int i = 1; i < max; i++){
-            //Log.d("encodeFileToQRStrings", "Adding: " + generateMiddleHeader(i, max) + qrChunks.get(i));
+            Log.d("encodeFileToQRStrings", "Adding: " + generateMiddleHeader(i, max) + qrChunks.get(i));
             qrStrings.add( generateMiddleHeader(i + 1, max) + qrChunks.get(i));
         }
-
-        for(int i = 0; i < max; i++){
-            Log.d("XXX_QRS","no: "+i+" "+ qrStrings.get(i).substring(0, 25));
-        }
-        Log.d("done","XXXXXXXXXXXXXXXXXX");
         return qrStrings;
     }
 
