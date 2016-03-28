@@ -55,7 +55,7 @@ public class ContactDecodeActivity extends AppCompatActivity {
 
                 else {
                     TextView fileName = (TextView) findViewById(R.id.contactName);
-                    fileName.setText(data.toString() + " " + ((ContactData) data).getName());
+                    fileName.setText(data.toString());
                 }
 
 //
