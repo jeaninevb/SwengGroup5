@@ -18,7 +18,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:hint="Type in the text you would like to send..."
-        android:textColorHint="@color/WHITE"
+        android:textColorHint="@color/BLACK"
         android:imeOptions="actionDone"
         android:inputType="textCapSentences|textMultiLine"
         android:scrollHorizontally="false"
@@ -28,7 +28,8 @@
         android:singleLine="false"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
+        android:layout_marginTop="30dp"
+        android:background="@color/WHITE"/>
 
     <Button
         android:layout_width="150dp"
