@@ -22,8 +22,8 @@ public class ContactDecodeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_decode);
 
-
         Bundle extras = getIntent().getExtras();
+
         if(extras != null) {
             String scannedData = extras.getString("scanned_data");
             Log.d("onCreate_CDA", "Scanned data: " + scannedData);
