@@ -36,6 +36,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
         Log.d("onCreate_CEA", "On create");
 
         Button newContact = (Button) findViewById(R.id.selectNewContact);
+        newContact.setText("Back");
         Button mainMenu = (Button) findViewById(R.id.mainMenu);
 
         contactQRCode = (ImageView) findViewById(R.id.imageView2);
@@ -100,7 +101,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             contactQRCode.setAdjustViewBounds(true); //allow alteration to ImageViews size/scale
             contactQRCode.setScaleType(ImageView.ScaleType.FIT_CENTER);//scale as large as possible while still inside parent
             TextView contactName = (TextView) findViewById(R.id.contactName);
-            contactName.setText("Contact: " + receivedIntent.getStringExtra(FILE_NAME_KEY));
+            contactName.setText("Item: " + receivedIntent.getStringExtra(FILE_NAME_KEY));
 
             //textView for order of code pages
             currentCode = (TextView) findViewById(R.id.currentCode);

@@ -21,8 +21,7 @@ public class EncodeOptionsActivity extends AppCompatActivity {
 
         final String [] choices  = {
                 "Contacts",
-                "Text Entry",
-                "File"
+                "Text Entry"
         };
 
         //get the listView and give it an adapter that will make it display our files
