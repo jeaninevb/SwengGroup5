@@ -104,7 +104,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
 
             //textView for order of code pages
             currentCode = (TextView) findViewById(R.id.currentCode);
-            maxQrCodes = (qrCodes.size() - 1);
+            maxQrCodes = (qrCodes.size());
             currentCode.setText("1/" + maxQrCodes);
 
 

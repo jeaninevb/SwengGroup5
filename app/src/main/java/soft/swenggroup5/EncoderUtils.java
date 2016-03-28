@@ -34,7 +34,7 @@ public class EncoderUtils {
      * private constants
      * TODO WIDTH and HEIGHT will need to be modified to increase the size of the QR code
      */
-    private final static int MAX_QR_CODE_DATA_SIZE = 2000;
+    private final static int MAX_QR_CODE_DATA_SIZE = 1000;
     private final static int WIDTH = 400;
     private final static int HEIGHT = 400;
 
@@ -113,12 +113,13 @@ public class EncoderUtils {
             return 0;
         } else {
             if (size % MAX_QR_CODE_DATA_SIZE > 0 || size < MAX_QR_CODE_DATA_SIZE) {
-                if (DEBUG) Log.d("numberOfQRCodes",
-                        "Size was " + size + ". Returning " + size / MAX_QR_CODE_DATA_SIZE + 1);
-                return size / MAX_QR_CODE_DATA_SIZE + 1;
+                if (DEBUG) Log.d("numberOfQRCodes1",
+                        "Size was " + size + ". Returning " + ((size / MAX_QR_CODE_DATA_SIZE) + 1));
+                Log.d("XXX_max", " "+((size / MAX_QR_CODE_DATA_SIZE) + 1));
+                return (size / MAX_QR_CODE_DATA_SIZE) + 1;
             } else {
-                if (DEBUG) Log.d("numberOfQRCodes",
-                        "Size was " + size + ". Returning 0 " + size / MAX_QR_CODE_DATA_SIZE);
+                if (DEBUG) Log.d("numberOfQRCodes2",
+                        "Size was " + size + ". Returning 0 " + (size / MAX_QR_CODE_DATA_SIZE));
                 return size / MAX_QR_CODE_DATA_SIZE;
             }
         }
@@ -283,17 +284,23 @@ public class EncoderUtils {
         String header = generateTopHeader(file, fileString);
         Log.d("encodeFileToQRStrings", "Header: " + header);
         Log.d("encodeFileToQRStrings", "File length: " + file.length());
-        int max = numberOfQRCodes((int) file.length());
-        ArrayList<String> qrStrings = getQRChunks(fileString, max);
-        Log.d("encodeFileToQRStrings", "Adding: " + header + qrStrings.get(0));
-        Log.d("encodeFileToQRStrings", "Before qrString(0): " + qrStrings.get(0));
-        qrStrings.add(0, header + qrStrings.get(0));
-        Log.d("encodeFileToQRStrings", "After qrString(0): " + qrStrings.get(0));
+        final int max = numberOfQRCodes((int) file.length());
         Log.d("encodeFileToQRStrings", "Max = " + max);
+        ArrayList<String> qrChunks = getQRChunks(fileString, max);
+        ArrayList<String> qrStrings = new ArrayList<String>(qrChunks.size());
+        //Log.d("encodeFileToQRStrings", "Adding: " + header + qrChunks.get(0));
+        //Log.d("encodeFileToQRStrings", "Before qrString(0): " + qrChunks.get(0));
+        qrStrings.add(header + qrChunks.get(0));
+        //Log.d("encodeFileToQRStrings", "After qrString(0): " + qrStrings.get(0));
         for(int i = 1; i < max; i++){
-            Log.d("encodeFileToQRStrings", "Adding: " + generateMiddleHeader(i, max) + qrStrings.get(i));
-            qrStrings.add(i, generateMiddleHeader(i + 1, max) + qrStrings.get(i));
+            //Log.d("encodeFileToQRStrings", "Adding: " + generateMiddleHeader(i, max) + qrChunks.get(i));
+            qrStrings.add( generateMiddleHeader(i + 1, max) + qrChunks.get(i));
         }
+
+        for(int i = 0; i < max; i++){
+            Log.d("XXX_QRS","no: "+i+" "+ qrStrings.get(i).substring(0, 25));
+        }
+        Log.d("done","XXXXXXXXXXXXXXXXXX");
         return qrStrings;
     }
 

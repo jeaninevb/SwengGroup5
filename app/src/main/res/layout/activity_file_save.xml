@@ -7,7 +7,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="soft.swenggroup5.FileSaveActivity">
+    tools:context="soft.swenggroup5.FileSaveActivity"
+
+    android:background="@drawable/gradient">
 
 
     <RelativeLayout
@@ -29,7 +31,9 @@
             android:layout_centerVertical="true"
             android:gravity="left"
             android:ellipsize="end"
-            android:singleLine="true"/>
+            android:singleLine="true"
+
+            android:textColor="@color/WHITE"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -37,7 +41,10 @@
             android:id="@+id/choosedirectorybutton"
             android:layout_alignParentRight="true"
             android:text="Choose"
-            android:onClick="directorySelectOnClick"/>
+            android:onClick="directorySelectOnClick"
+
+            android:textColor="@color/WHITE"
+            style="?android:attr/buttonBarButtonStyle"/>
 
     </RelativeLayout>
 
@@ -55,7 +62,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/filenametextedit"
             android:layout_gravity="center_horizontal"
-            android:hint="enter file name"/>
+            android:hint="enter file name"
+
+            android:textColor="@color/WHITE"
+            android:textColorHint="@color/WHITE"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -64,6 +74,10 @@
             android:id="@+id/savefilebutton"
             android:layout_gravity="center_horizontal"
             android:onClick="saveFileOnClick"
+
+
+            android:textColor="#4dffff"
+            style="?android:attr/buttonBarButtonStyle"
             />
     </LinearLayout>
 </RelativeLayout>

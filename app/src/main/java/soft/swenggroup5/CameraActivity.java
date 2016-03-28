@@ -112,22 +112,22 @@ public class CameraActivity extends AppCompatActivity {
     //adds the just scanned in QR code to the list of codes. May possibly remove headers of codes
     //TODO: Actual Implementation
     private void addQRtoList(String input){
-        if(DecoderUtils.getQRCodeIndex(input)==CURRENT_INDEX) {   //If it is next qr code add
             CURRENT_INDEX++;
             scannedStrings.add(input);
-        }
     }
 
     //checks if the passed qr code has not already been scanned and stored
     //TODO: Actual Implementation
     private boolean newQRCode(String input){
-        if(DecoderUtils.getQRCodeIndex(input) == 1) {
+        if(CURRENT_INDEX==-1 && DecoderUtils.getQRCodeIndex(input) == 1) {
             Log.d("newQRCode", "Total qrs = " + DecoderUtils.getTotalQRCodeNumber(input) + ". Current = " + 1);
+            Log.d("NEW_XXX", input);
             TOTAL_QR_CODES = DecoderUtils.getTotalQRCodeNumber(input);
-            CURRENT_INDEX = 1;
+            CURRENT_INDEX = 0;
             return true;
         }
-        if(scannedStrings.contains(input)) {
+        int qrIndex = DecoderUtils.getQRCodeIndex(input);
+        if(scannedStrings.contains(input) || qrIndex <= CURRENT_INDEX) {
             return false;
         }
         return true;
@@ -139,7 +139,7 @@ public class CameraActivity extends AppCompatActivity {
         Log.d("finalQRReceived", "TOTAL = " + TOTAL_QR_CODES);
         Log.d("finalQRReceived", "CURRENT = " + CURRENT_INDEX);
         Log.d("finalQRReceived", "index = " + DecoderUtils.getQRCodeIndex(input));
-        if(DecoderUtils.getQRCodeIndex(input) == TOTAL_QR_CODES && CURRENT_INDEX == TOTAL_QR_CODES + 1) {
+        if(DecoderUtils.getQRCodeIndex(input) == TOTAL_QR_CODES && CURRENT_INDEX == TOTAL_QR_CODES) {
             return true;
         }
         return false;
@@ -148,13 +148,7 @@ public class CameraActivity extends AppCompatActivity {
     //returns all the codes as a single string
     //TODO: Actual Implementation
     private String getTotalData(){
-        StringBuilder data = new StringBuilder();
-        Log.d("getTotalData", "Number of scanned strings = " + scannedStrings.size());
-        for(int i = 0; i < scannedStrings.size(); i++){
-            Log.d("getTotalData", "Adding: " + scannedStrings.get(i));
-            data.append(scannedStrings.get(i));
-        }
-        return data.toString();
+        return DecoderUtils.combineQRCodes(scannedStrings);
     }
 
 

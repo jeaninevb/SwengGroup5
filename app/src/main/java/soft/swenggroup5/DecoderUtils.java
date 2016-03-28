@@ -150,8 +150,8 @@ public class DecoderUtils {
     public static String combineQRCodes(ArrayList<String> codes){
         StringBuilder combined = new StringBuilder();
         combined.append( codes.get(0) );
-        for(String code : codes){
-            combined.append( getFileData(code) );
+        for(int i = 1; i < codes.size(); i++){
+            combined.append( getFileData(codes.get(i)) );
         }
         return combined.toString();
     }
