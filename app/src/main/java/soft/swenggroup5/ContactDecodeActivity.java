@@ -48,11 +48,16 @@ public class ContactDecodeActivity extends AppCompatActivity {
                     Log.d("onCreate_CDA", "Is a text data");
                     saveContact.setText("Copy");
                     Log.d("onCreate_CDA", "Is a text data");
+
+                    TextView fileName = (TextView) findViewById(R.id.contactName);
+                    fileName.setText(data.toString() + " " + fileData);
                 }
 
+                else {
+                    TextView fileName = (TextView) findViewById(R.id.contactName);
+                    fileName.setText(data.toString() + " " + ((ContactData) data).getName());
+                }
 
-                TextView fileName = (TextView) findViewById(R.id.contactName);
-                fileName.setText(data.toString() + " " + fileData);
 //
 //                TextView contactNumber = (TextView) findViewById(R.id.contactNumber);
 //                contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
