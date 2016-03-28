@@ -22,7 +22,7 @@
                 android:text="Previous Code"
                 android:id="@+id/previousCode"
 
-                android:textSize="16sp"
+                android:textSize="15sp"
 
                 android:textColor="#4dffff"
 
@@ -49,7 +49,7 @@
                 android:text="Next Code"
                 android:id="@+id/nextCode"
 
-                android:textSize="16sp"
+                android:textSize="15sp"
                 android:textColor="#00ff99"
 
                 style="?android:attr/buttonBarButtonStyle"
@@ -73,6 +73,8 @@
             android:textColor="@color/WHITE"
             android:textSize="20dp"
             android:id="@+id/contactName"
+            android:singleLine="true"
+            android:ellipsize="end"
             />
 
         <ImageView

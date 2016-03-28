@@ -35,7 +35,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
         newContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
-                startActivity(new Intent(ContactEncodeActivity.this, ContactSelectActivity.class));
+                finish();
             }
         });
         mainMenu.setOnClickListener(new View.OnClickListener() {

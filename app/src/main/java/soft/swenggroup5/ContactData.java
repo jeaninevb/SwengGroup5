@@ -42,6 +42,7 @@ public class ContactData implements ReceivedData{
      * it to a file using toFile(). In the SOFT app, this will be used in the Sender code as described above.
      */
     public ContactData(){
+        ContactDecodeActivity.type = "Contact Data";
         tripletData = new ArrayList<ContactTriplet>();
     }
 
@@ -57,6 +58,7 @@ public class ContactData implements ReceivedData{
      * @throws org.json.JSONException :  from using JSON methods
      */
     public ContactData(String jsonString) throws JSONException{
+        ContactDecodeActivity.type = "Contact Data";
         tripletData = new ArrayList<ContactTriplet>();
         JSONArray jas = new JSONArray(jsonString);
         //each object in the array should be a JSONObject that can be converted into a ContactTriplet
@@ -76,6 +78,7 @@ public class ContactData implements ReceivedData{
      * @param context    : needed to query the database in the Android device
      */
     public ContactData(Uri contactUri, Context context){
+        ContactDecodeActivity.type = "Contact Data";
         tripletData = new ArrayList<ContactTriplet>();
 
         // handle contact results

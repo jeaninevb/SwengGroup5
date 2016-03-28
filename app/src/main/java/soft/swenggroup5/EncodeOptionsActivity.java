@@ -22,8 +22,7 @@ public class EncodeOptionsActivity extends AppCompatActivity {
         final String [] choices  = {
                 "Contacts",
                 "Text Entry",
-                "File",
-                "Calendar Events"
+                "File"
         };
 
         //get the listView and give it an adapter that will make it display our files
@@ -51,7 +50,7 @@ public class EncodeOptionsActivity extends AppCompatActivity {
                         }
                         else if (myItemInt == 2) {
                             Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
-                            startActivity(new Intent(EncodeOptionsActivity.this, FileBrowserActivity.class));
+                            startActivity(new Intent(EncodeOptionsActivity.this, FileSelectActivity.class));
                         }
                         else if( myItemInt == 3) {
                             Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");

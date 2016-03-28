@@ -47,10 +47,11 @@ public class FileBrowserActivity extends AppCompatActivity {
         String root = startingIntent.getStringExtra(ROOT_KEY);
         //if no directory given, set to root external storage folder
         if(root==null) root = getDefaultRootFolder();
+        getSupportActionBar().setTitle(root);
         //get an array of all the files that should be displayed
         displayMode = startingIntent.getIntExtra(DISPLAYING_KEY, DIRECTORY_ONLY);
         File myDirectory = new File(root);
-        if(displayMode==FILES_AND_DIRECTORYS){
+        if(displayMode==FILES_AND_DIRECTORYS || displayMode==FILE_SELECT_ONLY){
             listedFiles = myDirectory.listFiles(); //lists all files that are at this directory level
         }else {
             listedFiles = myDirectory.listFiles(new FileFilter() {

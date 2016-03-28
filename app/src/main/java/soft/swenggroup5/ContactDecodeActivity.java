@@ -1,5 +1,7 @@
 package soft.swenggroup5;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,10 @@ public class ContactDecodeActivity extends AppCompatActivity {
 
     private static final boolean DEBUG = false;
     ReceivedData data = null;
+    public static String type = null;
+    Button saveContact;
+    Button scanAgain;
+    String fileData;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -24,19 +30,34 @@ public class ContactDecodeActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
+
         if(extras != null) {
             String scannedData = extras.getString("scanned_data");
             Log.d("onCreate_CDA", "Scanned data: " + scannedData);
 
             try {
                 data =  DecoderUtils.decodeFile(scannedData);
-                data.printData();
 
-                String fileData = DecoderUtils.getFileData(scannedData);
+                fileData = DecoderUtils.getFileData(scannedData);
 
+                scanAgain = (Button) findViewById(R.id.scanAgain);
+                saveContact = (Button) findViewById(R.id.saveFile);
 
-                TextView fileName = (TextView) findViewById(R.id.contactName);
-                fileName.setText("Do you want to save the contact: '" + data.toString() +"'?");
+                Log.d("onCreate_CDA", "File data: " + fileData);
+                if (type.equals("Text Data")) {
+                    Log.d("onCreate_CDA", "Is a text data");
+                    saveContact.setText("Copy");
+                    Log.d("onCreate_CDA", "Is a text data");
+
+                    TextView fileName = (TextView) findViewById(R.id.contactName);
+                    fileName.setText(data.toString() + " " + fileData);
+                }
+
+                else {
+                    TextView fileName = (TextView) findViewById(R.id.contactName);
+                    fileName.setText(data.toString());
+                }
+
 //
 //                TextView contactNumber = (TextView) findViewById(R.id.contactNumber);
 //                contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
@@ -51,8 +72,6 @@ public class ContactDecodeActivity extends AppCompatActivity {
 
         }
 
-        Button scanAgain = (Button) findViewById(R.id.scanAgain);
-        Button saveContact = (Button) findViewById(R.id.saveFile);
 
         scanAgain.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,14 +83,39 @@ public class ContactDecodeActivity extends AppCompatActivity {
         saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
-                if(data != null) {
-                    data.saveData(ContactDecodeActivity.this);
-                }else{
-                    Toast toast = Toast.makeText(
-                            ContactDecodeActivity.this,
-                            "QR code incorrectly read.\nPlease scan again.",
-                            Toast.LENGTH_SHORT);
-                    toast.show();
+                switch (type) {
+                    case ("File Data"):
+                        if(data != null) {
+                            data.saveData(ContactDecodeActivity.this);
+                        }else{
+                            Toast toast = Toast.makeText(
+                                    ContactDecodeActivity.this,
+                                    "QR code incorrectly read.\nPlease scan again.",
+                                    Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                        break;
+                    case("Text Data"):
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("label", fileData);
+                        clipboard.setPrimaryClip(clip);
+                        Toast textDataToast = Toast.makeText(
+                                ContactDecodeActivity.this,
+                                "Copied to clipboard",
+                                Toast.LENGTH_SHORT);
+                        textDataToast.show();
+
+                    case("Contact Data"):
+                        if(data != null) {
+                            data.saveData(ContactDecodeActivity.this);
+                        }else{
+                            Toast toast = Toast.makeText(
+                                    ContactDecodeActivity.this,
+                                    "QR code incorrectly read.\nPlease scan again.",
+                                    Toast.LENGTH_SHORT);
+                            toast.show();
+                        }
+                        break;
                 }
             }
         });
