@@ -355,11 +355,11 @@ public class EncoderUtils {
     private static ArrayList<String> getQRChunks(String fileString, int noOfCodes){
         ArrayList<String> chunks = new ArrayList<String>(noOfCodes);
         for(int i = 0; i < (noOfCodes-1); i++){ //get all but the last chunk
-            chunks.add(fileString.substring(i*MAX_QR_CODE_DATA_SIZE, (i+1)*MAX_QR_CODE_DATA_SIZE));
+            chunks.add(i, fileString.substring(i*MAX_QR_CODE_DATA_SIZE, (i+1)*MAX_QR_CODE_DATA_SIZE));
         }
         //the last chunk is gotten seperately so that .substring() doesnt try to index off the
         //+ end of the passed in string
-        chunks.add(fileString.substring((noOfCodes - 1) * MAX_QR_CODE_DATA_SIZE));
+        chunks.add((noOfCodes-1), fileString.substring((noOfCodes - 1) * MAX_QR_CODE_DATA_SIZE));
         return chunks;
     }
 

@@ -23,6 +23,12 @@ public class ContactEncodeActivity  extends AppCompatActivity {
     public static final String FILE_NAME_KEY = "soft.swenggroup5.EncodeActivity.FILENAMEKEY";
     public static final String FILE_PATH_KEY = "soft.swenggroup5.EncodeActivity.FILEPATHKEY";
 
+    public ImageView contactQRCode;
+    public List<String> qrCodes;
+    public int index;
+    public int maxQrCodes;
+    public TextView currentCode;
+
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sending_codes);
@@ -31,6 +37,8 @@ public class ContactEncodeActivity  extends AppCompatActivity {
 
         Button newContact = (Button) findViewById(R.id.selectNewContact);
         Button mainMenu = (Button) findViewById(R.id.mainMenu);
+
+        contactQRCode = (ImageView) findViewById(R.id.imageView2);
 
         newContact.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,12 +61,28 @@ public class ContactEncodeActivity  extends AppCompatActivity {
         nextCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
+                try {
+                    Log.d("TAG", "Encoded into a qr code: " + qrCodes.get(index));
+                    if(index < maxQrCodes) {
+                        contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(index++)));
+                        currentCode.setText((index + 1) + "/" + maxQrCodes);
+                    }
+                }
+                catch (Exception e) {}
                 //startActivity(new Intent(ContactEncodeActivity.this, MainActivity.class));
             }
         });
         previousCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
+                try {
+                    Log.d("TAG", "Encoded into a qr code: " + qrCodes.get(index));
+                    if(index > 0) {
+                        contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(index--)));
+                        currentCode.setText((index + 1) + "/" + maxQrCodes);
+                    }
+                }
+                catch (Exception e) {}
                 //startActivity(new Intent(ContactEncodeActivity.this, MainActivity.class));
             }
         });
@@ -68,11 +92,10 @@ public class ContactEncodeActivity  extends AppCompatActivity {
         String filePath = receivedIntent.getStringExtra(FILE_PATH_KEY);
         File contactFile = new File(filePath);
         try {
-            List<String> qrCodes = EncoderUtils.encodeFileToQRStrings(contactFile);
-
-            ImageView contactQRCode = (ImageView) findViewById(R.id.imageView2);
-            Log.d("TAG", "Encoded into a qr code: " + qrCodes.get(0));
-            contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(0)));
+            qrCodes = EncoderUtils.encodeFileToQRStrings(contactFile);
+            index = 0;
+            Log.d("TAG", "Encoded into a qr code: " + qrCodes.get(index));
+            contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(index)));
 
             contactQRCode.setAdjustViewBounds(true); //allow alteration to ImageViews size/scale
             contactQRCode.setScaleType(ImageView.ScaleType.FIT_CENTER);//scale as large as possible while still inside parent
@@ -80,8 +103,9 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             contactName.setText("Contact: " + receivedIntent.getStringExtra(FILE_NAME_KEY));
 
             //textView for order of code pages
-            TextView currentCode = (TextView) findViewById(R.id.currentCode);
-            currentCode.setText("1/" + (qrCodes.size() - 1));
+            currentCode = (TextView) findViewById(R.id.currentCode);
+            maxQrCodes = (qrCodes.size() - 1);
+            currentCode.setText("1/" + maxQrCodes);
 
 
 
