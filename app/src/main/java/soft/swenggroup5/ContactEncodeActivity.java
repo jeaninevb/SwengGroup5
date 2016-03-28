@@ -65,7 +65,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
                     Log.d("TAG", "Encoded into a qr code: " + qrCodes.get(index));
                     if(index < maxQrCodes) {
                         contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(index++)));
-                        currentCode.setText((index + 1) + "/" + maxQrCodes);
+                        currentCode.setText((index) + "/" + maxQrCodes);
                     }
                 }
                 catch (Exception e) {}
@@ -77,9 +77,9 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             public void onClick(View w) {
                 try {
                     Log.d("TAG", "Encoded into a qr code: " + qrCodes.get(index));
-                    if(index > 0) {
-                        contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(index--)));
-                        currentCode.setText((index + 1) + "/" + maxQrCodes);
+                    if((index - 1) > 0) {
+                        contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(--index - 1)));
+                        currentCode.setText((index) + "/" + maxQrCodes);
                     }
                 }
                 catch (Exception e) {}
@@ -95,7 +95,7 @@ public class ContactEncodeActivity  extends AppCompatActivity {
             qrCodes = EncoderUtils.encodeFileToQRStrings(contactFile);
             index = 0;
             Log.d("TAG", "Encoded into a qr code: " + qrCodes.get(index));
-            contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(index)));
+            contactQRCode.setImageBitmap(EncoderUtils.generateQRCodeBitmap(qrCodes.get(index++)));
 
             contactQRCode.setAdjustViewBounds(true); //allow alteration to ImageViews size/scale
             contactQRCode.setScaleType(ImageView.ScaleType.FIT_CENTER);//scale as large as possible while still inside parent
