@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -65,7 +66,9 @@ public class FileSaveActivity extends AppCompatActivity {
         if(savingdirectory!=null){
             String fileName = getFileName();
             if(fileName != null){
-                moveFile(savingdirectory+fileName, tempFilePath);
+                Log.d("fileXXX","des: "+fileName);
+                String fullPath = appendFileToPath(savingdirectory, fileName);
+                moveFile(fullPath, tempFilePath);
                 finish();
             }
         }
@@ -80,6 +83,7 @@ public class FileSaveActivity extends AppCompatActivity {
      * @param srcPath : the source path (and file name) of the temp file
      */
     private void moveFile(String destPath, String srcPath){
+        Log.d("fileXXX","des: "+destPath+" src: "+srcPath);
         InputStream in;
         OutputStream out;
         try {
@@ -128,6 +132,14 @@ public class FileSaveActivity extends AppCompatActivity {
             savingdirectory = filePath;
             TextView dirText = (TextView)findViewById(R.id.choosendirectorytext);
             dirText.setText(filePath);
+
+            Log.d("fileXXX", "dir: " + filePath);
         }
+    }
+
+    private String appendFileToPath(String path, String file){
+        if(path.charAt(path.length()-1)!='/' && file.charAt(file.length()-1)!='/')
+            return path +'/' + file;
+        return path + file;
     }
 }
