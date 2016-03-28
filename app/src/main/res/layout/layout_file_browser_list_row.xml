@@ -8,6 +8,7 @@
         android:layout_height="wrap_content"
         android:text="no item"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/WHITE"
         android:id="@+id/filenametext"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"

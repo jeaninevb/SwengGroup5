@@ -286,7 +286,7 @@ public class EncoderUtils {
         Log.d("encodeFileToQRStrings", "Max = " + max);
         for(int i = 1; i < max; i++){
             Log.d("encodeFileToQRStrings", "Adding: " + generateMiddleHeader(i, max) + qrStrings.get(i));
-            qrStrings.add(generateMiddleHeader(i + 1, max) + qrStrings.get(i));
+            qrStrings.add(i, generateMiddleHeader(i + 1, max) + qrStrings.get(i));
         }
         return qrStrings;
     }

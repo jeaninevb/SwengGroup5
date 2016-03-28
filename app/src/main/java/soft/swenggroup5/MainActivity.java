@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -75,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View w) {
                 getPermissions();
                 if (hasPermissions) {
-                    startContactSelect();
+                    Log.d("onCreate_MA", "Send button clicked");
+                    startActivity(new Intent(MainActivity.this, EncodeOptionsActivity.class));
                 }else{
                     displayToast("Permission have not yet been granted.");
                 }
