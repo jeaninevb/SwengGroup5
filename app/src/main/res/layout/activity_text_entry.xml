@@ -20,6 +20,7 @@
         android:layout_marginRight="10dp"
         android:hint="Type in the text you would like to send..."
         android:textColorHint="@color/WHITE"
+        android:textColor="@color/WHITE"
         android:imeOptions="actionDone"
         android:inputType="textCapSentences|textMultiLine"
         android:scrollHorizontally="false"

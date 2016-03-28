@@ -4,11 +4,11 @@
     /**
     * rotate splashImage
     *
-    * rotates for 2.2 seconds
+    * rotates for 1.5 seconds
     */
 
     <rotate
-        android:duration="2200"
+        android:duration="1500"
         android:fromDegrees="0"
         android:toDegrees="315"
         android:pivotX="50%"
