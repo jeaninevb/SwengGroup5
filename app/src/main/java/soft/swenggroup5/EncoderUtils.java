@@ -28,13 +28,13 @@ public class EncoderUtils {
      * Used to create stable testing and decoding
      */
     public final static String DELIMITER = "~";
-    public final static String END_DLIMITER = "\0";
+    public final static String END_DELIMITER = "#";
 
     /**
      * private constants
      * TODO WIDTH and HEIGHT will need to be modified to increase the size of the QR code
      */
-    private final static int MAX_QR_CODE_DATA_SIZE = 1000;
+    private final static int MAX_QR_CODE_DATA_SIZE = 500;
     private final static int WIDTH = 400;
     private final static int HEIGHT = 400;
 
@@ -188,7 +188,7 @@ public class EncoderUtils {
                     .append(String.valueOf(file.hashCode()))
                     .append(DELIMITER)
                     .append(String.valueOf(EncoderUtils.numberOfQRCodes(headerString.length() + 5)))
-                    .append(END_DLIMITER);
+                    .append(END_DELIMITER);
 
             if (DEBUG) Log.d("generateHeader", "Header string is " + headerString.toString());
             return headerString.toString();
@@ -274,7 +274,7 @@ public class EncoderUtils {
      * @param file : the file to break up into Strings that can become QR codes
      * @return : the given file broken up into Strings that can become QR codes
      */
-    public static List<String> encodeFileToQRStrings(File file){
+    public static ArrayList<String> encodeFileToQRStrings(File file){
         if(file == null){
             if(DEBUG) Log.d("encodeFileToQRStrings", "file given was null");
             return null;
@@ -319,7 +319,7 @@ public class EncoderUtils {
         header.append(getTopMimeType(file));
         header.append(DELIMITER);
         header.append(fileString.hashCode());
-        header.append(END_DLIMITER);
+        header.append(END_DELIMITER);
         return header.toString();
     }
 
@@ -340,7 +340,7 @@ public class EncoderUtils {
         header.append(max);
         header.append(DELIMITER);    //this delimiter is added so index and max can be gotten from the top
                                      //+ and middle headers with the same code.
-        header.append(END_DLIMITER);
+        header.append(END_DELIMITER);
         return header.toString();
     }
 

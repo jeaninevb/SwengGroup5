@@ -14,6 +14,8 @@ import android.widget.ListView;
  */
 public class EncodeOptionsActivity extends AppCompatActivity {
 
+    private boolean DEBUG = false;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,19 +42,19 @@ public class EncodeOptionsActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> myAdapter, View myView, int myItemInt, long mylng) {
                         Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
                         if(myItemInt == 0) {
-                            Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
+                            if (DEBUG) Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
                             startActivity(new Intent(EncodeOptionsActivity.this, ContactSelectActivity.class));
                         }
                         else if (myItemInt == 1){
-                            Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
+                            if (DEBUG) Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
                             startActivity(new Intent(EncodeOptionsActivity.this, TextEntryActivity.class));
                         }
                         else if (myItemInt == 2) {
-                            Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
+                            if (DEBUG) Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
                             startActivity(new Intent(EncodeOptionsActivity.this, FileSelectActivity.class));
                         }
                         else if( myItemInt == 3) {
-                            Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
+                            if (DEBUG) Log.d("onCreate_EOA", "Item : " + myItemInt + " clicked");
                             // TODO
                         }
                     }

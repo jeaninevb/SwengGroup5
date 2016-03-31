@@ -11,14 +11,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * Created by Tomas on 10/03/2016.
  */
 public class ContactDecodeActivity extends AppCompatActivity {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     ReceivedData data = null;
     public static String type = null;
+    boolean success = true;
     Button saveContact;
     Button scanAgain;
     String fileData;
@@ -29,25 +33,20 @@ public class ContactDecodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_contact_decode);
 
         Bundle extras = getIntent().getExtras();
-
-
+        scanAgain = (Button) findViewById(R.id.scanAgain);
+        saveContact = (Button) findViewById(R.id.saveFile);
         if(extras != null) {
             String scannedData = extras.getString("scanned_data");
-            Log.d("onCreate_CDA", "Scanned data: " + scannedData);
-
+            if(DEBUG) Log.d("onCreate_CDA", "Scanned data: " + scannedData);
             try {
                 data =  DecoderUtils.decodeFile(scannedData);
-
                 fileData = DecoderUtils.getFileData(scannedData);
 
-                scanAgain = (Button) findViewById(R.id.scanAgain);
-                saveContact = (Button) findViewById(R.id.saveFile);
-
-                Log.d("onCreate_CDA", "File data: " + fileData);
+                if (DEBUG) Log.d("onCreate_CDA", "File data: " + fileData);
                 if (type.equals("Text Data")) {
-                    Log.d("onCreate_CDA", "Is a text data");
+                    if (DEBUG) Log.d("onCreate_CDA", "Is a text data");
                     saveContact.setText("Copy");
-                    Log.d("onCreate_CDA", "Is a text data");
+                    if (DEBUG) Log.d("onCreate_CDA", "Is a text data");
 
                     TextView fileName = (TextView) findViewById(R.id.contactName);
                     fileName.setText(data.toString() + " " + fileData);
@@ -63,8 +62,8 @@ public class ContactDecodeActivity extends AppCompatActivity {
 //                contactName.setText("Contact: " + ContactSelectActivity.CONTACT_NAME);
             }
             catch (Exception e) {
-                if (DEBUG) Log.e("onCreate", e.toString());
-
+                if (DEBUG) Log.e("onCreate_exp", e.toString());
+                success = false;
                 TextView fileName = (TextView) findViewById(R.id.contactName);
                 fileName.setText("QR code incorrectly read. Please scan again.");
             }
@@ -83,6 +82,13 @@ public class ContactDecodeActivity extends AppCompatActivity {
         saveContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View w) {
+                if(!success){
+                    Toast.makeText(
+                            ContactDecodeActivity.this,
+                            "QR code incorrectly read.\nPlease scan again.",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 switch (type) {
                     case ("File Data"):
                         if(data != null) {

@@ -21,15 +21,17 @@ public class CameraActivity extends AppCompatActivity {
 
     private ArrayList<String> scannedStrings;
     private final IntentIntegrator INTEGRATOR = new IntentIntegrator(this);
-    private int TOTAL_QR_CODES=-1;                          //Set to unreachable value
-    private int CURRENT_INDEX=-1;
+    private boolean firstCodeReceived = false;
+    private int currentIndex = 1;
+    private int totalCodes = 0;
+    private boolean DEBUG = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         scannedStrings = new ArrayList<String>();
-        Log.d("onCreate", "Starting camera scan activity");
+        if(DEBUG) Log.d("onCreate_CA", "Starting camera scan activity");
         startCameraScan();
     }
 
@@ -87,13 +89,12 @@ public class CameraActivity extends AppCompatActivity {
             String qrString = result.getContents();
             Log.d("TAG", "qrString: " + qrString);
             if (qrString == null) {
-                Log.d("onActivityResult", "Cancelled scan");
+                if (DEBUG) Log.d("onActivityResult", "Cancelled scan");
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else if( newQRCode(qrString) ){ //if a new QR code add to list of codes
-                Log.d("onActivityResult", "Scanned new String: " + qrString);
+                if (DEBUG) Log.d("onActivityResult", "Scanned new String: " + qrString);
                 addQRtoList(qrString);
                 if(finalQRReceived(qrString)) { //if this was the final QR code
-                    Log.d("onActivityResult", "Scanned final qrCode. Now have " + getTotalData());
                     Intent showScannedContact = new Intent(CameraActivity.this, ContactDecodeActivity.class);
                     showScannedContact.putExtra("scanned_data", getTotalData());
                     startActivity(showScannedContact);
@@ -112,36 +113,27 @@ public class CameraActivity extends AppCompatActivity {
     //adds the just scanned in QR code to the list of codes. May possibly remove headers of codes
     //TODO: Actual Implementation
     private void addQRtoList(String input){
-            CURRENT_INDEX++;
+            currentIndex++;
             scannedStrings.add(input);
     }
 
     //checks if the passed qr code has not already been scanned and stored
     //TODO: Actual Implementation
     private boolean newQRCode(String input){
-        if(CURRENT_INDEX==-1 && DecoderUtils.getQRCodeIndex(input) == 1) {
-            Log.d("newQRCode", "Total qrs = " + DecoderUtils.getTotalQRCodeNumber(input) + ". Current = " + 1);
-            TOTAL_QR_CODES = DecoderUtils.getTotalQRCodeNumber(input);
-            CURRENT_INDEX = 0;
+        int index = DecoderUtils.getQRCodeIndex(input);
+        if(!firstCodeReceived && index==1){
+            firstCodeReceived = true;
+            totalCodes = DecoderUtils.getTotalQRCodeNumber(input);
             return true;
         }
-        int qrIndex = DecoderUtils.getQRCodeIndex(input);
-        if(scannedStrings.contains(input) || qrIndex <= CURRENT_INDEX) {
-            return false;
-        }
-        return true;
+        return (firstCodeReceived && index==currentIndex);
+
     }
 
     //checks if the passed qr code is the last code in a file transfer
     //TODO: Actual Implementation
     private boolean finalQRReceived(String input){
-        Log.d("finalQRReceived", "TOTAL = " + TOTAL_QR_CODES);
-        Log.d("finalQRReceived", "CURRENT = " + CURRENT_INDEX);
-        Log.d("finalQRReceived", "index = " + DecoderUtils.getQRCodeIndex(input));
-        if(DecoderUtils.getQRCodeIndex(input) == TOTAL_QR_CODES && CURRENT_INDEX == TOTAL_QR_CODES) {
-            return true;
-        }
-        return false;
+        return (firstCodeReceived && (currentIndex-1)==totalCodes);
     }
 
     //returns all the codes as a single string

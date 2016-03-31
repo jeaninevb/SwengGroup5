@@ -117,19 +117,27 @@ public class DecoderUtils {
     //returns a String containing just the Header from data, which should contain the entire
     //+ encoded data.
     public static String getHeader(String data){
-        if (DEBUG) Log.d("getHeader", "Header: " + data.split(EncoderUtils.END_DLIMITER)[0].trim());
-        return data.split(EncoderUtils.END_DLIMITER)[0].trim();
+        if (DEBUG) Log.d("getHeader", "Header: " + data.split(EncoderUtils.END_DELIMITER)[0]);
+        return data.split(EncoderUtils.END_DELIMITER)[0];
     }
 
     //returns a String containing just the actual file data from data, which should contain
     //+ the entire encoded data.
     public static String getFileData(String data){
-        return data.split(EncoderUtils.END_DLIMITER)[1];
+        int headerLength = getLengthOfHeader(data);
+        return data.substring(headerLength);
+    }
+
+    private static int getLengthOfHeader(String data){
+        int index = 0;
+        while(index < data.length() && data.charAt(index) != EncoderUtils.END_DELIMITER.charAt(0)){
+            index++;
+        }
+        return index+1;
     }
 
     //returns the index stored in the the given QRCode
     public static int getQRCodeIndex(String code){
-        Log.d("TAG", "Code: " + code);
         return Integer.parseInt(code.split(EncoderUtils.DELIMITER)[0]);
     }
 
